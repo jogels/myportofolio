@@ -1,0 +1,291 @@
+import React, { useState } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
+import ppportoImg from '../assets/ppporto.png';
+import CostCalculator from '../components/CostCalculator';
+import KineticWovenClothSection from '../components/KineticWovenClothSection';
+import ThreeUiShelfSection from '../components/ThreeUiShelfSection';
+import ManifestoShowcase from '../components/ManifestoShowcase';
+import CaraKerja from '../components/CaraKerja';
+import './PortfolioHome.css';
+import {
+  ArrowUpRight,
+  ArrowRight,
+  Play,
+  Search,
+  ChevronDown,
+  Sparkles,
+  Check,
+  Send,
+  ExternalLink,
+  Layers,
+  Code2,
+  Globe,
+  Smartphone,
+  Zap,
+  SlidersHorizontal,
+  Compass,
+  Clock,
+  CreditCard,
+  ShieldCheck
+} from 'lucide-react';
+
+export default function PortfolioHome({ onNavigateContohUi }) {
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [openFaq, setOpenFaq] = useState(1);
+
+  // ─── Window Scroll with Physics-Based Smooth Spring Interpolation ───
+  const { scrollY } = useScroll();
+
+  // useSpring softens raw mousewheel notches into butter-smooth 60fps continuous motion
+  const smoothScroll = useSpring(scrollY, {
+    stiffness: 120,
+    damping: 24,
+    mass: 0.18,
+    restDelta: 0.001
+  });
+
+  // Portrait slides LEFT smoothly from 0px to 380px
+  const portraitX = useTransform(smoothScroll, [0, 380], ['0%', '-70%']);
+
+  // ERZADEV letters fade out smoothly on initial scroll
+  const erzadevOpacity = useTransform(smoothScroll, [0, 140], [1, 0]);
+  const erzadevY = useTransform(smoothScroll, [0, 140], [0, -35]);
+  const erzadevScale = useTransform(smoothScroll, [0, 140], [1, 0.90]);
+
+  // Tagline fades out immediately
+  const taglineOpacity = useTransform(smoothScroll, [0, 70], [1, 0]);
+
+  // Intro text fades + slides in from RIGHT — EXACTLY SAME range [0, 380px]
+  const introOpacity = useTransform(smoothScroll, [0, 380], [0, 1]);
+  const introX = useTransform(smoothScroll, [0, 380], ['100px', '0px']);
+  const introScale = useTransform(smoothScroll, [0, 380], [0.92, 1]);
+
+  const filterTabs = [
+    { id: 'all', label: 'Outdoor Apps' },
+    { id: 'web', label: 'Indoor Web' },
+    { id: 'mobile', label: 'Mobile Apps' },
+    { id: 'ai', label: 'Potted AI' },
+  ];
+
+  const featuredWorks = [
+    {
+      id: 1,
+      title: 'Peperomia FinTech',
+      category: 'web',
+      desc: 'High-converting QRIS & payment ecosystem with sub-second latency.',
+      tech: 'React 19, Node.js, Tailwind',
+      price: 'Rp 5.500.000',
+      badge: 'POPULAR',
+      imgBg: 'https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=600&auto=format&fit=crop&q=80',
+    },
+    {
+      id: 2,
+      title: 'Fiddle - Leaf Mobile',
+      category: 'mobile',
+      desc: 'Mobile roastery app with live order tracking & loyalty rewards.',
+      tech: 'React Native, Expo, Firebase',
+      price: 'Rp 6.500.000',
+      badge: 'MOBILE',
+      imgBg: 'https://images.unsplash.com/photo-1545241047-6083a3684587?w=600&auto=format&fit=crop&q=80',
+    },
+    {
+      id: 3,
+      title: 'Calathea AI Suite',
+      category: 'ai',
+      desc: 'Smart workspace assistant for automated marketing copy & diagrams.',
+      tech: 'Next.js 15, Gemini API, Supabase',
+      price: 'Rp 7.000.000',
+      badge: 'AI READY',
+      imgBg: 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=600&auto=format&fit=crop&q=80',
+    },
+  ];
+
+
+
+  return (
+    <div className="editorial-outer-wrapper">
+      <div className="editorial-canvas">
+        {/* ============================================================ */}
+        {/* 1. HERO PINNED SECTION — Remains pinned while transforming */}
+        {/* ============================================================ */}
+        <div className="hero-pinned-track">
+          <section className="hero-sticky-frame">
+            {/* Floating Pill Navbar */}
+            <header className="hero-pill-navbar">
+              <div className="nav-left-pill">
+                <a href="#" className="brand-logo-circle"><Code2 size={15} /></a>
+                <span className="brand-text-logo">erzadev</span>
+                <nav className="nav-links-row">
+                  <a href="#" className="nav-pill-link active">Home</a>
+                  <a href="#services" className="nav-pill-link">Services</a>
+                  <a href="#projects" className="nav-pill-link">Works</a>
+                  <a href="#calculator" className="nav-calculate-chip">Calculate Cost</a>
+                </nav>
+              </div>
+              <div className="nav-right-pill">
+                <a
+                  href="https://wa.me/6281234567890?text=Halo%20Mas%20Erza,%20saya%20tertarik%20konsultasi%20pembuatan%20aplikasi!"
+                  target="_blank" rel="noreferrer"
+                  className="btn-pill-border"
+                >Hire Me</a>
+              </div>
+            </header>
+
+            {/* Tagline — fades out on first scroll */}
+            <motion.div style={{ opacity: taglineOpacity }} className="hero-veldra-top-tagline">
+              <span>GROW. SUCCEED. THRIVE.</span>
+            </motion.div>
+
+            {/* Centerpiece Stage — portrait sits flush on top of yellow marquee tape */}
+            <div className="hero-veldra-stage">
+
+              {/* ERZADEV letters — fade out at same time image moves */}
+              <motion.div
+                style={{ opacity: erzadevOpacity, y: erzadevY, scale: erzadevScale }}
+                className="hero-giant-letters"
+                aria-hidden="true"
+              >
+                <span>E</span><span>R</span><span>Z</span><span>A</span><span>D</span><span>E</span><span>V</span>
+              </motion.div>
+
+              {/* Portrait — slides left simultaneously with constant size */}
+              <motion.div
+                style={{ x: portraitX }}
+                className="hero-portrait-wrapper"
+              >
+                <img src={ppportoImg} alt="Erza Saleh" className="hero-portrait-img" />
+              </motion.div>
+
+              {/* Intro text — fades + slides in from right simultaneously with portrait */}
+              <motion.div
+                style={{ opacity: introOpacity, x: introX, scale: introScale }}
+                className="hero-scrolled-intro-content"
+              >
+                <div className="intro-text-chunky">
+                  <span className="line-highlight-yellow">Halo, Saya Erza</span>
+                  <span className="line-highlight-yellow">Lagi banyak ide?</span>
+                  <span className="line-highlight-white">Saya bantu mewujudkannya.</span>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Marquee Tape — Bottom boundary of the header card */}
+            <div className="marquee-outer-clip">
+              <div className="hero-veldra-marquee-tape">
+                <div className="marquee-track">
+                  <span>✦ SKY ROCKET YOUR BUSINESS TODAY</span>
+                  <span>✦ FULLSTACK WEB &amp; MOBILE APPS</span>
+                  <span>✦ FAST DELIVERY</span>
+                  <span>✦ SKY ROCKET YOUR BUSINESS TODAY</span>
+                  <span>✦ FULLSTACK WEB &amp; MOBILE APPS</span>
+                  <span>✦ FAST DELIVERY &amp; ZERO BUGS</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        {/* ============================================================ */}
+        {/* 2. KINETIC TEXTILE / WOVEN CLOTH 3D SIMULATION SECTION */}
+        {/* ============================================================ */}
+        <KineticWovenClothSection />
+
+        {/* ============================================================ */}
+        {/* 3. THREEUI INTERACTIVE 3D WORKING VOLUMES SHELF SHOWCASE */}
+        {/* ============================================================ */}
+        <ThreeUiShelfSection />
+
+        {/* ============================================================ */}
+        {/* 7. SERVICES & ENGINEERING CAPABILITIES + COST CALCULATOR */}
+        {/* ============================================================ */}
+        <section id="services" className="quality-goods-section">
+          <div className="quality-header-center">
+            <h2 className="title-chunky">Engineering Services &amp; Capabilities</h2>
+            <p className="quality-subtext">
+              Solusi end-to-end pembuatan produk digital, mulai dari arsitektur mobile apps native, website modern berkecepatan tinggi, hingga integrasi cloud dan automasi AI.
+            </p>
+          </div>
+
+          {/* Interactive Manifesto Showcase (Acid Brutalism / Minimalist 6-Card Services Grid) */}
+          <ManifestoShowcase />
+
+          {/* Interactive Cost Calculator */}
+          <div id="calculator">
+            <CostCalculator />
+          </div>
+        </section>
+
+        {/* ============================================================ */}
+        {/* 8. TIMELINE & WORKFLOW SECTION (Cara Kerja) */}
+        {/* ============================================================ */}
+        <CaraKerja />
+
+        {/* ============================================================ */}
+        {/* 9. BOTTOM FOOTER SECTION (REDESIGNED) */}
+        {/* ============================================================ */}
+        <footer className="modern-footer">
+          <div className="footer-grid-container">
+            {/* Left Column: Brand & Tagline */}
+            <div className="footer-brand-column">
+              <div className="footer-logo-row">
+                <span className="footer-logo-icon">⚡</span>
+                <span className="footer-logo-text">erzadev</span>
+              </div>
+              <p className="footer-brand-desc">
+                Crafting premium, high-performance web applications and native mobile experiences that elevate your business.
+              </p>
+              <div className="footer-status-badge">
+                <span className="status-dot"></span>
+                <span>Available for Select Client Projects</span>
+              </div>
+            </div>
+
+            {/* Middle Column: Navigation */}
+            <div className="footer-links-column">
+              <h4 className="footer-column-title">Sitemap</h4>
+              <ul className="footer-links-list">
+                <li><a href="#" className="footer-link-item">Home</a></li>
+                <li><a href="#services" className="footer-link-item">Services</a></li>
+                <li><a href="#projects" className="footer-link-item">Selected Works</a></li>
+                <li><a href="#calculator" className="footer-link-item">Cost Calculator</a></li>
+                <li><button onClick={onNavigateContohUi} className="footer-link-item link-btn-style">Showcase Lab</button></li>
+              </ul>
+            </div>
+
+            {/* Right Column: Contact & Socials */}
+            <div className="footer-links-column">
+              <h4 className="footer-column-title">Let's Connect</h4>
+              <ul className="footer-links-list">
+                <li>
+                  <a
+                    href="https://wa.me/6281234567890?text=Halo%20Mas%20Erza,%20saya%20tertarik%20konsultasi%20proyek!"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="footer-link-item contact-highlight"
+                  >
+                    WhatsApp Chat ↗
+                  </a>
+                </li>
+                <li><a href="mailto:erzasaleh@gmail.com" className="footer-link-item">Email (erzasaleh@gmail.com)</a></li>
+                <li><a href="https://linkedin.com" target="_blank" rel="noreferrer" className="footer-link-item">LinkedIn Profile ↗</a></li>
+                <li><a href="https://github.com" target="_blank" rel="noreferrer" className="footer-link-item">GitHub Codebase ↗</a></li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="footer-bottom-bar">
+            <span className="footer-copyright">
+              © {new Date().getFullYear()} ERZADEV • Created by Erza Saleh
+            </span>
+            <div className="footer-bottom-meta">
+              <span>Jakarta, Indonesia 🇮🇩</span>
+              <span className="meta-separator">•</span>
+              <span>Made with React &amp; Three.js</span>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+  );
+}
