@@ -261,9 +261,11 @@
       font-size: clamp(1.7rem, 3vw, 3.1rem);
       font-weight: 400;
       letter-spacing: -0.055em;
-      line-height: 0.98;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      line-height: 1.05;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      white-space: normal;
     }
 
     .selection__note {
@@ -1749,14 +1751,14 @@
     const BOOKS = [
       {
         id: "codex",
-        title: "Codex",
+        title: "ERP Apps",
         roman: "I",
-        discipline: "Agentic craft",
-        note: "Precise intent, translated into tested systems.",
-        deck: "A field manual for delegating repository work to Codex: state the intent, let the agent trace the system, and treat tests and browser proof as part of the craft.",
+        discipline: "HR & Operations Portal",
+        note: "Geofenced employee attendance, travel requests (SPPD), leaves, and overtime calculations.",
+        deck: "An integrated module built for automated geofenced employee attendance, digital leave requests, overtime tracking, and multi-level SPPD travel approvals.",
         binding: "Ultramarine cloth · copper foil",
         format: "148 × 216 mm · imagined edition",
-        theme: "Codex · intent into implementation",
+        theme: "HR Operations · automated workflows",
         motif: "Nested brackets",
         motifKey: "brackets",
         paletteLabel: "Ultramarine · bone · copper",
@@ -1777,19 +1779,19 @@
         width: 1.02,
         height: 1.58,
         depth: 0.26,
-        chapters: ["Intent", "Repository atlas", "Proof"],
+        chapters: ["Employee Attendance", "SPPD Travel Flow", "Leave & Overtime"],
         seed: 11
       },
       {
         id: "claude-code",
-        title: "Claude Code",
+        title: "Volunteer Apps",
         roman: "II",
-        discipline: "Contextual reasoning",
-        note: "Long context, held with deliberation and care.",
-        deck: "An annotated volume on Claude Code’s context-first practice: read the project, reason across files, preserve the surrounding work, and make every intervention explainable.",
+        discipline: "Social Engagement",
+        note: "Connecting passion with community needs and campaigns.",
+        deck: "An architectural playbook for social campaign management, volunteer onboarding, and real-time contribution tracking portals.",
         binding: "Burnt-orange cloth · antique-gold foil",
         format: "156 × 228 mm · imagined edition",
-        theme: "Claude Code · context before intervention",
+        theme: "Volunteer Network · social impact",
         motif: "Interlaced paths",
         motifKey: "paths",
         paletteLabel: "Burnt orange · cream · burgundy",
@@ -1810,19 +1812,19 @@
         width: 1.1,
         height: 1.46,
         depth: 0.29,
-        chapters: ["Context", "Deliberation", "Intervention"],
+        chapters: ["Campaigns", "Engagement", "Impact Tracking"],
         seed: 22
       },
       {
         id: "cursor",
-        title: "Cursor",
+        title: "Ticketing Apps",
         roman: "III",
-        discipline: "Directed editing",
-        note: "A fast line between the thought and the file.",
-        deck: "A compact handbook for editing with Cursor: navigate living codebases quickly, keep the active context close, and change the right surface without disturbing the rest.",
+        discipline: "Event Management",
+        note: "High-availability seat allocation and check-in engines.",
+        deck: "Strategies for managing ticket inventory, concurrency locks for booking, QR check-in flows, and payment gateway webhooks.",
         binding: "Citron cloth · black gloss foil",
         format: "140 × 210 mm · imagined edition",
-        theme: "Cursor · navigation with momentum",
+        theme: "Ticketing Engine · booking pipelines",
         motif: "Directional caret",
         motifKey: "caret",
         paletteLabel: "Citron · ink · off-white",
@@ -1843,19 +1845,19 @@
         width: 0.92,
         height: 1.52,
         depth: 0.22,
-        chapters: ["Navigation", "Selection", "Momentum"],
+        chapters: ["Concurrence Control", "Check-in Flows", "Payment Gates"],
         seed: 33
       },
       {
         id: "antigravity",
-        title: "Antigravity",
+        title: "Transportation Apps",
         roman: "IV",
-        discipline: "Spatial systems",
-        note: "Ideas released from the flatness of the page.",
-        deck: "A speculative atlas for Antigravity’s spatial way of working: let agents move across tools, make complex structures visible, and understand the system through motion.",
+        discipline: "Logistics & Transit",
+        note: "Real-time fleet tracking and passenger navigation.",
+        deck: "Designing high-accuracy routing engines, web socket location streaming, and dispatcher assignment dispatching flows.",
         binding: "Cobalt cloth · cool-silver foil",
         format: "162 × 240 mm · imagined edition",
-        theme: "Antigravity · structure in motion",
+        theme: "Transportation · routing algorithms",
         motif: "Suspended orbits",
         motifKey: "orbits",
         paletteLabel: "Cobalt · sky · silver",
@@ -1876,19 +1878,19 @@
         width: 1.08,
         height: 1.68,
         depth: 0.25,
-        chapters: ["System map", "Tool orbit", "Spatial proof"],
+        chapters: ["Fleet Mapping", "Socket Broadcasts", "Routing Optimization"],
         seed: 44
       },
       {
         id: "figma",
-        title: "Figma",
+        title: "Task Scheduler Apps",
         roman: "V",
-        discipline: "Collaborative form",
-        note: "Components, conversations, and systems in common.",
-        deck: "A modular reader on designing in Figma: move from loose frames to shared components, invite critique into the canvas, and leave behind a system others can extend.",
+        discipline: "Productivity & Automation",
+        note: "Automated workflows and priority queuing engines.",
+        deck: "Engineering cron job runners, background worker queues, dynamic notification triggers, and user-centric task boards.",
         binding: "Vermilion cloth · rose-gold foil",
         format: "150 × 220 mm · imagined edition",
-        theme: "Figma · a shared visual language",
+        theme: "Scheduler · background worker queues",
         motif: "Connected modules",
         motifKey: "modules",
         paletteLabel: "Vermilion · plum · blush",
@@ -1909,19 +1911,19 @@
         width: 1,
         height: 1.48,
         depth: 0.3,
-        chapters: ["Frames", "Components", "Common language"],
+        chapters: ["Queue Run", "Worker Execution", "Dashboard Analytics"],
         seed: 55
       },
       {
         id: "framer",
-        title: "Framer",
+        title: "Pet Shop Apps",
         roman: "VI",
-        discipline: "Interactive composition",
-        note: "Structure becomes rhythm when the page begins to move.",
-        deck: "A studio notebook for Framer: compose responsive pages directly in the medium, then tune type, layout, and interaction until motion feels native to the structure.",
+        discipline: "E-commerce & Care",
+        note: "Pet services, products, and veterinary appointments.",
+        deck: "A unified platform blueprint for pet grooming bookings, product catalog checkouts, and veterinary health records.",
         binding: "Coral cloth · copper foil",
         format: "146 × 224 mm · imagined edition",
-        theme: "Framer · composition through motion",
+        theme: "Pet Shop Portal · unified care",
         motif: "Folded frames",
         motifKey: "frames",
         paletteLabel: "Coral · pink · oxblood",
@@ -1942,19 +1944,19 @@
         width: 0.96,
         height: 1.57,
         depth: 0.24,
-        chapters: ["Structure", "Rhythm", "Responsive motion"],
+        chapters: ["Pet Catalog", "Grooming Booking", "Health Journals"],
         seed: 66
       },
       {
         id: "xcode",
-        title: "ERP Apps",
+        title: "Appointment Booking Apps",
         roman: "VII",
-        discipline: "Enterprise Resource & Supply Chain System",
-        note: "Arsitektur ERP modern untuk otomatisasi bisnis, inventori, dan finance realtime.",
-        deck: "Sistem Enterprise Resource Planning terintegrasi: modul manajemen stok multi-gudang, pencatatan keuangan akuntansi otomatis, dashboard analitik eksekutif, dan integrasi WhatsApp gateway.",
+        discipline: "Scheduling Systems",
+        note: "Flexible calendars and automated reminder queues.",
+        deck: "A study in double-booking prevention, calendar sync protocols, timezone localization, and SMS/WhatsApp booking confirmation bridges.",
         binding: "Icy-cyan cloth · aluminum foil",
         format: "158 × 232 mm · imagined edition",
-        theme: "ERP Engine · PostgreSQL & Next.js Core",
+        theme: "Booking System · calendar sync",
         motif: "Drafting compass",
         motifKey: "compass",
         paletteLabel: "Icy cyan · navy · aluminum",
@@ -1975,8 +1977,173 @@
         width: 1.12,
         height: 1.63,
         depth: 0.28,
-        chapters: ["Arsitektur Sistem", "Modul Finansial & Stok", "Otomatisasi & Integrasi API"],
+        chapters: ["Calendar Sync", "Localized Time", "Reminder Bridges"],
         seed: 77
+      },
+      {
+        id: "codex",
+        title: "Service Apps",
+        roman: "VIII",
+        discipline: "On-Demand Services",
+        note: "Service catalogs, technician routing, and client billing.",
+        deck: "Designing clean on-demand maintenance request pipelines, geolocation tagging for technicians, and instant quote generation.",
+        binding: "Ultramarine cloth · copper foil",
+        format: "148 × 216 mm · imagined edition",
+        theme: "On-Demand Platform · routing mechanics",
+        motif: "Nested brackets",
+        motifKey: "brackets",
+        paletteLabel: "Ultramarine · bone · copper",
+        color: "#182a43",
+        foil: "#c87046",
+        palette: {
+          paper: "#171a24",
+          paperDeep: "#10131b",
+          paperPale: "#f1eadf",
+          ink: "#f4eee6",
+          inkSoft: "#b9b4ae",
+          wall: "#171a24",
+          shelf: "#3a2118",
+          shelfDark: "#1c0e0a",
+          light: "#f4d7b9",
+          fill: "#9fb3c9"
+        },
+        width: 1.02,
+        height: 1.58,
+        depth: 0.26,
+        chapters: ["Request Pipes", "Location Tagging", "Invoice Systems"],
+        seed: 12
+      },
+      {
+        id: "claude-code",
+        title: "Boarding House Management Apps",
+        roman: "IX",
+        discipline: "Property Management",
+        note: "Room allocations, rental agreements, and payment collection.",
+        deck: "Managing boarding houses with ease: room availability states, digital rental contract logging, monthly bill auto-generation, and tenant reporting portals.",
+        binding: "Burnt-orange cloth · antique-gold foil",
+        format: "156 × 228 mm · imagined edition",
+        theme: "Boarding House System · room inventory",
+        motif: "Interlaced paths",
+        motifKey: "paths",
+        paletteLabel: "Burnt orange · cream · burgundy",
+        color: "#c24d24",
+        foil: "#efc16d",
+        palette: {
+          paper: "#762f1b",
+          paperDeep: "#572113",
+          paperPale: "#ffe4c5",
+          ink: "#fff0df",
+          inkSoft: "#e3bfa8",
+          wall: "#762f1b",
+          shelf: "#402015",
+          shelfDark: "#1d0d08",
+          light: "#ffd19a",
+          fill: "#dc8c6b"
+        },
+        width: 1.1,
+        height: 1.46,
+        depth: 0.29,
+        chapters: ["Room Inventory", "Rental Contracts", "Billing Automations"],
+        seed: 23
+      },
+      {
+        id: "cursor",
+        title: "Survey Apps",
+        roman: "X",
+        discipline: "Data Collection",
+        note: "Dynamic form builders and real-time response analytics.",
+        deck: "An inside look at dynamic schema definition engines, survey distribution, response validation, and aggregation charts.",
+        binding: "Citron cloth · black gloss foil",
+        format: "140 × 210 mm · imagined edition",
+        theme: "Survey Engine · dynamic schema",
+        motif: "Directional caret",
+        motifKey: "caret",
+        paletteLabel: "Citron · ink · off-white",
+        color: "#afc400",
+        foil: "#171a16",
+        palette: {
+          paper: "#c3cf21",
+          paperDeep: "#9eaa16",
+          paperPale: "#f0f2c9",
+          ink: "#171914",
+          inkSoft: "#485015",
+          wall: "#c3cf21",
+          shelf: "#3b2418",
+          shelfDark: "#1c0f09",
+          light: "#fff6ce",
+          fill: "#dce37e"
+        },
+        width: 0.92,
+        height: 1.52,
+        depth: 0.22,
+        chapters: ["Form Builders", "Validation Engines", "Aggregation Analytics"],
+        seed: 34
+      },
+      {
+        id: "antigravity",
+        title: "Wakaf Land Database Website",
+        roman: "XI",
+        discipline: "Islamic Endowment Registry",
+        note: "Public trust land mapping and endowment certificate registry.",
+        deck: "Digitizing endowment records: interactive geo-mapping of wakaf land, certificate authenticity verification, and public transparency reports.",
+        binding: "Cobalt cloth · cool-silver foil",
+        format: "162 × 240 mm · imagined edition",
+        theme: "Wakaf Database · geo-registry",
+        motif: "Suspended orbits",
+        motifKey: "orbits",
+        paletteLabel: "Cobalt · sky · silver",
+        color: "#1537a1",
+        foil: "#dbe8f1",
+        palette: {
+          paper: "#142a80",
+          paperDeep: "#0b1953",
+          paperPale: "#dbe8f1",
+          ink: "#f3f5f2",
+          inkSoft: "#b5c7e9",
+          wall: "#142a80",
+          shelf: "#3b2117",
+          shelfDark: "#1a0d08",
+          light: "#e5edf2",
+          fill: "#5f85dc"
+        },
+        width: 1.08,
+        height: 1.68,
+        depth: 0.25,
+        chapters: ["Registry Listing", "Geospatial Map", "Trust Verification"],
+        seed: 45
+      },
+      {
+        id: "figma",
+        title: "Islamic Educational Website",
+        roman: "XII",
+        discipline: "Digital Learning",
+        note: "Curriculum management, class schedule, and study materials.",
+        deck: "An educational portal built for modern islamic academies: interactive course modules, study progress tracking, and lecture video streaming.",
+        binding: "Vermilion cloth · rose-gold foil",
+        format: "150 × 220 mm · imagined edition",
+        theme: "Educational Portal · online classes",
+        motif: "Connected modules",
+        motifKey: "modules",
+        paletteLabel: "Vermilion · plum · blush",
+        color: "#c83222",
+        foil: "#efb0aa",
+        palette: {
+          paper: "#a62c21",
+          paperDeep: "#7f1e17",
+          paperPale: "#ffe0d5",
+          ink: "#fff0e8",
+          inkSoft: "#e9bbb2",
+          wall: "#a62c21",
+          shelf: "#432016",
+          shelfDark: "#1f0d08",
+          light: "#ffd1bc",
+          fill: "#d66d66"
+        },
+        width: 1,
+        height: 1.48,
+        depth: 0.3,
+        chapters: ["Academy Courses", "Student Progress", "Lecture Streams"],
+        seed: 56
       }
     ];
 
@@ -2411,7 +2578,7 @@
       const ctx = canvasTexture.getContext("2d");
 
       if (coverAtlasReady) {
-        const [sourceX, sourceY, sourceWidth, sourceHeight] = COVER_CROPS[BOOKS.indexOf(book)];
+        const [sourceX, sourceY, sourceWidth, sourceHeight] = COVER_CROPS[BOOKS.indexOf(book) % COVER_CROPS.length];
         ctx.drawImage(
           coverAtlasImage,
           sourceX,
@@ -2429,12 +2596,31 @@
         ctx.fillStyle = "#0a0a0a";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        const titleSize = book.title.length > 10 ? 68 : 82;
+        
+        // Wrap title into 2 lines if it contains spaces and is long
+        const words = book.title.split(" ");
+        let line1 = book.title;
+        let line2 = "";
+        if (words.length > 1 && book.title.length > 12) {
+          const mid = Math.ceil(words.length / 2);
+          line1 = words.slice(0, mid).join(" ");
+          line2 = words.slice(mid).join(" ");
+        }
+
+        const maxLineLength = Math.max(line1.length, line2.length);
+        const titleSize = maxLineLength > 12 ? 56 : 68;
         ctx.font = `600 ${titleSize}px "Iowan Old Style", Baskerville, Georgia, serif`;
-        ctx.fillText(book.title, canvasTexture.width / 2, canvasTexture.height * 0.73);
+
+        if (line2) {
+          ctx.fillText(line1, canvasTexture.width / 2, canvasTexture.height * 0.69);
+          ctx.fillText(line2, canvasTexture.width / 2, canvasTexture.height * 0.75);
+        } else {
+          ctx.fillText(line1, canvasTexture.width / 2, canvasTexture.height * 0.72);
+        }
+
         ctx.font = '600 16px Inter, "Helvetica Neue", Arial, sans-serif';
         ctx.letterSpacing = "2.5px";
-        ctx.fillText(book.discipline.toUpperCase(), canvasTexture.width / 2, canvasTexture.height * 0.80);
+        ctx.fillText(book.discipline.toUpperCase(), canvasTexture.width / 2, canvasTexture.height * 0.81);
         ctx.restore();
 
         const edgeShade = ctx.createLinearGradient(0, 0, canvasTexture.width, 0);

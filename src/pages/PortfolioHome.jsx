@@ -178,7 +178,7 @@ export default function PortfolioHome({ onNavigateContohUi }) {
                   <span>✦ FAST DELIVERY</span>
                   <span>✦ SKY ROCKET YOUR BUSINESS TODAY</span>
                   <span>✦ FULLSTACK WEB &amp; MOBILE APPS</span>
-                  <span>✦ FAST DELIVERY &amp; ZERO BUGS</span>
+                  <span>✦ FAST DELIVERY</span>
                 </div>
               </div>
             </div>

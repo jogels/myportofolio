@@ -40,6 +40,9 @@ export default function ThreeUiShelfSection() {
         const iframeWin = iframe.contentWindow;
         if (!iframeWin) return false;
 
+        const iframeDoc = iframeWin.document;
+        if (iframeDoc.readyState !== 'complete') return false;
+
         const handleIframeWheel = (e) => {
           // If deltaY (vertical scroll) is dominant, we scroll the parent window
           if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
@@ -102,7 +105,7 @@ export default function ThreeUiShelfSection() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              height: '500px',
+              height: '100%',
               width: '100%',
               background: '#0d0d0d',
               borderRadius: '16px',
