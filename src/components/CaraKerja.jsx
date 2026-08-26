@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import ppcloseupImg from '../assets/ppcloseup.png';
+import { useLanguage } from '../context/LanguageContext';
 
 const STEPS = [
   {
@@ -59,13 +60,71 @@ const STEPS = [
 ];
 
 export default function CaraKerja() {
+  const { lang, t } = useLanguage();
   const journeyRef = useRef(null);
   const fillRef = useRef(null);
   const sproutRef = useRef(null);
   const nodeRefs = useRef([]);
   const stepRefs = useRef([]);
 
-  // ---------- growing-plant scroll animation ----------
+  const DYNAMIC_STEPS = [
+    {
+      num: 1,
+      side: "left",
+      icon: "🕵️‍♂️",
+      quip: lang === 'ID' ? '// nggak pakai istilah teknis, janji' : '// no jargon, promised',
+      title: t('step_1_title'),
+      desc: t('step_1_desc'),
+      meta: lang === 'ID' ? ["± 2–3 hari", "Zoom / WA", "Notion"] : ["± 2–3 days", "Zoom / WA", "Notion"],
+    },
+    {
+      num: 2,
+      side: "right",
+      icon: "🎨",
+      quip: lang === 'ID' ? '// revisi sampai kamu bilang "nah, ini!"' : '// revisions until it clicks',
+      title: t('step_2_title'),
+      desc: t('step_2_desc'),
+      meta: lang === 'ID' ? ["± 5–7 hari", "Figma", "Prototype"] : ["± 5–7 days", "Figma", "Prototype"],
+    },
+    {
+      num: 3,
+      side: "left",
+      icon: "👨‍💻",
+      quip: lang === 'ID' ? "// tahap paling lama saya diem di depan laptop" : "// core engineering sprint",
+      title: t('step_3_title'),
+      desc: t('step_3_desc'),
+      meta: lang === 'ID' ? ["± 2–6 minggu", "React/Flutter", "Git"] : ["± 2–6 weeks", "React/Flutter", "Git"],
+    },
+    {
+      num: 4,
+      side: "right",
+      icon: "🐞",
+      quip: lang === 'ID' ? "// bug diburu sebelum user nemuin duluan" : "// edge-case bug hunting",
+      title: t('step_4_title'),
+      desc: t('step_4_desc'),
+      meta: lang === 'ID' ? ["± 4–7 hari", "Manual QA", "Automated Test"] : ["± 4–7 days", "Manual QA", "Automated Test"],
+    },
+    {
+      num: 5,
+      side: "left",
+      icon: "📦",
+      quip: lang === 'ID' ? "// momen paling deg-degan sekaligus seru" : "// store & cloud release",
+      title: t('step_5_title'),
+      desc: t('step_5_desc'),
+      meta: lang === 'ID' ? ["± 2–3 hari", "App Store", "Play Store"] : ["± 2–3 days", "App Store", "Play Store"],
+    },
+    {
+      num: 6,
+      side: "right",
+      icon: "🛟",
+      quip: lang === 'ID' ? "// dukungan aktif pasca-launch" : "// active post-launch support",
+      title: t('step_6_title'),
+      desc: t('step_6_desc'),
+      meta: lang === 'ID' ? ["Garansi", "Bug Fix", "Monitoring"] : ["Warranty", "Bug Fix", "Monitoring"],
+    },
+  ];
+
+  // ---------- timeline line fill & profile avatar scroll animation ----------
   useEffect(() => {
     const journey = journeyRef.current;
     const fill = fillRef.current;
@@ -91,10 +150,7 @@ export default function CaraKerja() {
 
       fill.style.height = progress * 100 + "%";
       sprout.style.top = progress * 100 + "%";
-
-      const sway = Math.sin(progress * 14) * 9;
-      const grow = 0.82 + progress * 0.45;
-      sprout.style.transform = `translate3d(-50%,-50%,0) scale(${grow}) rotate(${sway}deg)`;
+      sprout.style.transform = `translate3d(-50%,-50%,0)`;
     };
 
     measure();
@@ -142,15 +198,13 @@ export default function CaraKerja() {
     <section id="process" className="ck-section">
       <div className="ck-container">
         <div className="ck-eyebrow">
-          <span className="ck-dot" /> Cara Kerja
+          <span className="ck-dot" /> {t('process_tag')}
         </div>
         <h2 className="ck-title">
-          Rute perjalanan dari benih ide sampai aplikasi berbuah 🌱
+          {t('process_title')}
         </h2>
         <p className="ck-sub">
-          Anggap ini kebun kecil. Foto profil saya tumbuh menyusuri scroll
-          kamu, mekar satu-satu di 6 titik sebelum akhirnya berbuah jadi
-          aplikasi.
+          {t('process_desc')}
         </p>
 
         <div className="journey" ref={journeyRef}>
@@ -158,11 +212,11 @@ export default function CaraKerja() {
             <div className="journey-line-fill" ref={fillRef} />
           </div>
           <div className="journey-sprout" ref={sproutRef} style={{ width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <img src={ppcloseupImg} alt="Erza Saleh" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2.5px solid var(--mint)', boxShadow: '0 0 12px var(--mint)' }} />
+            <img src={ppcloseupImg} alt="Erza Saleh" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2.5px solid #c87046', boxShadow: '0 0 14px rgba(200, 112, 70, 0.6)' }} />
           </div>
 
           <div className="journey-steps">
-            {STEPS.map((step, i) => (
+            {DYNAMIC_STEPS.map((step, i) => (
               <div
                 key={step.num}
                 ref={(el) => (stepRefs.current[i] = el)}
@@ -193,10 +247,6 @@ export default function CaraKerja() {
             ))}
           </div>
         </div>
-
-        <p className="journey-hint">
-          🌿 foto profil beneran bergerak ngikutin scroll kamu — coba geser ke atas-bawah
-        </p>
       </div>
 
       <style>{`

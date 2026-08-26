@@ -7,6 +7,7 @@ import ThreeUiShelfSection from '../components/ThreeUiShelfSection';
 import ManifestoShowcase from '../components/ManifestoShowcase';
 import CaraKerja from '../components/CaraKerja';
 import ErrorBoundary from '../components/ErrorBoundary';
+import { useLanguage } from '../context/LanguageContext';
 import './PortfolioHome.css';
 import {
   ArrowUpRight,
@@ -31,6 +32,7 @@ import {
 } from 'lucide-react';
 
 export default function PortfolioHome({ onNavigateContohUi }) {
+  const { lang, setLang, t } = useLanguage();
   const [activeFilter, setActiveFilter] = useState('all');
   const [openFaq, setOpenFaq] = useState(1);
 
@@ -107,21 +109,38 @@ export default function PortfolioHome({ onNavigateContohUi }) {
             {/* Floating Pill Navbar */}
             <header className="hero-pill-navbar">
               <div className="nav-left-pill">
-                <a href="#" className="brand-logo-circle"><Code2 size={15} /></a>
                 <span className="brand-text-logo">erzadev</span>
                 <nav className="nav-links-row">
-                  <a href="#" className="nav-pill-link active">Home</a>
-                  <a href="#services" className="nav-pill-link">Services</a>
-                  <a href="#projects" className="nav-pill-link">Works</a>
-                  <a href="#calculator" className="nav-calculate-chip">Calculate Cost</a>
+                  <a href="#" className="nav-pill-link active">{t('nav_home')}</a>
+                  <a href="#services" className="nav-pill-link">{t('nav_services')}</a>
+                  <a href="#projects" className="nav-pill-link">{t('nav_works')}</a>
+                  <a href="#calculator" className="nav-calculate-chip">{t('nav_calculator')}</a>
                 </nav>
               </div>
               <div className="nav-right-pill">
+                <div className="lang-toggle-pill">
+                  <button
+                    type="button"
+                    className={`lang-btn ${lang === 'ID' ? 'active' : ''}`}
+                    onClick={() => setLang('ID')}
+                    title="Bahasa Indonesia"
+                  >
+                    🇮🇩 ID
+                  </button>
+                  <button
+                    type="button"
+                    className={`lang-btn ${lang === 'EN' ? 'active' : ''}`}
+                    onClick={() => setLang('EN')}
+                    title="English"
+                  >
+                    🇬🇧 EN
+                  </button>
+                </div>
                 <a
                   href="https://wa.me/6281234567890?text=Halo%20Mas%20Erza,%20saya%20tertarik%20konsultasi%20pembuatan%20aplikasi!"
                   target="_blank" rel="noreferrer"
                   className="btn-pill-border"
-                >Hire Me</a>
+                >{t('nav_hire_me')}</a>
               </div>
             </header>
 
@@ -198,9 +217,9 @@ export default function PortfolioHome({ onNavigateContohUi }) {
         {/* ============================================================ */}
         <section id="services" className="quality-goods-section">
           <div className="quality-header-center">
-            <h2 className="title-chunky">Apa aja yang bisa saya bantu kerjain</h2>
+            <h2 className="title-chunky">{t('services_title')}</h2>
             <p className="quality-subtext">
-              Solusi end-to-end pembuatan produk digital, mulai dari arsitektur mobile apps native, website modern berkecepatan tinggi, hingga integrasi cloud dan automasi AI.
+              {t('services_desc')}
             </p>
           </div>
 
@@ -232,7 +251,6 @@ export default function PortfolioHome({ onNavigateContohUi }) {
             {/* Left Column: Brand & Tagline */}
             <div className="footer-brand-column">
               <div className="footer-logo-row">
-                <span className="footer-logo-icon">⚡</span>
                 <span className="footer-logo-text">erzadev</span>
               </div>
               <p className="footer-brand-desc">

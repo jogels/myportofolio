@@ -1,11 +1,107 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { useLanguage } from '../context/LanguageContext';
 import './KineticWovenClothSection.css';
 
+function generateClothTexture(lang) {
+  const W = 640;
+  const H = 400;
+  const c = document.createElement('canvas');
+  c.width = W;
+  c.height = H;
+  const x = c.getContext('2d');
+  if (!x) return new THREE.CanvasTexture(c);
+
+  // Ivory Ground Gradient
+  const g = x.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, '#efe6d4');
+  g.addColorStop(0.5, '#e9dfca');
+  g.addColorStop(1, '#e3d7bf');
+  x.fillStyle = g;
+  x.fillRect(0, 0, W, H);
+
+  // Top solid crimson band connecting directly to marquee
+  x.fillStyle = '#a5202c';
+  x.fillRect(0, 0, W, 23);
+
+  // Crimson Hem Borders
+  x.strokeStyle = '#a5202c';
+  x.lineWidth = 5;
+  x.strokeRect(23, 23, W - 46, H - 46);
+  x.lineWidth = 1.5;
+  x.strokeStyle = '#7c1622';
+  x.strokeRect(33, 33, W - 66, H - 66);
+
+  // Top Title: Erzadev
+  x.fillStyle = '#a5202c';
+  x.font = 'bold 37px Georgia, "Times New Roman", serif';
+  x.textAlign = 'center';
+  x.textBaseline = 'middle';
+  x.fillText('ERZADEV', W / 2, 100);
+
+  x.font = 'normal 10px "Helvetica Neue", Arial, sans-serif';
+  x.fillStyle = '#7c1622';
+  x.fillText('· JAKARTA · INDONESIA ·', W / 2, 131);
+
+  // Main Display: Welcome to My Website / Selamat Datang di Website Saya
+  x.fillStyle = '#9e1e2a';
+  if (lang === 'ID') {
+    x.font = 'bold 46px Georgia, "Times New Roman", serif';
+    x.fillText('SELAMAT DATANG DI', W / 2, 205);
+    x.fillText('WEBSITE SAYA', W / 2, 268);
+  } else {
+    x.font = 'bold 54px Georgia, "Times New Roman", serif';
+    x.fillText('WELCOME TO', W / 2, 210);
+    x.fillText('MY WEBSITE', W / 2, 272);
+  }
+
+  // Weave Thread Grid Overlay
+  x.globalAlpha = 1;
+  for (let yy = 0; yy < H; yy += 4) {
+    x.strokeStyle = 'rgba(60,30,20,0.05)';
+    x.lineWidth = 1;
+    x.beginPath();
+    x.moveTo(0, yy + 0.5);
+    x.lineTo(W, yy + 0.5);
+    x.stroke();
+  }
+  for (let xx = 0; xx < W; xx += 4) {
+    x.strokeStyle = 'rgba(255,250,235,0.06)';
+    x.lineWidth = 1;
+    x.beginPath();
+    x.moveTo(xx + 0.5, 0);
+    x.lineTo(xx + 0.5, H);
+    x.stroke();
+  }
+
+  // Fabric Slub Noise (Optimized)
+  try {
+    const id = x.getImageData(0, 0, W, H);
+    const d = id.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const n = (Math.random() * 2 - 1) * 10;
+      d[i] += n;
+      d[i + 1] += n;
+      d[i + 2] += n;
+    }
+    x.putImageData(id, 0, 0);
+  } catch (e) {
+    // fallback if getImageData fails
+  }
+
+  const tex = new THREE.CanvasTexture(c);
+  tex.anisotropy = 4;
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
 export default function KineticWovenClothSection() {
+  const { lang } = useLanguage();
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
+  const materialRef = useRef(null);
 
+  // 1. Primary Three.js setup (Runs ONCE on mount — exact original fit & scale)
   useEffect(() => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
@@ -15,110 +111,24 @@ export default function KineticWovenClothSection() {
     let isRunning = false;
     let t = 0;
 
-    // 1. Generate Procedural Woven Fabric Canvas Texture (Optimized 640x400)
-    function makeClothTexture() {
-      const W = 640;
-      const H = 400;
-      const c = document.createElement('canvas');
-      c.width = W;
-      c.height = H;
-      const x = c.getContext('2d');
-      if (!x) return new THREE.CanvasTexture(c);
-
-      // Ivory Ground Gradient
-      const g = x.createLinearGradient(0, 0, 0, H);
-      g.addColorStop(0, '#efe6d4');
-      g.addColorStop(0.5, '#e9dfca');
-      g.addColorStop(1, '#e3d7bf');
-      x.fillStyle = g;
-      x.fillRect(0, 0, W, H);
-
-      // Top solid crimson band connecting directly to marquee
-      x.fillStyle = '#a5202c';
-      x.fillRect(0, 0, W, 23);
-
-      // Crimson Hem Borders
-      x.strokeStyle = '#a5202c';
-      x.lineWidth = 5;
-      x.strokeRect(23, 23, W - 46, H - 46);
-      x.lineWidth = 1.5;
-      x.strokeStyle = '#7c1622';
-      x.strokeRect(33, 33, W - 66, H - 66);
-
-      // Top Title: Erzadev
-      x.fillStyle = '#a5202c';
-      x.font = 'bold 37px Georgia, "Times New Roman", serif';
-      x.textAlign = 'center';
-      x.textBaseline = 'middle';
-      x.fillText('ERZADEV', W / 2, 100);
-
-      x.font = 'normal 10px "Helvetica Neue", Arial, sans-serif';
-      x.fillStyle = '#7c1622';
-      x.fillText('· JAKARTA · INDONESIA ·', W / 2, 131);
-
-      // Main Display: Welcome to My Website
-      x.fillStyle = '#9e1e2a';
-      x.font = 'bold 56px Georgia, "Times New Roman", serif';
-      x.fillText('WELCOME TO', W / 2, 210);
-      x.fillText('MY WEBSITE', W / 2, 272);
-
-      // Weave Thread Grid Overlay
-      x.globalAlpha = 1;
-      for (let yy = 0; yy < H; yy += 4) {
-        x.strokeStyle = 'rgba(60,30,20,0.05)';
-        x.lineWidth = 1;
-        x.beginPath();
-        x.moveTo(0, yy + 0.5);
-        x.lineTo(W, yy + 0.5);
-        x.stroke();
-      }
-      for (let xx = 0; xx < W; xx += 4) {
-        x.strokeStyle = 'rgba(255,250,235,0.06)';
-        x.lineWidth = 1;
-        x.beginPath();
-        x.moveTo(xx + 0.5, 0);
-        x.lineTo(xx + 0.5, H);
-        x.stroke();
-      }
-
-      // Fabric Slub Noise (Optimized)
-      try {
-        const id = x.getImageData(0, 0, W, H);
-        const d = id.data;
-        for (let i = 0; i < d.length; i += 32) {
-          const n = (Math.random() * 2 - 1) * 8;
-          d[i] += n;
-          d[i + 1] += n;
-          d[i + 2] += n;
-        }
-        x.putImageData(id, 0, 0);
-      } catch (e) {
-        // fallback if getImageData fails
-      }
-
-      const tex = new THREE.CanvasTexture(c);
-      tex.anisotropy = 1;
-      tex.colorSpace = THREE.SRGBColorSpace;
-      return tex;
-    }
-
     // 2. Three.js Scene Setup (Optimized for 60fps performance)
     const scene = new THREE.Scene();
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true, powerPreference: 'high-performance' });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
 
     const BW = 4.4;
     const BH = 2.75;
-    const GX = 14;
-    const GY = 9;
+    const GX = 30;
+    const GY = 20;
     const geo = new THREE.PlaneGeometry(BW, BH, GX, GY);
     const mat = new THREE.MeshPhongMaterial({
-      map: makeClothTexture(),
+      map: generateClothTexture(lang),
       side: THREE.DoubleSide,
       shininess: 6,
       specular: 0x2a1410,
       color: 0xffffff,
     });
+    materialRef.current = mat;
     const mesh = new THREE.Mesh(geo, mat);
     scene.add(mesh);
 
@@ -244,17 +254,12 @@ export default function KineticWovenClothSection() {
       }
     }
 
-    let frameCounter = 0;
     function commit() {
       for (let i = 0; i < N; i++) {
         pos.setXYZ(i, cur[i * 3], cur[i * 3 + 1], cur[i * 3 + 2]);
       }
       pos.needsUpdate = true;
-      frameCounter++;
-      // Recompute vertex normals only once every 3 frames to save CPU
-      if (frameCounter % 3 === 0) {
-        geo.computeVertexNormals();
-      }
+      geo.computeVertexNormals();
     }
 
     // 4. Camera & Sizing Fit — Align top of cloth flush into marquee tape with 0px gap
@@ -274,7 +279,6 @@ export default function KineticWovenClothSection() {
       const hFit = BW / 2 / Math.tan((42 * Math.PI) / 360) / aspect;
       const dist = Math.max(vFit, hFit) * 1.05;
       const halfVisibleH = dist * Math.tan((42 * Math.PI) / 360);
-      // Lift cloth up so the top pinned edge connects seamlessly with the marquee tape
       const targetCamY = BH / 2 - halfVisibleH - 0.18;
       camera.position.set(0, targetCamY, dist);
       camera.lookAt(0, targetCamY, 0);
@@ -320,11 +324,10 @@ export default function KineticWovenClothSection() {
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    // Pause animation when element is offscreen for maximum performance
     const intersectionObserver = new IntersectionObserver(([entry]) => {
       isIntersecting = entry.isIntersecting;
       updateRunningState();
-    }, { threshold: 0.1 });
+    });
     intersectionObserver.observe(container);
 
     return () => {
@@ -338,6 +341,17 @@ export default function KineticWovenClothSection() {
       geo.dispose();
     };
   }, []);
+
+  // 2. Seamless language texture update without unmounting scene or changing cloth size
+  useEffect(() => {
+    if (materialRef.current) {
+      const oldTex = materialRef.current.map;
+      const newTex = generateClothTexture(lang);
+      materialRef.current.map = newTex;
+      materialRef.current.needsUpdate = true;
+      if (oldTex) oldTex.dispose();
+    }
+  }, [lang]);
 
   return (
     <section ref={containerRef} className="kinetic-cloth-section-container">

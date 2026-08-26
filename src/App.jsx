@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PortfolioHome from './pages/PortfolioHome';
 import ContohUi from './pages/ContohUi';
 import SitePreloader from './components/SitePreloader';
+import { LanguageProvider } from './context/LanguageContext';
 
 function App() {
   const [currentPath, setCurrentPath] = useState(
@@ -30,14 +31,14 @@ function App() {
   };
 
   return (
-    <>
+    <LanguageProvider>
       <SitePreloader />
       {currentPath === '/contohUi' ? (
         <ContohUi />
       ) : (
         <PortfolioHome onNavigateContohUi={() => navigateTo('/contohUi')} />
       )}
-    </>
+    </LanguageProvider>
   );
 }
 
