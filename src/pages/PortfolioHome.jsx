@@ -198,7 +198,7 @@ export default function PortfolioHome({ onNavigateContohUi }) {
         {/* ============================================================ */}
         <section id="services" className="quality-goods-section">
           <div className="quality-header-center">
-            <h2 className="title-chunky">Engineering Services &amp; Capabilities</h2>
+            <h2 className="title-chunky">Apa aja yang bisa saya bantu kerjain</h2>
             <p className="quality-subtext">
               Solusi end-to-end pembuatan produk digital, mulai dari arsitektur mobile apps native, website modern berkecepatan tinggi, hingga integrasi cloud dan automasi AI.
             </p>

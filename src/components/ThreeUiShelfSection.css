@@ -1,131 +1,392 @@
 /* ==========================================================================
-   ThreeUiShelfSection.css - 3D Interactive Working Volumes Library Showcase
+   ThreeUiShelfSection.css - High-End Bento Project Grid (Google Fonts Edition)
    ========================================================================== */
 
 .threeui-shelf-section {
   position: relative;
   width: 100%;
-  padding: 5rem 1.5rem 6rem;
-  background: #060707;
+  padding: 6rem 1.5rem 7rem;
+  background: #060709;
   color: #f4eee6;
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
 }
 
 .threeui-shelf-header {
   text-align: center;
-  max-width: 780px;
-  margin: 0 auto 3rem;
+  max-width: 820px;
+  margin: 0 auto 3.5rem;
 }
 
 .threeui-pill-tag {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.4rem 1rem;
-  background: rgba(212, 255, 0, 0.1);
-  border: 1px solid rgba(212, 255, 0, 0.35);
-  color: #d4ff00;
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.85rem;
-  letter-spacing: 0.12em;
+  padding: 0.45rem 1.2rem;
+  background: rgba(200, 112, 70, 0.12);
+  border: 1px solid rgba(200, 112, 70, 0.4);
+  color: #c87046;
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   border-radius: 999px;
   margin-bottom: 1.25rem;
   text-transform: uppercase;
 }
 
 .threeui-shelf-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: clamp(1.6rem, 3.8vw, 2.4rem);
-  font-weight: 900;
-  line-height: 1.2;
-  letter-spacing: 0.02em;
+  font-family: 'Outfit', 'Syne', sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
   color: #ffffff;
   margin: 0 0 1rem;
-  text-transform: uppercase;
 }
 
 .threeui-shelf-desc {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
   font-size: clamp(0.95rem, 1.4vw, 1.15rem);
-  line-height: 1.6;
+  line-height: 1.65;
   color: rgba(244, 238, 230, 0.7);
   margin: 0 auto;
 }
 
-/* 3D Interactive Canvas Container with GPU Isolation */
-.threeui-shelf-container {
+/* Category Filter Tabs */
+.project-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-bottom: 3rem;
   width: 100%;
-  max-width: 1400px;
+  max-width: 900px;
+}
+
+.filter-btn {
+  padding: 0.55rem 1.25rem;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #a0a5b5;
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.filter-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.filter-btn.active {
+  background: #c87046;
+  color: #ffffff;
+  border-color: #c87046;
+  box-shadow: 0 4px 20px rgba(200, 112, 70, 0.35);
+}
+
+/* Projects Bento Grid Layout */
+.projects-bento-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1.75rem;
+  width: 100%;
+  max-width: 1350px;
   margin: 0 auto;
-  height: 560px;
-  position: relative;
-  border-radius: 24px;
-  overflow: hidden;
-  border: 1px solid rgba(244, 238, 230, 0.12);
-  background: #171a24;
-  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.85), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-  contain: layout paint size;
-  will-change: transform;
-  transform: translateZ(0);
-  backface-visibility: hidden;
 }
 
-.shader-frame {
+.project-card {
   position: relative;
-  width: 100%;
-  height: 100%;
+  background: #0f1118;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
   overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
 }
 
-.threeui-shelf-placeholder {
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--card-accent, #c87046), transparent);
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(200, 112, 70, 0.4);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 30px rgba(200, 112, 70, 0.12);
+}
+
+.project-card:hover::before {
+  opacity: 1;
+}
+
+/* Card Header & Badge */
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.card-vol-badge {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #c87046;
+  background: rgba(200, 112, 70, 0.1);
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  border: 1px solid rgba(200, 112, 70, 0.2);
+}
+
+.card-discipline-tag {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(244, 238, 230, 0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.card-title {
+  font-family: 'Outfit', 'Syne', sans-serif;
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.75rem;
+  line-height: 1.3;
+}
+
+.card-deck {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: rgba(244, 238, 230, 0.75);
+  margin: 0 0 1.25rem;
+}
+
+/* Key Chapters List */
+.card-chapters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  background: rgba(255, 255, 255, 0.025);
+  padding: 0.9rem 1.1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.chapter-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.84rem;
+  color: rgba(244, 238, 230, 0.85);
+  font-weight: 500;
+}
+
+.chapter-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #c87046;
+  flex-shrink: 0;
+}
+
+/* Card Bottom Footer */
+.card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1.2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.card-tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tech-pill {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #8b92a5;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+}
+
+.btn-detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.95rem;
+  background: rgba(200, 112, 70, 0.12);
+  border: 1px solid rgba(200, 112, 70, 0.35);
+  color: #c87046;
+  border-radius: 8px;
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-detail:hover {
+  background: #c87046;
+  color: #ffffff;
+  border-color: #c87046;
+}
+
+/* Modal Drawer Overlay */
+.project-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  height: 100%;
+  padding: 1.5rem;
+  animation: fadeInModal 0.3s ease;
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+}
+
+.project-modal-content {
+  position: relative;
+  background: #0f1118;
+  border: 1px solid rgba(200, 112, 70, 0.35);
+  border-radius: 24px;
   width: 100%;
-  background: #0d0d0d;
-  border-radius: 16px;
-  border: 1px dashed rgba(255, 255, 255, 0.15);
-  color: #718096;
-  font-size: 0.95rem;
+  max-width: 720px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 2.5rem;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: #a0a5b5;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.modal-header-badge {
+  display: inline-block;
   font-family: 'Outfit', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #c87046;
+  margin-bottom: 0.75rem;
 }
 
-.pulse-icon {
-  animation: pulseGlow 1.5s infinite ease-in-out;
-  color: #2fe088;
+.modal-title {
+  font-family: 'Outfit', 'Syne', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.5rem;
 }
 
-@keyframes pulseGlow {
+.modal-discipline {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.95rem;
+  color: rgba(244, 238, 230, 0.6);
+  margin-bottom: 1.75rem;
+}
 
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 0.7;
+.modal-section-title {
+  font-family: 'Outfit', 'Syne', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 1.5rem 0 0.85rem;
+  letter-spacing: 0.02em;
+}
+
+.modal-chapter-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 1.1rem 1.3rem;
+  border-radius: 12px;
+  margin-bottom: 0.85rem;
+}
+
+.modal-chapter-title {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #c87046;
+  margin-bottom: 0.35rem;
+}
+
+.modal-chapter-desc {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: rgba(244, 238, 230, 0.75);
+}
+
+@keyframes fadeInModal {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
   }
-
-  50% {
-    transform: scale(1.2);
+  to {
     opacity: 1;
+    transform: scale(1);
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
+  .projects-bento-grid {
+    grid-template-columns: 1fr;
+  }
+  
   .threeui-shelf-section {
-    padding: 3.5rem 1rem 4rem;
-  }
-
-  .threeui-shelf-container {
-    height: 460px;
-    border-radius: 16px;
-  }
-}
-
-@media (max-width: 600px) {
-  .threeui-shelf-container {
-    height: 380px;
+    padding: 4rem 1rem 5rem;
   }
 }

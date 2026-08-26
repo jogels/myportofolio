@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PortfolioHome from './pages/PortfolioHome';
 import ContohUi from './pages/ContohUi';
+import SitePreloader from './components/SitePreloader';
 
 function App() {
   const [currentPath, setCurrentPath] = useState(
@@ -28,13 +29,16 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Render Showcase Lab jika di /contohUi
-  if (currentPath === '/contohUi') {
-    return <ContohUi />;
-  }
-
-  // Render Full Playful Portfolio Home di /
-  return <PortfolioHome onNavigateContohUi={() => navigateTo('/contohUi')} />;
+  return (
+    <>
+      <SitePreloader />
+      {currentPath === '/contohUi' ? (
+        <ContohUi />
+      ) : (
+        <PortfolioHome onNavigateContohUi={() => navigateTo('/contohUi')} />
+      )}
+    </>
+  );
 }
 
 export default App;
