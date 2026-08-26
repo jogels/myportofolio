@@ -6,6 +6,7 @@ import KineticWovenClothSection from '../components/KineticWovenClothSection';
 import ThreeUiShelfSection from '../components/ThreeUiShelfSection';
 import ManifestoShowcase from '../components/ManifestoShowcase';
 import CaraKerja from '../components/CaraKerja';
+import ErrorBoundary from '../components/ErrorBoundary';
 import './PortfolioHome.css';
 import {
   ArrowUpRight,
@@ -33,32 +34,25 @@ export default function PortfolioHome({ onNavigateContohUi }) {
   const [activeFilter, setActiveFilter] = useState('all');
   const [openFaq, setOpenFaq] = useState(1);
 
-  // ─── Window Scroll with Physics-Based Smooth Spring Interpolation ───
+  // ─── Direct Hardware-Accelerated Scroll Interpolation ───
   const { scrollY } = useScroll();
-
-  // useSpring softens raw mousewheel notches into butter-smooth 60fps continuous motion
-  const smoothScroll = useSpring(scrollY, {
-    stiffness: 120,
-    damping: 24,
-    mass: 0.18,
-    restDelta: 0.001
-  });
+  const smoothScrollY = scrollY;
 
   // Portrait slides LEFT smoothly from 0px to 380px
-  const portraitX = useTransform(smoothScroll, [0, 380], ['0%', '-70%']);
+  const portraitX = useTransform(smoothScrollY, [0, 380], ['0%', '-70%']);
 
   // ERZADEV letters fade out smoothly on initial scroll
-  const erzadevOpacity = useTransform(smoothScroll, [0, 140], [1, 0]);
-  const erzadevY = useTransform(smoothScroll, [0, 140], [0, -35]);
-  const erzadevScale = useTransform(smoothScroll, [0, 140], [1, 0.90]);
+  const erzadevOpacity = useTransform(smoothScrollY, [0, 140], [1, 0]);
+  const erzadevY = useTransform(smoothScrollY, [0, 140], [0, -35]);
+  const erzadevScale = useTransform(smoothScrollY, [0, 140], [1, 0.90]);
 
   // Tagline fades out immediately
-  const taglineOpacity = useTransform(smoothScroll, [0, 70], [1, 0]);
+  const taglineOpacity = useTransform(smoothScrollY, [0, 70], [1, 0]);
 
   // Intro text fades + slides in from RIGHT — EXACTLY SAME range [0, 380px]
-  const introOpacity = useTransform(smoothScroll, [0, 380], [0, 1]);
-  const introX = useTransform(smoothScroll, [0, 380], ['100px', '0px']);
-  const introScale = useTransform(smoothScroll, [0, 380], [0.92, 1]);
+  const introOpacity = useTransform(smoothScrollY, [0, 380], [0, 1]);
+  const introX = useTransform(smoothScrollY, [0, 380], ['100px', '0px']);
+  const introScale = useTransform(smoothScrollY, [0, 380], [0.92, 1]);
 
   const filterTabs = [
     { id: 'all', label: 'Outdoor Apps' },
@@ -153,7 +147,7 @@ export default function PortfolioHome({ onNavigateContohUi }) {
                 style={{ x: portraitX }}
                 className="hero-portrait-wrapper"
               >
-                <img src={ppportoImg} alt="Erza Saleh" className="hero-portrait-img" />
+                <img src={ppportoImg} alt="Erza Saleh" className="hero-portrait-img" decoding="async" loading="eager" />
               </motion.div>
 
               {/* Intro text — fades + slides in from right simultaneously with portrait */}
@@ -188,12 +182,16 @@ export default function PortfolioHome({ onNavigateContohUi }) {
         {/* ============================================================ */}
         {/* 2. KINETIC TEXTILE / WOVEN CLOTH 3D SIMULATION SECTION */}
         {/* ============================================================ */}
-        <KineticWovenClothSection />
+        <ErrorBoundary>
+          <KineticWovenClothSection />
+        </ErrorBoundary>
 
         {/* ============================================================ */}
         {/* 3. THREEUI INTERACTIVE 3D WORKING VOLUMES SHELF SHOWCASE */}
         {/* ============================================================ */}
-        <ThreeUiShelfSection />
+        <ErrorBoundary>
+          <ThreeUiShelfSection />
+        </ErrorBoundary>
 
         {/* ============================================================ */}
         {/* 7. SERVICES & ENGINEERING CAPABILITIES + COST CALCULATOR */}
@@ -207,18 +205,24 @@ export default function PortfolioHome({ onNavigateContohUi }) {
           </div>
 
           {/* Interactive Manifesto Showcase (Acid Brutalism / Minimalist 6-Card Services Grid) */}
-          <ManifestoShowcase />
+          <ErrorBoundary>
+            <ManifestoShowcase />
+          </ErrorBoundary>
 
           {/* Interactive Cost Calculator */}
           <div id="calculator">
-            <CostCalculator />
+            <ErrorBoundary>
+              <CostCalculator />
+            </ErrorBoundary>
           </div>
         </section>
 
         {/* ============================================================ */}
         {/* 8. TIMELINE & WORKFLOW SECTION (Cara Kerja) */}
         {/* ============================================================ */}
-        <CaraKerja />
+        <ErrorBoundary>
+          <CaraKerja />
+        </ErrorBoundary>
 
         {/* ============================================================ */}
         {/* 9. BOTTOM FOOTER SECTION (REDESIGNED) */}

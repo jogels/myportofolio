@@ -54,7 +54,7 @@
   margin: 0 auto;
 }
 
-/* 3D Interactive Canvas Container */
+/* 3D Interactive Canvas Container with GPU Isolation */
 .threeui-shelf-container {
   width: 100%;
   max-width: 1400px;
@@ -66,6 +66,10 @@
   border: 1px solid rgba(244, 238, 230, 0.12);
   background: #171a24;
   box-shadow: 0 35px 90px rgba(0, 0, 0, 0.85), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  contain: layout paint size;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .shader-frame {
@@ -75,10 +79,45 @@
   overflow: hidden;
 }
 
+.threeui-shelf-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  height: 100%;
+  width: 100%;
+  background: #0d0d0d;
+  border-radius: 16px;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  color: #718096;
+  font-size: 0.95rem;
+  font-family: 'Outfit', sans-serif;
+}
+
+.pulse-icon {
+  animation: pulseGlow 1.5s infinite ease-in-out;
+  color: #2fe088;
+}
+
+@keyframes pulseGlow {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
 @media (max-width: 900px) {
   .threeui-shelf-section {
     padding: 3.5rem 1rem 4rem;
   }
+
   .threeui-shelf-container {
     height: 460px;
     border-radius: 16px;

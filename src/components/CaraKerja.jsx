@@ -72,13 +72,21 @@ export default function CaraKerja() {
     const sprout = sproutRef.current;
     if (!journey || !fill || !sprout) return;
 
+    let cachedTop = 0;
+    let cachedHeight = 0;
     let rafId = null;
 
-    const update = () => {
+    const measure = () => {
       const rect = journey.getBoundingClientRect();
+      cachedTop = rect.top + window.scrollY;
+      cachedHeight = rect.height;
+    };
+
+    const update = () => {
       const vh = window.innerHeight;
-      const total = rect.height + vh * 0.35;
-      const progressed = vh * 0.55 - rect.top;
+      const rectTop = cachedTop - window.scrollY;
+      const total = cachedHeight + vh * 0.35;
+      const progressed = vh * 0.55 - rectTop;
       const progress = total > 0 ? Math.max(0, Math.min(1, progressed / total)) : 0;
 
       fill.style.height = progress * 100 + "%";
@@ -86,7 +94,15 @@ export default function CaraKerja() {
 
       const sway = Math.sin(progress * 14) * 9;
       const grow = 0.82 + progress * 0.45;
-      sprout.style.transform = `translate(-50%,-50%) scale(${grow}) rotate(${sway}deg)`;
+      sprout.style.transform = `translate3d(-50%,-50%,0) scale(${grow}) rotate(${sway}deg)`;
+    };
+
+    measure();
+    update();
+
+    const onResize = () => {
+      measure();
+      update();
     };
 
     const onScroll = () => {
@@ -97,12 +113,11 @@ export default function CaraKerja() {
       });
     };
 
-    update();
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", update);
+    window.addEventListener("resize", onResize, { passive: true });
     return () => {
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", update);
+      window.removeEventListener("resize", onResize);
       if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);

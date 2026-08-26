@@ -15,10 +15,10 @@ export default function KineticWovenClothSection() {
     let isRunning = false;
     let t = 0;
 
-    // 1. Generate Procedural Woven Fabric Canvas Texture
+    // 1. Generate Procedural Woven Fabric Canvas Texture (Optimized 640x400)
     function makeClothTexture() {
-      const W = 1280;
-      const H = 800;
+      const W = 640;
+      const H = 400;
       const c = document.createElement('canvas');
       c.width = W;
       c.height = H;
@@ -35,36 +35,36 @@ export default function KineticWovenClothSection() {
 
       // Top solid crimson band connecting directly to marquee
       x.fillStyle = '#a5202c';
-      x.fillRect(0, 0, W, 46);
+      x.fillRect(0, 0, W, 23);
 
       // Crimson Hem Borders
       x.strokeStyle = '#a5202c';
-      x.lineWidth = 10;
-      x.strokeRect(46, 46, W - 92, H - 92);
-      x.lineWidth = 3;
+      x.lineWidth = 5;
+      x.strokeRect(23, 23, W - 46, H - 46);
+      x.lineWidth = 1.5;
       x.strokeStyle = '#7c1622';
-      x.strokeRect(66, 66, W - 132, H - 132);
+      x.strokeRect(33, 33, W - 66, H - 66);
 
       // Top Title: Erzadev
       x.fillStyle = '#a5202c';
-      x.font = 'bold 74px Georgia, "Times New Roman", serif';
+      x.font = 'bold 37px Georgia, "Times New Roman", serif';
       x.textAlign = 'center';
       x.textBaseline = 'middle';
-      x.fillText('ERZADEV', W / 2, 200);
+      x.fillText('ERZADEV', W / 2, 100);
 
-      x.font = 'normal 20px "Helvetica Neue", Arial, sans-serif';
+      x.font = 'normal 10px "Helvetica Neue", Arial, sans-serif';
       x.fillStyle = '#7c1622';
-      x.fillText('· JAKARTA · INDONESIA ·', W / 2, 262);
+      x.fillText('· JAKARTA · INDONESIA ·', W / 2, 131);
 
       // Main Display: Welcome to My Website
       x.fillStyle = '#9e1e2a';
-      x.font = 'bold 112px Georgia, "Times New Roman", serif';
-      x.fillText('WELCOME TO', W / 2, 420);
-      x.fillText('MY WEBSITE', W / 2, 545);
+      x.font = 'bold 56px Georgia, "Times New Roman", serif';
+      x.fillText('WELCOME TO', W / 2, 210);
+      x.fillText('MY WEBSITE', W / 2, 272);
 
       // Weave Thread Grid Overlay
       x.globalAlpha = 1;
-      for (let yy = 0; yy < H; yy += 3) {
+      for (let yy = 0; yy < H; yy += 4) {
         x.strokeStyle = 'rgba(60,30,20,0.05)';
         x.lineWidth = 1;
         x.beginPath();
@@ -72,7 +72,7 @@ export default function KineticWovenClothSection() {
         x.lineTo(W, yy + 0.5);
         x.stroke();
       }
-      for (let xx = 0; xx < W; xx += 3) {
+      for (let xx = 0; xx < W; xx += 4) {
         x.strokeStyle = 'rgba(255,250,235,0.06)';
         x.lineWidth = 1;
         x.beginPath();
@@ -81,36 +81,36 @@ export default function KineticWovenClothSection() {
         x.stroke();
       }
 
-      // Fabric Slub Noise
+      // Fabric Slub Noise (Optimized)
       try {
         const id = x.getImageData(0, 0, W, H);
         const d = id.data;
-        for (let i = 0; i < d.length; i += 4) {
-          const n = (Math.random() * 2 - 1) * 10;
+        for (let i = 0; i < d.length; i += 32) {
+          const n = (Math.random() * 2 - 1) * 8;
           d[i] += n;
           d[i + 1] += n;
           d[i + 2] += n;
         }
         x.putImageData(id, 0, 0);
       } catch (e) {
-        // fallback if getImageData fails in sandboxed environment
+        // fallback if getImageData fails
       }
 
       const tex = new THREE.CanvasTexture(c);
-      tex.anisotropy = 4;
+      tex.anisotropy = 1;
       tex.colorSpace = THREE.SRGBColorSpace;
       return tex;
     }
 
     // 2. Three.js Scene Setup (Optimized for 60fps performance)
     const scene = new THREE.Scene();
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true, powerPreference: 'high-performance' });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
 
     const BW = 4.4;
     const BH = 2.75;
-    const GX = 30;
-    const GY = 20;
+    const GX = 14;
+    const GY = 9;
     const geo = new THREE.PlaneGeometry(BW, BH, GX, GY);
     const mat = new THREE.MeshPhongMaterial({
       map: makeClothTexture(),
@@ -244,12 +244,17 @@ export default function KineticWovenClothSection() {
       }
     }
 
+    let frameCounter = 0;
     function commit() {
       for (let i = 0; i < N; i++) {
         pos.setXYZ(i, cur[i * 3], cur[i * 3 + 1], cur[i * 3 + 2]);
       }
       pos.needsUpdate = true;
-      geo.computeVertexNormals();
+      frameCounter++;
+      // Recompute vertex normals only once every 3 frames to save CPU
+      if (frameCounter % 3 === 0) {
+        geo.computeVertexNormals();
+      }
     }
 
     // 4. Camera & Sizing Fit — Align top of cloth flush into marquee tape with 0px gap
@@ -315,11 +320,11 @@ export default function KineticWovenClothSection() {
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    // Pause animation when element is offscreen for performance
+    // Pause animation when element is offscreen for maximum performance
     const intersectionObserver = new IntersectionObserver(([entry]) => {
       isIntersecting = entry.isIntersecting;
       updateRunningState();
-    });
+    }, { threshold: 0.1 });
     intersectionObserver.observe(container);
 
     return () => {

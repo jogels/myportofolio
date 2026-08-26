@@ -1780,6 +1780,11 @@
         height: 1.58,
         depth: 0.26,
         chapters: ["Employee Attendance", "SPPD Travel Flow", "Leave & Overtime"],
+        chapterDecks: [
+          "Automated geofenced GPS check-in & check-out with selfie validation and real-time location verification for multi-branch employees.",
+          "Multi-tier official travel approval workflow (SPPD), allowance budget calculation, and digital expense report submission.",
+          "Automated annual leave balance calculations, sick leave quota tracking, overtime rate computations, and HR approval dashboards."
+        ],
         seed: 11
       },
       {
@@ -1813,6 +1818,11 @@
         height: 1.46,
         depth: 0.29,
         chapters: ["Campaigns", "Engagement", "Impact Tracking"],
+        chapterDecks: [
+          "Creating social cause campaigns, setting volunteer target quotas, and managing activity schedules.",
+          "Volunteer registration, skill matching, task assignments, and community discussion boards.",
+          "Real-time donation metrics, volunteer hours logged, and social impact analytics reports."
+        ],
         seed: 22
       },
       {
@@ -1846,6 +1856,11 @@
         height: 1.52,
         depth: 0.22,
         chapters: ["Concurrence Control", "Check-in Flows", "Payment Gates"],
+        chapterDecks: [
+          "High-concurrency seat locking, anti-double-booking engine, and temporary hold timers.",
+          "High-speed QR code scanning, offline ticket validation, and gate entry logs.",
+          "Direct QRIS, Virtual Account, credit card integration, and automated refund processing."
+        ],
         seed: 33
       },
       {
@@ -1879,6 +1894,11 @@
         height: 1.68,
         depth: 0.25,
         chapters: ["Fleet Mapping", "Socket Broadcasts", "Routing Optimization"],
+        chapterDecks: [
+          "Live GPS fleet tracking, driver status telemetry, and active route heatmaps.",
+          "Real-time location streaming via WebSockets, ETA updates, and instant passenger alerts.",
+          "Traffic-aware route calculation, multi-stop dispatching, and fuel efficiency analytics."
+        ],
         seed: 44
       },
       {
@@ -1912,6 +1932,11 @@
         height: 1.48,
         depth: 0.3,
         chapters: ["Queue Run", "Worker Execution", "Dashboard Analytics"],
+        chapterDecks: [
+          "Priority queue management, delayed task scheduling, and Redis-backed job runners.",
+          "Distributed background worker nodes, automatic retry policies, and error dead-letter queues.",
+          "Visual task completion metrics, execution latency charts, and system throughput logs."
+        ],
         seed: 55
       },
       {
@@ -1945,6 +1970,11 @@
         height: 1.57,
         depth: 0.24,
         chapters: ["Pet Catalog", "Grooming Booking", "Health Journals"],
+        chapterDecks: [
+          "Categorized pet food, accessories, care products catalog with inventory stock alerts.",
+          "Veterinary and grooming slot reservation, pet profile management, and appointment reminders.",
+          "Vaccination history logs, medical records, weight tracking, and vet consultation notes."
+        ],
         seed: 66
       },
       {
@@ -1978,6 +2008,11 @@
         height: 1.63,
         depth: 0.28,
         chapters: ["Calendar Sync", "Localized Time", "Reminder Bridges"],
+        chapterDecks: [
+          "Two-way Google & Outlook calendar integration, slot availability buffers, and booking limits.",
+          "Automatic timezone conversion, multi-currency pricing, and localized language preferences.",
+          "Automated WhatsApp and email booking confirmations, 24h pre-appointment alerts, and cancellation flows."
+        ],
         seed: 77
       },
       {
@@ -2011,6 +2046,11 @@
         height: 1.58,
         depth: 0.26,
         chapters: ["Request Pipes", "Location Tagging", "Invoice Systems"],
+        chapterDecks: [
+          "On-demand maintenance service dispatching, customer job posting, and emergency requests.",
+          "Technician GPS proximity matching, job site navigation, and arrival status timestamps.",
+          "Digital service cost estimation, itemized job invoicing, and instant digital receipt generation."
+        ],
         seed: 12
       },
       {
@@ -2044,6 +2084,11 @@
         height: 1.46,
         depth: 0.29,
         chapters: ["Room Inventory", "Rental Contracts", "Billing Automations"],
+        chapterDecks: [
+          "Interactive room availability map, room facility tiering, and rental status tracking.",
+          "Digital tenancy agreements, ID verification, lease duration terms, and deposit tracking.",
+          "Monthly rent auto-billing, utility meter calculation, WhatsApp payment reminders, and tenant portals."
+        ],
         seed: 23
       },
       {
@@ -2077,6 +2122,11 @@
         height: 1.52,
         depth: 0.22,
         chapters: ["Form Builders", "Validation Engines", "Aggregation Analytics"],
+        chapterDecks: [
+          "Drag-and-drop dynamic question builders, conditional branching logic, and multi-page form layouts.",
+          "Real-time field validation, anti-spam captcha protection, and response completeness checks.",
+          "Instant visual pie/bar charts, response sentiment analysis, and CSV/Excel export tools."
+        ],
         seed: 34
       },
       {
@@ -2110,6 +2160,11 @@
         height: 1.68,
         depth: 0.25,
         chapters: ["Registry Listing", "Geospatial Map", "Trust Verification"],
+        chapterDecks: [
+          "Endowment land legal record catalog, nazhir assignment logs, and land boundary measurements.",
+          "Interactive GIS map layer displaying verified wakaf land plots, satellite overlays, and search filters.",
+          "Digital certificate authenticity check, public transparency reports, and land utilization tracking."
+        ],
         seed: 45
       },
       {
@@ -2143,6 +2198,11 @@
         height: 1.48,
         depth: 0.3,
         chapters: ["Academy Courses", "Student Progress", "Lecture Streams"],
+        chapterDecks: [
+          "Structured Islamic study curriculum, video lecture modules, and downloadable PDF material packs.",
+          "Quiz submission grading, attendance tracking, lesson completion percentage, and student badges.",
+          "Live webinar integration, recorded lecture archives, and Q&A discussion forums."
+        ],
         seed: 56
       }
     ];
@@ -2218,6 +2278,7 @@
     const pad = (value) => String(value).padStart(2, "0");
 
     let reducedMotion = reducedMotionQuery.matches;
+    let initialSettlingFrames = 120;
     let renderer;
     let scene;
     let camera;
@@ -2719,7 +2780,11 @@
       return configureCanvasTexture(new THREE.CanvasTexture(foilCanvas));
     }
 
+    let sharedClothBumpTexture = null;
+    let sharedClothSurfaceMaps = null;
+
     function makeClothBumpTexture(book) {
+      if (sharedClothBumpTexture) return sharedClothBumpTexture;
       const bumpCanvas = document.createElement("canvas");
       bumpCanvas.width = 256;
       bumpCanvas.height = 256;
@@ -2756,13 +2821,15 @@
       texture.wrapS = THREE.RepeatWrapping;
       texture.wrapT = THREE.RepeatWrapping;
       texture.repeat.set(5, 8);
-      return configureCanvasTexture(texture, {
+      sharedClothBumpTexture = configureCanvasTexture(texture, {
         color: false,
-        anisotropy: 12
+        anisotropy: 4
       });
+      return sharedClothBumpTexture;
     }
 
     function makeClothSurfaceMaps(book) {
+      if (sharedClothSurfaceMaps) return sharedClothSurfaceMaps;
       const size = 256;
       const heightField = new Float32Array(size * size);
       const normalCanvas = document.createElement("canvas");
@@ -2821,14 +2888,15 @@
         texture.repeat.set(5, 8);
         return configureCanvasTexture(texture, {
           color: false,
-          anisotropy: 12
+          anisotropy: 4
         });
       };
 
-      return {
+      sharedClothSurfaceMaps = {
         normal: configureWeaveMap(normalCanvas, "cloth-normal"),
         roughness: configureWeaveMap(roughnessCanvas, "cloth-roughness")
       };
+      return sharedClothSurfaceMaps;
     }
 
     function makeEmbossMap(sourceTexture, name) {
@@ -3045,7 +3113,9 @@
           ctx.font = '400 20px "Iowan Old Style", Baskerville, Georgia, serif';
           drawWrappedCanvasText(
             ctx,
-            chapterIndex === 0 ? book.note : book.deck,
+            (book.chapterDecks && book.chapterDecks[chapterIndex])
+              ? book.chapterDecks[chapterIndex]
+              : (chapterIndex === 0 ? book.note : book.deck),
             54,
             438,
             42,
@@ -3089,7 +3159,17 @@
           drawWrappedCanvasText(ctx, book.chapters[2], 52, 244, 18, 54, 3);
           ctx.globalAlpha = 0.52;
           ctx.font = '400 20px "Iowan Old Style", Baskerville, Georgia, serif';
-          drawWrappedCanvasText(ctx, book.deck, 54, 438, 42, 28, 6);
+          drawWrappedCanvasText(
+            ctx,
+            (book.chapterDecks && book.chapterDecks[2])
+              ? book.chapterDecks[2]
+              : book.deck,
+            54,
+            438,
+            42,
+            28,
+            6
+          );
         } else if (pageIndex === 6) {
           ctx.font = '500 11px Inter, "Helvetica Neue", Arial, sans-serif';
           ctx.letterSpacing = "2px";
@@ -4960,13 +5040,21 @@
       rig.lastOffset = offset;
     }
 
+    let pointerMovePending = false;
     function setPointerFromEvent(event) {
-      const rect = canvas.getBoundingClientRect();
       pointer.clientX = event.clientX;
       pointer.clientY = event.clientY;
-      pointer.ndc.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      pointer.ndc.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-      pointerDirty = true;
+      if (!pointerMovePending) {
+        pointerMovePending = true;
+        requestAnimationFrame(() => {
+          pointerMovePending = false;
+          const rect = canvas.getBoundingClientRect();
+          pointer.ndc.x = ((pointer.clientX - rect.left) / rect.width) * 2 - 1;
+          pointer.ndc.y = -((pointer.clientY - rect.top) / rect.height) * 2 + 1;
+          pointerDirty = true;
+          requestFrame();
+        });
+      }
     }
 
     function updateHover() {
@@ -5820,12 +5908,10 @@
       renderer.render(scene, camera);
 
       const shelfMoving = Math.abs(position - targetPosition) > 0.0005 || wheelIdle > 0;
-      const shouldContinue = !reducedMotion
-        || mode === "opening"
-        || mode === "closing"
-        || shelfMoving
-        || themeIsMoving;
-      if (shouldContinue && !suspended) requestFrame();
+      const detailAnimating = mode === "opening" || mode === "closing" || (mode === "detail" && pageDrag.active);
+      if (initialSettlingFrames > 0) initialSettlingFrames -= 1;
+      const isTransitioning = initialSettlingFrames > 0 || shelfMoving || themeIsMoving || detailAnimating || pointerDirty;
+      if (isTransitioning && !suspended) requestFrame();
     }
 
     function resize() {
@@ -5833,7 +5919,7 @@
       viewHeight = window.innerHeight;
       configureResponsiveTargets();
       renderer.setSize(viewWidth, viewHeight, false);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+      renderer.setPixelRatio(1.0);
       camera.aspect = viewWidth / viewHeight;
       camera.updateProjectionMatrix();
 
@@ -6031,7 +6117,9 @@
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 0.9;
       renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.shadowMap.type = THREE.BasicShadowMap;
+      renderer.shadowMap.autoUpdate = false;
+      renderer.shadowMap.needsUpdate = true;
       renderer.setClearColor(0x000000, 0);
 
       scene = new THREE.Scene();
@@ -6098,6 +6186,19 @@
       window.addEventListener("resize", resize);
       window.addEventListener("keydown", onKeyDown);
       window.addEventListener("blur", onWindowBlur);
+      window.addEventListener("message", (event) => {
+        if (event.data === "suspend-3d") {
+          suspended = true;
+          if (rafId) {
+            cancelAnimationFrame(rafId);
+            rafId = 0;
+          }
+        } else if (event.data === "resume-3d") {
+          suspended = false;
+          lastTime = performance.now();
+          requestFrame();
+        }
+      });
       document.addEventListener("visibilitychange", onVisibilityChange);
       reducedMotionQuery.addEventListener("change", onReducedMotionChange);
 
