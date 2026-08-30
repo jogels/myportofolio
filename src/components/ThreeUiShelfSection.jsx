@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Layers, ArrowRight, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Layers, ArrowRight, X, Smartphone } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import "./ThreeUiShelfSection.css";
 
@@ -232,15 +232,934 @@ const getProjectsData = (lang) => [
       { title: "Certificate Verification Registry", desc: "Digital wakaf certificate authenticity checks and legal deed archives." },
       { title: "Public Transparency Portal", desc: "Donation utilization reports, land development status, and public audit metrics." }
     ],
-    tech: ["Next.js", "Leaflet GIS", "PostGIS", "Tailwind"],
-    color: "#1537a1"
+    tech: ["React", "Node.js", "Vimeo API", "PostgreSQL"],
+    color: "#c83222"
   }
 ];
+
+const renderAppMockContent = (project, lang, erpMode, setErpMode, erpState, setErpState, volJoined, setVolJoined, volDonation, setVolDonation, ticketState, setTicketState, bookingState, setBookingState, bookingSlot, setBookingSlot, serviceState, setServiceState, selectedTechnician, setSelectedTechnician, kosCreated, setKosCreated, roomStates, setRoomStates) => {
+  const isID = lang === 'ID';
+  switch (project.id) {
+    case 'erp': {
+      const attendanceState = erpState || 'idle';
+      const isInside = erpMode === 'inside';
+
+      return (
+        <div className="flex flex-col h-full justify-between p-2 text-white">
+          <div className="flex flex-col gap-2 mt-4">
+            
+            {/* Mode Selector for Testing */}
+            <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-1.5 flex flex-col gap-1">
+              <span className="text-[6.5px] text-neutral-500 text-center tracking-wider uppercase font-bold">
+                {isID ? 'TES MODE LOKASI' : 'TEST LOCATION MODE'}
+              </span>
+              <div className="flex gap-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setErpMode('inside');
+                    setErpState('idle');
+                  }}
+                  className={`flex-1 py-1 rounded text-[7.5px] font-bold border transition-all ${
+                    isInside
+                      ? 'bg-green-500/20 border-green-500 text-green-400 shadow-[0_0_6px_rgba(34,197,94,0.15)]'
+                      : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:border-neutral-600'
+                  }`}
+                >
+                  {isID ? 'Dalam Radius' : 'Inside Radius'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setErpMode('outside');
+                    setErpState('idle');
+                  }}
+                  className={`flex-1 py-1 rounded text-[7.5px] font-bold border transition-all ${
+                    !isInside
+                      ? 'bg-red-500/20 border-red-500 text-red-400 shadow-[0_0_6px_rgba(239,68,68,0.15)]'
+                      : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:border-neutral-600'
+                  }`}
+                >
+                  {isID ? 'Luar Radius' : 'Outside Radius'}
+                </button>
+              </div>
+            </div>
+
+            {/* Attendance Status Card */}
+            <div className={`border rounded-xl p-2.5 flex items-center justify-between transition-all duration-300 ${
+              attendanceState === 'idle'
+                ? 'bg-amber-500/10 border-amber-500/40 text-amber-300'
+                : attendanceState === 'success'
+                ? 'bg-green-500/15 border-green-500/40 text-green-300 shadow-[0_4px_12px_rgba(34,197,94,0.1)]'
+                : 'bg-red-500/15 border-red-500/40 text-red-300 shadow-[0_4px_12px_rgba(239,68,68,0.1)]'
+            }`}>
+              <div className="flex flex-col gap-0.5">
+                <span className="text-[7.5px] text-neutral-400 uppercase tracking-wider">
+                  {isID ? 'STATUS ABSEN' : 'ATTENDANCE STATUS'}
+                </span>
+                <span className="text-[10px] font-bold">
+                  {attendanceState === 'idle'
+                    ? (isID ? 'Siap Absen Masuk' : 'Ready to Clock In')
+                    : attendanceState === 'success'
+                    ? (isID ? 'Check-In Sukses' : 'Clocked In')
+                    : (isID ? 'Check-In Gagal' : 'Clock-In Failed')}
+                </span>
+                <span className="text-[7.5px] text-neutral-400 mt-0.5">
+                  {attendanceState === 'idle'
+                    ? (isInside ? (isID ? '📍 Lokasi Terverifikasi' : '📍 Location Verified') : (isID ? '❌ Di luar Geofence' : '❌ Out of Geofence'))
+                    : attendanceState === 'success'
+                    ? (isID ? '📍 Kantor Pusat (10m)' : '📍 HQ (10m)')
+                    : (isID ? '📍 Jarak: 1.2km (Maks: 100m)' : '📍 Dist: 1.2km (Max: 100m)')}
+                </span>
+              </div>
+              <div className="flex flex-col items-end">
+                {attendanceState === 'success' ? (
+                  <span className="text-[8px] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded font-bold">08:02</span>
+                ) : attendanceState === 'failed' ? (
+                  <span className="text-[8px] bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded font-bold">ERR</span>
+                ) : (
+                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
+                )}
+              </div>
+            </div>
+
+            {/* Travel SPPD Card */}
+            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2.5 flex flex-col gap-0.5">
+              <span className="text-[7.5px] text-neutral-400 uppercase tracking-wider">{isID ? 'PENGAJUAN SPPD' : 'OFFICIAL TRAVEL'}</span>
+              <p className="text-[9.5px] font-bold text-neutral-200 truncate">Jakarta Conference #48</p>
+              <span className="text-[7.5px] text-yellow-400 bg-yellow-500/10 px-1.5 py-0.5 rounded mt-1 inline-block w-max font-medium">
+                {isID ? 'Menunggu Persetujuan' : 'Pending Approval'}
+              </span>
+            </div>
+
+          </div>
+
+          {/* Large Absensi Action Button */}
+          <button
+            type="button"
+            onClick={() => {
+              if (attendanceState === 'success') {
+                setErpState('idle');
+              } else {
+                setErpState(isInside ? 'success' : 'failed');
+              }
+            }}
+            className={`w-full py-2 rounded-xl text-[9px] font-bold transition-all duration-300 text-center uppercase tracking-wider shadow-lg ${
+              attendanceState === 'idle'
+                ? 'bg-orange-500 hover:bg-orange-600 text-white shadow-orange-500/20 hover:scale-[1.02]'
+                : attendanceState === 'success'
+                ? 'bg-neutral-800 hover:bg-neutral-700 text-neutral-400 border border-neutral-700'
+                : 'bg-red-600 hover:bg-red-500 text-white shadow-red-600/20 hover:scale-[1.02]'
+            }`}
+          >
+            {attendanceState === 'idle'
+              ? (isID ? 'Absen Masuk' : 'Clock In')
+              : attendanceState === 'success'
+              ? (isID ? 'Reset Absensi' : 'Reset Attendance')
+              : (isID ? 'Coba Lagi' : 'Try Again')}
+          </button>
+        </div>
+      );
+    }
+    case 'volunteer': {
+      const donationGoal = 15000000;
+      const currentDonation = volDonation;
+      const percentage = Math.min(Math.round((currentDonation / donationGoal) * 100), 100);
+      
+      const volEvents = [
+        {
+          id: 0,
+          title: isID ? "Bersih-Bersih Ciliwung" : "Ciliwung Clean-Up",
+          date: "12 Sep 2026",
+          desc: isID ? "Aksi bersama membersihkan tumpukan sampah plastik di aliran sungai Ciliwung." : "Joint action to clean up plastic waste piles along Ciliwung river stream."
+        },
+        {
+          id: 1,
+          title: isID ? "Reboisasi Merapi" : "Merapi Reforestation",
+          date: "19 Sep 2026",
+          desc: isID ? "Penanaman bibit pohon di lereng Gunung Merapi untuk memulihkan ekosistem hijau." : "Planting tree saplings on Mount Merapi to restore green ecosystems."
+        },
+        {
+          id: 2,
+          title: isID ? "Bagi Makanan Gratis" : "Food Sharing Initiative",
+          date: "26 Sep 2026",
+          desc: isID ? "Membagikan makanan gratis untuk warga prasejahtera di sekitar wilayah Jakarta." : "Distributing free meals to underprivileged families in Jakarta regions."
+        }
+      ];
+
+      return (
+        <div className="flex flex-col h-full justify-between p-2 text-white">
+          <div className="flex flex-col gap-2 mt-4 overflow-hidden">
+            
+            {/* Slidable Events Container */}
+            <div className="flex flex-col gap-1">
+              <span className="text-[7.5px] text-neutral-400 uppercase tracking-wider font-bold">
+                {isID ? 'EVENT RELAWAN AKTIF (GESER)' : 'ACTIVE EVENTS (SLIDE)'}
+              </span>
+              
+              {/* Horizontal Scrollable Row */}
+              <div 
+                className="flex gap-2 overflow-x-auto snap-x snap-mandatory w-full py-1"
+                style={{ 
+                  scrollbarWidth: 'none', 
+                  msOverflowStyle: 'none',
+                  WebkitOverflowScrolling: 'touch'
+                }}
+              >
+                {volEvents.map((ev) => {
+                  const isJoined = Array.isArray(volJoined) ? volJoined[ev.id] : false;
+                  return (
+                    <div 
+                      key={ev.id}
+                      className="bg-neutral-900/80 border border-neutral-800/85 rounded-xl p-2.5 flex flex-col gap-1.5 min-w-[185px] w-[185px] snap-center flex-shrink-0"
+                    >
+                      <div className="flex justify-between items-center">
+                        <span className="text-[7px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded font-bold uppercase">
+                          {isID ? 'KAMPANYE' : 'CAMPAIGN'}
+                        </span>
+                        <span className="text-[7px] text-neutral-400">📅 {ev.date}</span>
+                      </div>
+                      <p className="text-[9.5px] font-bold text-neutral-100 truncate">{ev.title}</p>
+                      <p className="text-[7.5px] text-neutral-400 leading-snug h-[32px] overflow-hidden text-ellipsis">
+                        {ev.desc}
+                      </p>
+                      
+                      {/* Join Action inside Card */}
+                      <div className="flex justify-between items-center mt-0.5 pt-1.5 border-t border-neutral-800/40">
+                        <span className="text-[7px] text-neutral-300 font-medium">
+                          {isJoined 
+                            ? (isID ? '✓ Anda bergabung' : '✓ You joined') 
+                            : (isID ? '150 Relawan' : '150 Volunteers')}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (Array.isArray(volJoined)) {
+                              const newJoined = [...volJoined];
+                              newJoined[ev.id] = !newJoined[ev.id];
+                              setVolJoined(newJoined);
+                            }
+                          }}
+                          className={`px-2 py-0.5 rounded text-[7px] font-bold border transition-all ${
+                            isJoined
+                              ? 'bg-emerald-600 border-emerald-500 text-white shadow-[0_0_4px_rgba(16,185,129,0.2)]'
+                              : 'bg-neutral-800 border-neutral-700 text-neutral-300 hover:border-emerald-500/40'
+                          }`}
+                        >
+                          {isJoined ? (isID ? 'Keluar' : 'Leave') : (isID ? 'Gabung' : 'Join')}
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Donation & Impact Card */}
+            <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-2.5 flex flex-col gap-1.5">
+              <span className="text-[7.5px] text-neutral-400 uppercase tracking-wider font-bold">
+                {isID ? 'DONASI & DAMPAK GLOBAL' : 'DONATION & GLOBAL IMPACT'}
+              </span>
+              <div className="flex justify-between text-[9px] font-bold text-neutral-200">
+                <span>Rp {currentDonation.toLocaleString('id-ID')}</span>
+                <span className="text-neutral-400">Target Rp 15.000.000</span>
+              </div>
+              
+              {/* Progress Bar */}
+              <div className="w-full bg-neutral-800 h-1.5 rounded-full overflow-hidden">
+                <div 
+                  className="bg-emerald-500 h-full transition-all duration-500" 
+                  style={{ width: `${percentage}%` }}
+                />
+              </div>
+              
+              <div className="flex justify-between text-[7.5px] text-neutral-400">
+                <span>{percentage}% {isID ? 'Terkumpul' : 'Collected'}</span>
+                <span className="text-emerald-400 font-bold">📍 {isID ? 'Dampak: 1.2 Ton Sampah' : 'Impact: 1.2 Tons Trash'}</span>
+              </div>
+            </div>
+
+            {/* Bottom Donation Action Button */}
+            <button
+              type="button"
+              onClick={() => {
+                if (currentDonation >= donationGoal) {
+                  setVolDonation(250000);
+                } else {
+                  setVolDonation(currentDonation + 500000);
+                }
+              }}
+              className="w-full py-2 rounded-xl text-[9px] font-bold bg-neutral-800 border border-neutral-700 text-neutral-300 hover:border-emerald-500/40 transition-all text-center uppercase tracking-wider shadow-lg"
+            >
+              {currentDonation >= donationGoal 
+                ? (isID ? 'Reset Donasi Global' : 'Reset Global Donation') 
+                : (isID ? 'Donasi Rp 500K' : 'Donate Rp 500K')}
+            </button>
+
+          </div>
+          
+          {/* Footnote instruction */}
+          <div className="text-[7px] text-neutral-500 text-center py-1 bg-neutral-900/30 rounded-lg">
+            {isID ? 'Simulasi: Geser kartu & klik Gabung untuk mendaftar event' : 'Simulation: Slide cards & click Join to register events'}
+          </div>
+        </div>
+      );
+    }
+    case 'ticketing': {
+      const isIdle = ticketState === 'idle';
+      const isClaiming = ticketState === 'claiming';
+      const isClaimed = ticketState === 'claimed';
+
+      return (
+        <div className="flex flex-col h-full justify-between p-2 text-white">
+          <div className="flex flex-col gap-2.5 mt-4">
+            
+            {/* Ticket Card Container */}
+            <div className={`border rounded-xl p-3 flex flex-col items-center text-center transition-all duration-300 ${
+              isIdle 
+                ? 'bg-neutral-900/80 border-neutral-800 text-neutral-400' 
+                : isClaiming
+                ? 'bg-amber-500/10 border-amber-500/30 text-amber-300 animate-pulse'
+                : 'bg-indigo-950/40 border-indigo-500/30 text-neutral-200 shadow-[0_4px_15px_rgba(99,102,241,0.15)]'
+            }`}>
+              <span className="text-[7.5px] uppercase tracking-wider font-bold">
+                {isID ? 'TIKET RESMI KONSER' : 'OFFICIAL CONCERT TICKET'}
+              </span>
+              
+              {isIdle && (
+                <div className="py-6 flex flex-col items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center text-[14px]">🎫</div>
+                  <p className="text-[10px] font-bold text-neutral-300">{isID ? 'Belum Ada Tiket Aktif' : 'No Active Ticket'}</p>
+                  <p className="text-[7.5px] text-neutral-500 max-w-[140px]">
+                    {isID ? 'Silakan beli tiket konser Arctic Monkeys di bawah.' : 'Purchase Arctic Monkeys concert ticket below.'}
+                  </p>
+                </div>
+              )}
+
+              {isClaiming && (
+                <div className="py-6 flex flex-col items-center gap-2">
+                  <div className="w-6 h-6 rounded-full border-2 border-t-amber-500 border-neutral-800 animate-spin"></div>
+                  <p className="text-[9.5px] font-bold text-amber-400">{isID ? 'Menghubungi Server VA...' : 'Verifying VA Payment...'}</p>
+                  <p className="text-[7px] text-neutral-500">{isID ? 'Memvalidasi hold kursi dinamis' : 'Validating dynamic seat locks'}</p>
+                </div>
+              )}
+
+              {isClaimed && (
+                <div className="flex flex-col items-center w-full">
+                  <p className="text-[11px] font-bold text-neutral-100 mt-1">Arctic Monkeys Live</p>
+                  <span className="text-[8px] bg-indigo-500/20 text-indigo-400 px-1.5 py-0.5 rounded font-bold mt-1 inline-block">
+                    {isID ? 'VIP AREA · KURSI A-12' : 'VIP AREA · SEAT A-12'}
+                  </span>
+                  
+                  {/* High fidelity mock QR Code SVG (unscannable vector graphic) */}
+                  <div className="bg-white p-1.5 rounded-lg mt-3 w-max mx-auto shadow-md border border-neutral-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" className="w-[60px] h-[60px] fill-neutral-950">
+                      {/* Top-left finder */}
+                      <rect x="0" y="0" width="7" height="7" />
+                      <rect x="1" y="1" width="5" height="5" fill="white" />
+                      <rect x="2" y="2" width="3" height="3" />
+                      {/* Top-right finder */}
+                      <rect x="22" y="0" width="7" height="7" />
+                      <rect x="23" y="1" width="5" height="5" fill="white" />
+                      <rect x="24" y="2" width="3" height="3" />
+                      {/* Bottom-left finder */}
+                      <rect x="0" y="22" width="7" height="7" />
+                      <rect x="1" y="23" width="5" height="5" fill="white" />
+                      <rect x="2" y="24" width="3" height="3" />
+                      {/* Random pixels */}
+                      <rect x="9" y="0" width="1" height="1" /><rect x="11" y="0" width="2" height="1" /><rect x="15" y="0" width="1" height="1" /><rect x="19" y="0" width="2" height="1" />
+                      <rect x="8" y="2" width="2" height="1" /><rect x="13" y="2" width="1" height="2" /><rect x="18" y="2" width="1" height="1" />
+                      <rect x="10" y="4" width="1" height="2" /><rect x="14" y="4" width="2" height="1" /><rect x="20" y="4" width="1" height="1" />
+                      <rect x="8" y="6" width="1" height="1" /><rect x="12" y="6" width="3" height="1" /><rect x="17" y="6" width="2" height="1" />
+                      <rect x="0" y="9" width="2" height="1" /><rect x="4" y="9" width="1" height="1" /><rect x="9" y="9" width="3" height="2" /><rect x="15" y="9" width="1" height="1" /><rect x="23" y="9" width="2" height="1" /><rect x="27" y="9" width="1" height="1" />
+                      <rect x="2" y="11" width="1" height="1" /><rect x="7" y="11" width="1" height="2" /><rect x="13" y="11" width="1" height="1" /><rect x="19" y="11" width="2" height="1" /><rect x="25" y="11" width="1" height="1" />
+                      <rect x="10" y="13" width="2" height="1" /><rect x="16" y="13" width="1" height="1" /><rect x="21" y="13" width="2" height="2" /><rect x="26" y="13" width="1" height="1" />
+                      <rect x="0" y="15" width="1" height="1" /><rect x="4" y="15" width="2" height="1" /><rect x="8" y="15" width="1" height="2" /><rect x="14" y="15" width="2" height="1" />
+                      <rect x="18" y="16" width="2" height="1" /><rect x="24" y="16" width="1" height="1" /><rect x="28" y="16" width="1" height="1" />
+                      <rect x="10" y="18" width="1" height="2" /><rect x="15" y="18" width="2" height="1" /><rect x="20" y="18" width="1" height="1" />
+                      <rect x="9" y="20" width="2" height="1" /><rect x="13" y="20" width="1" height="1" /><rect x="17" y="20" width="2" height="1" /><rect x="23" y="20" width="1" height="2" />
+                      <rect x="8" y="23" width="2" height="1" /><rect x="12" y="23" width="1" height="1" /><rect x="15" y="23" width="3" height="1" /><rect x="20" y="23" width="1" height="1" />
+                      <rect x="10" y="26" width="1" height="2" /><rect x="14" y="26" width="2" height="1" /><rect x="18" y="26" width="2" height="2" /><rect x="26" y="26" width="2" height="1" />
+                    </svg>
+                  </div>
+                  <span className="text-[7px] text-neutral-400 mt-2 font-mono">CODE: AM-938210</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Action trigger button */}
+          <button
+            type="button"
+            disabled={isClaiming}
+            onClick={() => {
+              if (isClaimed) {
+                setTicketState('idle');
+              } else {
+                setTicketState('claiming');
+                setTimeout(() => {
+                  setTicketState('claimed');
+                }, 1200);
+              }
+            }}
+            className={`w-full py-2.5 rounded-xl text-[9px] font-bold transition-all duration-300 text-center uppercase tracking-wider shadow-lg ${
+              isIdle
+                ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-650/20 hover:scale-[1.02]'
+                : isClaiming
+                ? 'bg-neutral-800 text-neutral-500 border border-neutral-700 cursor-not-allowed'
+                : 'bg-neutral-800 hover:bg-neutral-700 text-neutral-400 border border-neutral-700'
+            }`}
+          >
+            {isIdle
+              ? (isID ? 'Beli Tiket (Rp 1.500.000)' : 'Buy Ticket (Rp 1,500,000)')
+              : isClaiming
+              ? (isID ? 'Memproses VA...' : 'Processing VA...')
+              : (isID ? 'Batalkan Tiket' : 'Cancel Ticket')}
+          </button>
+        </div>
+      );
+    }
+    case 'transit':
+      return (
+        <div className="flex flex-col h-full justify-between p-2 text-white">
+          <div className="flex flex-col gap-2 mt-4">
+            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2">
+              <span className="text-[7px] text-neutral-400">{isID ? 'LOKASI DRIVER' : 'DRIVER LOCATION'}</span>
+              <div className="flex justify-between items-center mt-1">
+                <span className="text-[9px] font-bold">Budi Sudarsono</span>
+                <span className="text-[8px] text-green-400">OTW</span>
+              </div>
+              <p className="text-[8px] text-neutral-400 mt-0.5">Toyota Avanza (B 1234 ABC)</p>
+            </div>
+            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2 h-16 flex flex-col justify-between overflow-hidden relative">
+              <span className="text-[7px] text-neutral-400 z-10">{isID ? 'PETA TELEMETRI' : 'TELEMETRY MAP'}</span>
+              <div className="absolute inset-0 bg-neutral-900 flex items-center justify-center">
+                <div className="w-full h-full border border-dashed border-neutral-700 rounded flex items-center justify-center text-[7px] text-neutral-500 bg-neutral-900">
+                  MAP RADAR MOCKUP
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="bg-amber-500 text-center py-1.5 rounded-lg text-[9px] font-bold text-neutral-900">
+            {isID ? 'Panggil Ambulans/Taksi' : 'Order Driver'}
+          </div>
+        </div>
+      );
+    case 'scheduler':
+      return (
+        <div className="flex flex-col h-full justify-between p-2 text-white">
+          <div className="flex flex-col gap-2 mt-4">
+            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2">
+              <span className="text-[7px] text-neutral-400">{isID ? 'STATUS ENGINE' : 'ENGINE STATUS'}</span>
+              <div className="flex justify-between items-center mt-1">
+                <span className="text-[9px] font-bold text-green-400">ACTIVE</span>
+                <span className="text-[8px] text-neutral-400">5 Workers</span>
+              </div>
+            </div>
+            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2 flex flex-col gap-1">
+              <div className="flex justify-between text-[7px] text-neutral-400">
+                <span>Sync Job #89</span>
+                <span className="text-green-400">Success</span>
+              </div>
+              <div className="flex justify-between text-[7px] text-neutral-400">
+                <span>Report Job #90</span>
+                <span className="text-cyan-400">Running</span>
+              </div>
+            </div>
+          </div>
+          <div className="bg-zinc-700 text-center py-1.5 rounded-lg text-[9px] font-bold">
+            {isID ? 'Trigger Manual' : 'Trigger Job'}
+          </div>
+        </div>
+      );
+    case 'petshop':
+      return (
+        <div className="flex flex-col h-full justify-between p-2 text-white">
+          <div className="flex flex-col gap-2 mt-4">
+            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2">
+              <span className="text-[7px] text-neutral-400">{isID ? 'PROFIL PET' : 'PET PROFILE'}</span>
+              <div className="flex items-center gap-2 mt-1">
+                <div className="w-5 h-5 rounded-full bg-pink-500/20 text-center text-[9px] flex items-center justify-center">🐱</div>
+                <div className="flex flex-col">
+                  <span className="text-[9px] font-bold">Milo</span>
+                  <span className="text-[7px] text-neutral-400">Persian Cat · 2 Yrs</span>
+                </div>
+              </div>
+            </div>
+            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2">
+              <span className="text-[7px] text-neutral-400">{isID ? 'JADWAL GROOMING' : 'GROOMING BOOKING'}</span>
+              <p className="text-[8px] font-medium text-neutral-200 mt-1">{isID ? 'Besok Jam 14:00' : 'Tomorrow 14:00'}</p>
+            </div>
+          </div>
+          <div className="bg-pink-600 text-center py-1.5 rounded-lg text-[9px] font-bold">
+            {isID ? 'Booking Grooming' : 'Book Session'}
+          </div>
+        </div>
+      );
+    case 'booking': {
+      const isIdle = bookingState === 'idle';
+      const isBooking = bookingState === 'booking';
+      const isBooked = bookingState === 'booked';
+      
+      const slots = ["09:00", "11:00", "14:00"];
+      const activeSlot = slots[bookingSlot] || slots[0];
+
+      return (
+        <div className="flex flex-col h-full justify-between p-2 text-white">
+          <div className="flex flex-col gap-2.5 mt-4">
+            
+            {/* Doctor Profile Header */}
+            <div className="bg-neutral-900/80 border border-neutral-800/85 rounded-xl p-2.5 flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-[16px]">👩‍⚕️</div>
+              <div className="flex flex-col">
+                <p className="text-[10px] font-bold text-neutral-100">Dr. Clara Sitorus</p>
+                <span className="text-[7.5px] text-neutral-400">
+                  {isID ? 'Spesialis Jantung · 📍 Klinik A' : 'Cardiologist · 📍 Clinic A'}
+                </span>
+              </div>
+            </div>
+
+            {/* Main Interactive Screen Area */}
+            {isIdle && (
+              <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-2.5 flex flex-col gap-1.5">
+                <span className="text-[7.5px] text-neutral-400 uppercase tracking-wider font-bold">
+                  {isID ? 'PILIH SLOT WAKTU (KLIK)' : 'SELECT TIME SLOT (CLICK)'}
+                </span>
+                
+                {/* Time Slots Grid */}
+                <div className="grid grid-cols-3 gap-1.5">
+                  {slots.map((sl, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setBookingSlot(idx)}
+                      className={`py-1.5 rounded-lg text-[9px] font-bold border transition-all text-center ${
+                        bookingSlot === idx
+                          ? 'bg-blue-500/20 border-blue-500 text-blue-400 shadow-[0_0_6px_rgba(59,130,246,0.2)]'
+                          : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:border-blue-500/40'
+                      }`}
+                    >
+                      {sl}
+                    </button>
+                  ))}
+                </div>
+                
+                <span className="text-[7px] text-neutral-500 mt-1">
+                  {isID ? '📍 Lokasi Zona Waktu: Jakarta (WIB)' : '📍 Timezone: Jakarta (WIB)'}
+                </span>
+              </div>
+            )}
+
+            {isBooking && (
+              <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-6 flex flex-col items-center gap-2.5 text-center">
+                <div className="w-5 h-5 border-2 border-t-blue-500 border-neutral-800 animate-spin rounded-full"></div>
+                <p className="text-[9px] font-bold text-blue-400">{isID ? 'Menyinkronkan Kalender...' : 'Syncing Calendars...'}</p>
+                <p className="text-[7px] text-neutral-500 max-w-[130px]">
+                  {isID ? 'Memblokir slot jadwal di Google & Outlook Calendar...' : 'Locking slot availability on Google & Outlook...'}
+                </p>
+              </div>
+            )}
+
+            {isBooked && (
+              <div className="bg-blue-950/20 border border-blue-500/30 rounded-xl p-2.5 flex flex-col gap-1.5 shadow-[0_4px_12px_rgba(59,130,246,0.1)]">
+                <div className="flex justify-between items-center">
+                  <span className="text-[7.5px] bg-blue-500/20 text-blue-400 px-1.5 py-0.5 rounded font-bold uppercase">
+                    {isID ? 'KONFIRMASI JADWAL' : 'APPOINTMENT CONFIRMED'}
+                  </span>
+                  <span className="text-[7.5px] text-green-400 font-bold">✓ SYNCED</span>
+                </div>
+                
+                <div className="bg-neutral-900/40 p-2 rounded-lg border border-neutral-800/40 flex flex-col gap-1">
+                  <p className="text-[9.5px] font-bold text-neutral-200">Dr. Clara Sitorus</p>
+                  <div className="flex justify-between text-[8px] text-neutral-400">
+                    <span>🕒 {isID ? 'Waktu' : 'Schedule'}: {activeSlot} WIB</span>
+                    <span>📅 {isID ? 'Besok' : 'Tomorrow'}</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-0.5 mt-0.5">
+                  <span className="text-[7px] text-neutral-400 flex items-center gap-1">
+                    🟢 {isID ? 'Notifikasi Kalender Aktif' : 'Calendar Sync Active'}
+                  </span>
+                  <span className="text-[7px] text-neutral-400 flex items-center gap-1">
+                    🟢 {isID ? 'WhatsApp Reminder Terjadwal (24 Jam)' : 'WhatsApp Reminder Set (24h)'}
+                  </span>
+                </div>
+              </div>
+            )}
+
+          </div>
+
+          {/* Action Action Button */}
+          <button
+            type="button"
+            disabled={isBooking}
+            onClick={() => {
+              if (isBooked) {
+                setBookingState('idle');
+              } else {
+                setBookingState('booking');
+                setTimeout(() => {
+                  setBookingState('booked');
+                }, 1200);
+              }
+            }}
+            className={`w-full py-2.5 rounded-xl text-[9px] font-bold transition-all duration-300 text-center uppercase tracking-wider shadow-lg ${
+              isIdle
+                ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/20 hover:scale-[1.02]'
+                : isBooking
+                ? 'bg-neutral-800 text-neutral-500 border border-neutral-700 cursor-not-allowed'
+                : 'bg-neutral-800 hover:bg-neutral-700 text-neutral-400 border border-neutral-700'
+            }`}
+          >
+            {isIdle
+              ? (isID ? `Pesan Slot ${activeSlot}` : `Book Slot ${activeSlot}`)
+              : isBooking
+              ? (isID ? 'Pesan Slot...' : 'Booking Slot...')
+              : (isID ? 'Reset Simulasi' : 'Reset Simulation')}
+          </button>
+        </div>
+      );
+    }
+    case 'service': {
+      const isUnpaid = serviceState === 'idle';
+      const isPaid = serviceState === 'paid';
+      const isDispatched = serviceState === 'dispatched';
+
+      const technicians = [
+        { name: "Ahmad Subarjo", rating: "4.9", dist: "1.2km", desc: isID ? "Spesialis AC & Kulkas" : "AC & Fridge Specialist" },
+        { name: "Siti Rahma", rating: "4.8", dist: "2.4km", desc: isID ? "Spesialis Kelistrikan" : "Electrical Specialist" }
+      ];
+
+      return (
+        <div className="flex flex-col h-full justify-between p-2 text-white">
+          <div className="flex flex-col gap-2 mt-4">
+            
+            {/* Service Ticket Detail Card */}
+            <div className="bg-neutral-900/80 border border-neutral-800/85 rounded-xl p-2.5 flex flex-col gap-1">
+              <div className="flex justify-between items-center">
+                <span className="text-[7.5px] bg-cyan-500/20 text-cyan-400 px-1.5 py-0.5 rounded font-bold uppercase">
+                  {isID ? 'TIKET LAYANAN' : 'SERVICE TICKET'}
+                </span>
+                <span className="text-[7.5px] text-neutral-400">#SRV-9082</span>
+              </div>
+              <p className="text-[10px] font-bold text-neutral-200 mt-1">{isID ? 'Perbaikan AC Rusak' : 'AC Repair Service'}</p>
+              <p className="text-[8px] text-neutral-400">{isID ? 'Biaya Jasa: Rp 150.000' : 'Service Fee: Rp 150,000'}</p>
+            </div>
+
+            {/* Step 1: Unpaid (Bayar ke aplikasi dulu) */}
+            {isUnpaid && (
+              <div className="bg-amber-500/10 border border-amber-500/35 rounded-xl p-2.5 flex flex-col gap-1 text-center items-center py-4">
+                <span className="text-[18px]">💳</span>
+                <p className="text-[9.5px] font-bold text-amber-300">{isID ? 'Menunggu Pembayaran' : 'Awaiting Payment'}</p>
+                <p className="text-[7.5px] text-neutral-400 max-w-[150px]">
+                  {isID ? 'Silakan selesaikan pembayaran untuk mulai mencari teknisi terdekat.' : 'Please complete the payment to start matching nearby technicians.'}
+                </p>
+              </div>
+            )}
+
+            {/* Step 2: Paid (Pilih teknisi) */}
+            {isPaid && (
+              <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-2.5 flex flex-col gap-1.5">
+                <span className="text-[7.5px] text-green-400 uppercase tracking-wider font-bold">
+                  {isID ? 'PEMBAYARAN SUKSES ✓ PILIH TEKNISI' : 'PAYMENT SUCCESS ✓ CHOOSE TECH'}
+                </span>
+                
+                {/* List of Techs */}
+                <div className="flex flex-col gap-1.5">
+                  {technicians.map((tech, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => {
+                        setSelectedTechnician(tech.name);
+                        setServiceState('dispatched');
+                      }}
+                      className="w-full p-2 rounded-lg bg-neutral-800/60 border border-neutral-700/60 text-left hover:border-cyan-500/40 transition-all flex justify-between items-center"
+                    >
+                      <div className="flex flex-col gap-0.5">
+                        <p className="text-[8.5px] font-bold text-neutral-100">{tech.name}</p>
+                        <span className="text-[7px] text-neutral-400">{tech.desc}</span>
+                      </div>
+                      <div className="flex flex-col items-end gap-0.5">
+                        <span className="text-[8px] text-yellow-400 font-bold">⭐ {tech.rating}</span>
+                        <span className="text-[7px] text-neutral-400">📍 {tech.dist}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Step 3: Dispatched (Teknisi datang ke titik lokasi) */}
+            {isDispatched && (
+              <div className="bg-cyan-950/20 border border-cyan-500/30 rounded-xl p-2.5 flex flex-col gap-2 shadow-[0_4px_12px_rgba(6,182,212,0.15)]">
+                <div className="flex justify-between items-center">
+                  <span className="text-[7.5px] bg-cyan-500/20 text-cyan-400 px-1.5 py-0.5 rounded font-bold uppercase">
+                    {isID ? 'TEKNISI DI JALAN' : 'TECH ON THE WAY'}
+                  </span>
+                  <span className="text-[7.5px] text-cyan-400 font-bold animate-pulse">● LIVE</span>
+                </div>
+                
+                <div className="bg-neutral-900/60 p-2 rounded-lg border border-neutral-800/40 flex items-center justify-between">
+                  <div className="flex flex-col">
+                    <p className="text-[9px] font-bold text-neutral-200">{selectedTechnician}</p>
+                    <span className="text-[7px] text-neutral-400">{isID ? 'Menuju titik lokasi Anda' : 'Heading to your location'}</span>
+                  </div>
+                  <span className="text-[9.5px] bg-cyan-500/20 text-cyan-400 px-1.5 py-0.5 rounded font-bold">ETA: 8m</span>
+                </div>
+                
+                <div className="text-[7px] text-neutral-400 bg-neutral-950/40 p-1.5 rounded border border-neutral-900 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+                  <span>{isID ? 'Teknisi terpantau GPS bergerak mendekat' : 'Technician GPS tracked moving closer'}</span>
+                </div>
+              </div>
+            )}
+
+          </div>
+
+          {/* Large Action Button */}
+          {isUnpaid ? (
+            <button
+              type="button"
+              onClick={() => setServiceState('paid')}
+              className="w-full py-2.5 rounded-xl text-[9px] font-bold bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-650/20 hover:scale-[1.02] transition-all text-center uppercase tracking-wider"
+            >
+              {isID ? 'Bayar Jasa (Rp 150.000)' : 'Pay Fee (Rp 150,000)'}
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                setServiceState('idle');
+                setSelectedTechnician(null);
+              }}
+              className="w-full py-2.5 rounded-xl text-[9px] font-bold bg-neutral-850 border border-neutral-700 text-neutral-400 hover:bg-neutral-800 transition-all text-center uppercase tracking-wider"
+            >
+              {isID ? 'Reset Order / Selesai' : 'Reset Order / Done'}
+            </button>
+          )}
+
+        </div>
+      );
+    }
+    case 'boarding': {
+      const isCreated = kosCreated;
+      const occupiedCount = roomStates.filter(r => r).length;
+      const vacantCount = roomStates.length - occupiedCount;
+      const roomNames = ["101", "102", "103", "201", "202", "203"];
+      const tenants = ["Budi", "Siti", "-", "Rian", "-", "Andi"];
+
+      return (
+        <div className="flex flex-col h-full justify-between p-2 text-white">
+          <div className="flex flex-col gap-2 mt-4 overflow-hidden">
+            
+            {/* Owner Section Badge */}
+            <div className="flex justify-between items-center bg-neutral-900/60 p-1.5 rounded-lg border border-neutral-800/80">
+              <span className="text-[7.5px] bg-indigo-500/20 text-indigo-400 px-1.5 py-0.5 rounded font-bold uppercase">
+                {isID ? 'PORTAL PEMILIK KOS (B2B)' : 'KOS OWNER PORTAL (B2B)'}
+              </span>
+              <span className="text-[7.5px] text-neutral-400">💼 Admin</span>
+            </div>
+
+            {/* Step 1: Create Property */}
+            {!isCreated && (
+              <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-3 flex flex-col gap-2">
+                <span className="text-[7.5px] text-neutral-400 uppercase tracking-wider font-bold">
+                  {isID ? 'BUAT PROPERTI KOS BARU' : 'CREATE NEW KOS PROPERTY'}
+                </span>
+                
+                <div className="flex flex-col gap-1.5 mt-1">
+                  <div className="flex flex-col gap-0.5">
+                    <label className="text-[6.5px] text-neutral-500 font-bold uppercase">{isID ? 'Nama Properti' : 'Property Name'}</label>
+                    <input 
+                      type="text" 
+                      readOnly 
+                      value="Kos Green House" 
+                      className="bg-neutral-800 border border-neutral-700 text-[8.5px] p-1.5 rounded text-neutral-200 focus:outline-none"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-0.5">
+                    <label className="text-[6.5px] text-neutral-500 font-bold uppercase">{isID ? 'Lokasi Area' : 'Location Area'}</label>
+                    <input 
+                      type="text" 
+                      readOnly 
+                      value="Jakarta Selatan (Dekat Kampus)" 
+                      className="bg-neutral-800 border border-neutral-700 text-[8.5px] p-1.5 rounded text-neutral-200 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setKosCreated(true)}
+                  className="w-full py-2 rounded-lg text-[8.5px] font-bold bg-indigo-650 hover:bg-indigo-600 text-white mt-1 transition-all"
+                >
+                  {isID ? '+ Buat Properti Kos' : '+ Create Kos Property'}
+                </button>
+              </div>
+            )}
+
+            {/* Step 2: Manage Rooms Grid */}
+            {isCreated && (
+              <div className="flex flex-col gap-2">
+                {/* Stats Summary */}
+                <div className="flex justify-between items-center bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-2 text-[8px]">
+                  <div>
+                    <span className="font-bold text-neutral-200">Kos Green House</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="text-red-400 font-bold">{isID ? `Terisi: ${occupiedCount}` : `Filled: ${occupiedCount}`}</span>
+                    <span className="text-emerald-400 font-bold">{isID ? `Kosong: ${vacantCount}` : `Vacant: ${vacantCount}`}</span>
+                  </div>
+                </div>
+
+                {/* Grid List of Rooms */}
+                <div className="grid grid-cols-3 gap-1.5 py-0.5">
+                  {roomStates.map((isOccupied, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => {
+                        const newRooms = [...roomStates];
+                        newRooms[idx] = !newRooms[idx];
+                        setRoomStates(newRooms);
+                      }}
+                      className={`p-2 rounded-xl border text-center transition-all flex flex-col justify-between h-[48px] ${
+                        isOccupied
+                          ? 'bg-neutral-900/90 border-neutral-800/85 text-neutral-300'
+                          : 'bg-emerald-500/10 border-emerald-500/35 text-emerald-400 border-dashed hover:bg-emerald-500/15'
+                      }`}
+                    >
+                      <div className="flex justify-between items-center w-full">
+                        <span className="text-[7.5px] font-bold font-mono">Kamar {roomNames[idx]}</span>
+                        <span className={`w-1.5 h-1.5 rounded-full ${isOccupied ? 'bg-red-400' : 'bg-emerald-400 animate-pulse'}`}></span>
+                      </div>
+                      
+                      <span className="text-[8px] font-medium truncate w-full text-left mt-1.5">
+                        {isOccupied 
+                          ? `👤 ${tenants[idx] === '-' ? (isID ? 'Penyewa' : 'Tenant') : tenants[idx]}` 
+                          : `📥 ${isID ? 'Kosong' : 'Vacant'}`}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+                
+                <span className="text-[6.5px] text-neutral-500 text-center">
+                  {isID ? '💡 Klik kotak kamar untuk mensimulasikan Check-In / Check-Out' : '💡 Click a room card to simulate Check-In / Check-Out'}
+                </span>
+              </div>
+            )}
+
+          </div>
+
+          {/* Bottom Reset Button when Created */}
+          {isCreated && (
+            <button
+              type="button"
+              onClick={() => {
+                setKosCreated(false);
+                setRoomStates([true, true, false, true, false, true]);
+              }}
+              className="w-full py-2 rounded-xl text-[9px] font-bold bg-neutral-850 border border-neutral-700 text-neutral-400 hover:bg-neutral-800 transition-all text-center uppercase tracking-wider"
+            >
+              {isID ? 'Hapus Properti / Reset' : 'Delete Property / Reset'}
+            </button>
+          )}
+        </div>
+      );
+    }
+    case 'survey':
+      return (
+        <div className="flex flex-col h-full justify-between p-2 text-white">
+          <div className="flex flex-col gap-2 mt-4">
+            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2">
+              <span className="text-[7px] text-neutral-400">{isID ? 'SURVEI AKTIF' : 'ACTIVE SURVEY'}</span>
+              <p className="text-[9px] font-bold text-neutral-100">Customer Feedback v2</p>
+              <span className="text-[8px] text-neutral-400">142 Responses</span>
+            </div>
+            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2 flex flex-col gap-1">
+              <span className="text-[7px] text-neutral-400">{isID ? 'PREVIEW PERTANYAAN' : 'QUESTION PREVIEW'}</span>
+              <p className="text-[8px] font-medium text-neutral-200">"Apakah Anda puas dengan layanan kami?"</p>
+            </div>
+          </div>
+          <div className="bg-purple-600 text-center py-1.5 rounded-lg text-[9px] font-bold">
+            {isID ? 'Lihat Hasil' : 'View Results'}
+          </div>
+        </div>
+      );
+    case 'wakaf':
+      return (
+        <div className="flex flex-col h-full justify-between p-2 text-white">
+          <div className="flex flex-col gap-2 mt-4">
+            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2">
+              <span className="text-[7px] text-neutral-400">{isID ? 'REGISTRI TANAH WAKAF' : 'WAKAF REGISTRY'}</span>
+              <p className="text-[9px] font-bold text-neutral-100 mt-1">Sertifikat #938210</p>
+              <span className="text-[8px] text-neutral-400">Luas: 2450m² · Bersertifikat</span>
+            </div>
+            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2">
+              <span className="text-[7px] text-neutral-400">{isID ? 'LOKASI GEOSPASIAL' : 'GEOSPATIAL LOCATION'}</span>
+              <p className="text-[8px] font-medium text-emerald-400">Kec. Ciganjur, Jakarta Selatan</p>
+            </div>
+          </div>
+          <div className="bg-emerald-600 text-center py-1.5 rounded-lg text-[9px] font-bold">
+            {isID ? 'Verifikasi Sertifikat' : 'Verify Certificate'}
+          </div>
+        </div>
+      );
+    case 'islamic':
+      return (
+        <div className="flex flex-col h-full justify-between p-2 text-white">
+          <div className="flex flex-col gap-2 mt-4">
+            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2">
+              <span className="text-[7px] text-neutral-400">{isID ? 'PROGRESS BELAJAR' : 'LEARNING PROGRESS'}</span>
+              <p className="text-[9px] font-bold text-neutral-100 mt-1">Fiqih Muamalah</p>
+              <div className="w-full bg-neutral-700 h-1.5 rounded-full mt-1.5 overflow-hidden">
+                <div className="bg-red-500 h-full w-[45%]" />
+              </div>
+              <span className="text-[7px] text-neutral-400 mt-1 inline-block">45% Selesai (Modul 3 dari 7)</span>
+            </div>
+          </div>
+          <div className="bg-red-600 text-center py-1.5 rounded-lg text-[9px] font-bold">
+            {isID ? 'Mulai Kelas Video' : 'Resume Lecture'}
+          </div>
+        </div>
+      );
+    default:
+      return null;
+  }
+};
 
 export default function ThreeUiShelfSection() {
   const { lang, t } = useLanguage();
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedProject, setSelectedProject] = useState(null);
+  const [showMockup, setShowMockup] = useState(false);
+  const [erpMode, setErpMode] = useState('inside'); // 'inside', 'outside'
+  const [erpState, setErpState] = useState('idle'); // 'idle', 'success', 'failed'
+  const [volJoined, setVolJoined] = useState([false, false, false]);
+  const [volDonation, setVolDonation] = useState(250000);
+  const [ticketState, setTicketState] = useState('idle'); // 'idle', 'claiming', 'claimed'
+  const [bookingState, setBookingState] = useState('idle'); // 'idle', 'booking', 'booked'
+  const [bookingSlot, setBookingSlot] = useState(0); // 0, 1, 2
+  const [serviceState, setServiceState] = useState('idle'); // 'idle', 'paid', 'dispatched'
+  const [selectedTechnician, setSelectedTechnician] = useState(null); // 'Ahmad Subarjo', 'Siti Rahma'
+  const [kosCreated, setKosCreated] = useState(false);
+  const [roomStates, setRoomStates] = useState([true, true, false, true, false, true]); // occupied status for 6 rooms
+
+  useEffect(() => {
+    setErpMode('inside');
+    setErpState('idle');
+    setVolJoined([false, false, false]);
+    setVolDonation(250000);
+    setTicketState('idle');
+    setBookingState('idle');
+    setBookingSlot(0);
+    setServiceState('idle');
+    setSelectedTechnician(null);
+    setKosCreated(false);
+    setRoomStates([true, true, false, true, false, true]);
+  }, [selectedProject]);
 
   const projects = getProjectsData(lang);
   const filteredProjects = activeFilter === 'all'
@@ -365,6 +1284,135 @@ export default function ThreeUiShelfSection() {
                 </span>
               ))}
             </div>
+
+            {/* Visual Example Button */}
+            <div style={{ marginTop: '2.5rem', display: 'flex', justifyContent: 'center' }}>
+              <button
+                type="button"
+                className="btn-visual-mockup hover:scale-105"
+                onClick={() => setShowMockup(true)}
+                style={{
+                  padding: '0.8rem 2rem',
+                  fontSize: '0.9rem',
+                  fontWeight: '700',
+                  letterSpacing: '0.05em',
+                  color: '#ffffff',
+                  background: 'linear-gradient(135deg, #ef7046 0%, #d4562c 100%)',
+                  border: 'none',
+                  borderRadius: '14px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.8rem',
+                  boxShadow: '0 6px 20px rgba(239, 112, 70, 0.35)',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  textTransform: 'uppercase'
+                }}
+              >
+                <Smartphone size={16} />
+                {lang === 'ID' ? 'Contoh Visual' : 'Visual Example'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Visual Mockup Popup Modal */}
+      {showMockup && selectedProject && (
+        <div 
+          className="fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-md p-4" 
+          style={{ zIndex: 100000 }}
+          onClick={() => setShowMockup(false)}
+        >
+          <div 
+            className="relative bg-neutral-950 border border-neutral-800 rounded-3xl p-6 max-w-[340px] w-full flex flex-col items-center shadow-2xl transition-all duration-300" 
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              className="absolute top-4 right-4 text-neutral-400 hover:text-white transition-all duration-300 bg-neutral-900/80 hover:bg-neutral-800 border border-neutral-800 hover:border-neutral-700 w-8 h-8 rounded-full flex items-center justify-center shadow-lg" 
+              onClick={() => setShowMockup(false)}
+            >
+              <X size={16} />
+            </button>
+            <span className="text-[10px] uppercase tracking-wider text-orange-500 font-bold mb-1">
+              {lang === 'ID' ? 'CONTOH VISUAL APLIKASI' : 'APPLICATION VISUAL EXAMPLE'}
+            </span>
+            <h3 className="text-xl font-bold text-white mb-1 text-center">{selectedProject.title}</h3>
+            <p className="text-xs text-neutral-400 mb-6 text-center">{selectedProject.discipline}</p>
+            
+            {/* The Phone Mockup Code */}
+            <div className="group relative flex justify-center h-[460px] w-[230px] border-[4px] border-neutral-800 rounded-[40px] bg-neutral-900 shadow-2xl ring-1 ring-neutral-950/50 transition-all duration-500 hover:shadow-3xl hover:-translate-y-1 select-none cursor-pointer">
+              {/* Internal phone screen border reset */}
+              <div className="absolute inset-0 rounded-[38px] border border-white/10 pointer-events-none"></div>
+
+              <div className="relative h-full w-full overflow-hidden rounded-[36px] bg-black">
+                {/* Background animations */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-slate-900 via-indigo-950 to-slate-900 transition-transform duration-700 group-hover:scale-110"></div>
+                <div className="absolute top-0 right-0 w-[150px] h-[150px] bg-purple-600/20 blur-[40px] rounded-full mix-blend-screen transition-all duration-700 group-hover:translate-x-4 group-hover:-translate-y-4"></div>
+                <div className="absolute bottom-0 left-0 w-[150px] h-[150px] bg-cyan-600/20 blur-[40px] rounded-full mix-blend-screen transition-all duration-700 group-hover:-translate-x-4 group-hover:translate-y-4"></div>
+
+                {/* Shine effect (moved inside the screen to clip reflection within screen borders) */}
+                <div className="absolute top-0 right-0 w-[120%] h-full bg-gradient-to-tr from-white/0 via-white/5 to-white/0 -skew-x-12 translate-x-[20%] pointer-events-none group-hover:translate-x-[-100%] transition-transform duration-1000 ease-in-out z-30"></div>
+
+                {/* Status Bar */}
+                <div className="absolute top-2 w-full px-6 py-1 flex justify-between items-center z-20 text-white text-[10px] font-medium opacity-80">
+                  <span>9:41</span>
+                  <div className="flex gap-1 items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3">
+                      <path d="M3 20h18V2L3 20z"></path>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                      <path fillRule="evenodd" d="M3 5.25a.75.75 0 01.75-.75h14.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H3.75a.75.75 0 01-.75-.75V5.25zm17.5 4.5a.75.75 0 01.75.75v3a.75.75 0 01-.75.75h-1.5v-4.5h1.5z" clipRule="evenodd"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                {/* Lockscreen Interface */}
+                <div className="absolute inset-0 flex flex-col items-center pt-16 transition-all duration-500 ease-in-out group-hover:opacity-0 group-hover:-translate-y-4 group-hover:scale-95 group-hover:pointer-events-none z-10">
+                  <div className="flex flex-col items-center text-white/90">
+                    <span className="text-[10px] font-semibold tracking-wider">
+                      {new Date().toLocaleDateString(lang === 'ID' ? 'id-ID' : 'en-US', { weekday: 'long', day: 'numeric', month: 'short' }).toUpperCase()}
+                    </span>
+                    <span className="text-7xl font-thin tracking-tighter -mt-2">09:41</span>
+                  </div>
+
+                  <div className="absolute bottom-8 w-full px-8 flex justify-between">
+                    <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/5">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="white" className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M11.412 15.655L9.75 21.75l3.745-4.012M9.257 13.5H3.75l2.659-2.849m2.048-2.194L14.25 2.25 12 10.5h8.25l-4.707 5.043M8.457 8.457L3 3m5.457 5.457l7.086 7.086m0 0L21 21"></path>
+                      </svg>
+                    </div>
+                    <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/5">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="white" className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"></path>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z"></path>
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div className="absolute bottom-2 w-[40%] h-[3px] bg-white/50 rounded-full"></div>
+                </div>
+
+                {/* App UI (Home Screen State) */}
+                <div className="absolute inset-0 pt-12 pb-4 px-4 flex flex-col justify-between opacity-0 scale-105 translate-y-4 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 z-0">
+                  {renderAppMockContent(selectedProject, lang, erpMode, setErpMode, erpState, setErpState, volJoined, setVolJoined, volDonation, setVolDonation, ticketState, setTicketState, bookingState, setBookingState, bookingSlot, setBookingSlot, serviceState, setServiceState, selectedTechnician, setSelectedTechnician, kosCreated, setKosCreated, roomStates, setRoomStates)}
+                  <div className="w-full flex justify-center">
+                    <div className="w-[40%] h-[3px] bg-white/50 rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Notch */}
+              <div className="absolute top-[10px] z-30 h-5 w-18 rounded-full bg-black flex items-center justify-center shadow-lg border border-white/5">
+                <div className="w-2 h-2 rounded-full bg-neutral-900 border border-neutral-800 ml-auto mr-2"></div>
+              </div>
+            </div>
+            
+            <p className="text-[10px] text-neutral-500 mt-4 text-center">
+              {lang === 'ID' 
+                ? 'Arahkan kursor / klik layar HP untuk membuka kunci aplikasi' 
+                : 'Hover / click the screen to unlock the application'}
+            </p>
           </div>
         </div>
       )}
