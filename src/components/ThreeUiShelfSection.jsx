@@ -237,7 +237,7 @@ const getProjectsData = (lang) => [
   }
 ];
 
-const renderAppMockContent = (project, lang, erpMode, setErpMode, erpState, setErpState, volJoined, setVolJoined, volDonation, setVolDonation, ticketState, setTicketState, bookingState, setBookingState, bookingSlot, setBookingSlot, serviceState, setServiceState, selectedTechnician, setSelectedTechnician, kosCreated, setKosCreated, roomStates, setRoomStates) => {
+const renderAppMockContent = (project, lang, erpMode, setErpMode, erpState, setErpState, volJoined, setVolJoined, volDonation, setVolDonation, ticketState, setTicketState, bookingState, setBookingState, bookingSlot, setBookingSlot, serviceState, setServiceState, selectedTechnician, setSelectedTechnician, kosCreated, setKosCreated, roomStates, setRoomStates, transitState, setTransitState, taskState, setTaskState, petState, setPetState, surveyState, setSurveyState, surveyRating, setSurveyRating, selectedWakafRow, setSelectedWakafRow) => {
   const isID = lang === 'ID';
   switch (project.id) {
     case 'erp': {
@@ -619,83 +619,263 @@ const renderAppMockContent = (project, lang, erpMode, setErpMode, erpState, setE
         </div>
       );
     }
-    case 'transit':
+    case 'transit': {
+      const isIdle = transitState === 'idle';
+      const isSearching = transitState === 'searching';
+      const isMatched = transitState === 'matched';
+
+      return (
+        <div className="flex flex-col h-full justify-between p-2 text-white">
+          <div className="flex flex-col gap-2.5 mt-4">
+            
+            {/* Route Detail Card */}
+            <div className="bg-neutral-900/80 border border-neutral-800/85 rounded-xl p-2.5 flex flex-col gap-1">
+              <span className="text-[7.5px] bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded font-bold uppercase w-max">
+                {isID ? 'PERJALANAN INDIVIDU' : 'RIDE BOOKING'}
+              </span>
+              <div className="flex flex-col gap-0.5 mt-1.5">
+                <p className="text-[9.5px] text-neutral-300 font-bold truncate">📍 {isID ? 'Lokasi Saya' : 'My Location'}</p>
+                <p className="text-[9.5px] text-neutral-400 font-medium truncate">🏁 {isID ? 'Tujuan: Stasiun Senen' : 'Dest: Senen Station'}</p>
+              </div>
+              <p className="text-[7.5px] text-neutral-500 mt-1">
+                {isID ? 'Estimasi Tarif: Rp 25.000' : 'Est. Fare: Rp 25,000'}
+              </p>
+            </div>
+
+            {/* Step 1: Searching for Driver */}
+            {isSearching && (
+              <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-4 flex flex-col items-center gap-2 text-center relative overflow-hidden h-[90px]">
+                {/* Searching radar concentric rings */}
+                <div className="absolute w-20 h-20 rounded-full border border-amber-500/20 animate-ping"></div>
+                <div className="w-6 h-6 rounded-full bg-amber-500/10 flex items-center justify-center text-[10px] animate-pulse">🚕</div>
+                <p className="text-[9px] font-bold text-amber-400 mt-1">{isID ? 'Mencari Driver Terdekat...' : 'Finding Nearest Ride...'}</p>
+                <p className="text-[7px] text-neutral-500">{isID ? 'Menghubungi armada taksi aktif' : 'Contacting active taxi pool'}</p>
+              </div>
+            )}
+
+            {/* Step 2: Driver Matched */}
+            {isMatched && (
+              <div className="bg-green-950/20 border border-green-500/30 rounded-xl p-2.5 flex flex-col gap-1.5 shadow-[0_4px_12px_rgba(34,197,94,0.1)]">
+                <div className="flex justify-between items-center">
+                  <span className="text-[7.5px] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded font-bold uppercase">
+                    {isID ? 'DRIVER DITEMUKAN' : 'DRIVER MATCHED'}
+                  </span>
+                  <span className="text-[7.5px] text-green-400 font-bold">ETA: 4m</span>
+                </div>
+                
+                <div className="bg-neutral-900/60 p-2 rounded-lg border border-neutral-800/40 flex items-center justify-between mt-0.5">
+                  <div className="flex flex-col">
+                    <p className="text-[9.5px] font-bold text-neutral-200">Budi Sudarsono</p>
+                    <span className="text-[7.5px] text-neutral-400">Toyota Avanza · B 1234 ABC</span>
+                  </div>
+                  <span className="text-[9px] text-yellow-400 font-bold">⭐ 4.8</span>
+                </div>
+              </div>
+            )}
+
+          </div>
+
+          {/* Action Trigger Button */}
+          <button
+            type="button"
+            disabled={isSearching}
+            onClick={() => {
+              if (isMatched) {
+                setTransitState('idle');
+              } else {
+                setTransitState('searching');
+                setTimeout(() => {
+                  setTransitState('matched');
+                }, 1500);
+              }
+            }}
+            className={`w-full py-2.5 rounded-xl text-[9px] font-bold transition-all duration-300 text-center uppercase tracking-wider shadow-lg ${
+              isIdle
+                ? 'bg-amber-500 hover:bg-amber-600 text-neutral-950 shadow-amber-500/20 hover:scale-[1.02]'
+                : isSearching
+                ? 'bg-neutral-800 text-neutral-500 border border-neutral-700 cursor-not-allowed'
+                : 'bg-neutral-800 hover:bg-neutral-700 text-neutral-400 border border-neutral-700'
+            }`}
+          >
+            {isIdle
+              ? (isID ? 'Pesan Taksi (Rp 25.000)' : 'Order Taxi (Rp 25,000)')
+              : isSearching
+              ? (isID ? 'Mencari...' : 'Searching...')
+              : (isID ? 'Batalkan Perjalanan' : 'Cancel Ride')}
+          </button>
+        </div>
+      );
+    }
+    case 'scheduler': {
+      const isIdle = taskState === 'idle';
+      const isRunning = taskState === 'running';
+      const isDone = taskState === 'done';
+
       return (
         <div className="flex flex-col h-full justify-between p-2 text-white">
           <div className="flex flex-col gap-2 mt-4">
-            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2">
-              <span className="text-[7px] text-neutral-400">{isID ? 'LOKASI DRIVER' : 'DRIVER LOCATION'}</span>
-              <div className="flex justify-between items-center mt-1">
-                <span className="text-[9px] font-bold">Budi Sudarsono</span>
-                <span className="text-[8px] text-green-400">OTW</span>
+            
+            {/* Engine Status Card */}
+            <div className="bg-neutral-900/80 border border-neutral-800/85 rounded-xl p-2.5 flex items-center justify-between">
+              <div className="flex flex-col">
+                <span className="text-[7.5px] text-neutral-400 uppercase tracking-wider font-bold">{isID ? 'STATUS ENGINE' : 'ENGINE STATUS'}</span>
+                <p className="text-[9.5px] font-bold text-neutral-200 mt-0.5">{isID ? 'Penjadwal Otomatis' : 'Automated Scheduler'}</p>
               </div>
-              <p className="text-[8px] text-neutral-400 mt-0.5">Toyota Avanza (B 1234 ABC)</p>
+              <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded ${isRunning ? 'bg-cyan-500/20 text-cyan-400 animate-pulse' : 'bg-green-500/20 text-green-400'}`}>
+                {isRunning ? (isID ? 'MEMPROSES' : 'RUNNING') : 'ACTIVE'}
+              </span>
             </div>
-            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2 h-16 flex flex-col justify-between overflow-hidden relative">
-              <span className="text-[7px] text-neutral-400 z-10">{isID ? 'PETA TELEMETRI' : 'TELEMETRY MAP'}</span>
-              <div className="absolute inset-0 bg-neutral-900 flex items-center justify-center">
-                <div className="w-full h-full border border-dashed border-neutral-700 rounded flex items-center justify-center text-[7px] text-neutral-500 bg-neutral-900">
-                  MAP RADAR MOCKUP
+
+            {/* List of Tasks */}
+            <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-2.5 flex flex-col gap-1.5">
+              <span className="text-[7.5px] text-neutral-400 uppercase tracking-wider font-bold">{isID ? 'DAFTAR PEKERJAAN' : 'WORKFLOW JOBS'}</span>
+              
+              <div className="flex flex-col gap-1">
+                <div className="flex justify-between items-center bg-neutral-950/40 p-1.5 rounded border border-neutral-850">
+                  <span className="text-[8.5px] text-neutral-300">Job #101: Backup DB</span>
+                  <span className={`text-[7.5px] font-bold ${isDone ? 'text-green-400' : isRunning ? 'text-cyan-400 animate-pulse' : 'text-neutral-500'}`}>
+                    {isDone ? 'Sukses ✓' : isRunning ? 'Running' : 'Ready'}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center bg-neutral-950/40 p-1.5 rounded border border-neutral-850">
+                  <span className="text-[8.5px] text-neutral-300">Job #102: Send Invoices</span>
+                  <span className={`text-[7.5px] font-bold ${isDone ? 'text-green-400' : isRunning ? 'text-cyan-400 animate-pulse' : 'text-neutral-500'}`}>
+                    {isDone ? 'Sukses ✓' : isRunning ? 'Running' : 'Ready'}
+                  </span>
                 </div>
               </div>
             </div>
+
           </div>
-          <div className="bg-amber-500 text-center py-1.5 rounded-lg text-[9px] font-bold text-neutral-900">
-            {isID ? 'Panggil Ambulans/Taksi' : 'Order Driver'}
-          </div>
+
+          {/* Action Trigger Button */}
+          <button
+            type="button"
+            disabled={isRunning}
+            onClick={() => {
+              if (isDone) {
+                setTaskState('idle');
+              } else {
+                setTaskState('running');
+                setTimeout(() => {
+                  setTaskState('done');
+                }, 1500);
+              }
+            }}
+            className={`w-full py-2.5 rounded-xl text-[9px] font-bold transition-all duration-300 text-center uppercase tracking-wider shadow-lg ${
+              isIdle
+                ? 'bg-cyan-600 hover:bg-cyan-500 text-white shadow-cyan-650/20 hover:scale-[1.02]'
+                : isRunning
+                ? 'bg-neutral-800 text-neutral-500 border border-neutral-700 cursor-not-allowed'
+                : 'bg-neutral-800 hover:bg-neutral-700 text-neutral-400 border border-neutral-700'
+            }`}
+          >
+            {isIdle
+              ? (isID ? 'Jalankan Alur Kerja' : 'Run Workflow')
+              : isRunning
+              ? (isID ? 'Memproses Alur...' : 'Processing Jobs...')
+              : (isID ? 'Reset Alur Kerja' : 'Reset Workflow')}
+          </button>
         </div>
       );
-    case 'scheduler':
+    }
+    case 'petshop': {
+      const isIdle = petState === 'idle';
+      const isBooking = petState === 'booking';
+      const isBooked = petState === 'booked';
+
       return (
         <div className="flex flex-col h-full justify-between p-2 text-white">
-          <div className="flex flex-col gap-2 mt-4">
-            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2">
-              <span className="text-[7px] text-neutral-400">{isID ? 'STATUS ENGINE' : 'ENGINE STATUS'}</span>
-              <div className="flex justify-between items-center mt-1">
-                <span className="text-[9px] font-bold text-green-400">ACTIVE</span>
-                <span className="text-[8px] text-neutral-400">5 Workers</span>
+          <div className="flex flex-col gap-2.5 mt-4">
+            
+            {/* Pet Profile Header */}
+            <div className="bg-neutral-900/80 border border-neutral-800/85 rounded-xl p-2.5 flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-pink-500/20 flex items-center justify-center text-[16px]">🐱</div>
+              <div className="flex flex-col">
+                <p className="text-[10px] font-bold text-neutral-100">Milo</p>
+                <span className="text-[7.5px] text-neutral-400">
+                  {isID ? 'Kucing Persia · Umur 2 Tahun' : 'Persian Cat · 2 Years'}
+                </span>
               </div>
             </div>
-            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2 flex flex-col gap-1">
-              <div className="flex justify-between text-[7px] text-neutral-400">
-                <span>Sync Job #89</span>
-                <span className="text-green-400">Success</span>
-              </div>
-              <div className="flex justify-between text-[7px] text-neutral-400">
-                <span>Report Job #90</span>
-                <span className="text-cyan-400">Running</span>
-              </div>
-            </div>
-          </div>
-          <div className="bg-zinc-700 text-center py-1.5 rounded-lg text-[9px] font-bold">
-            {isID ? 'Trigger Manual' : 'Trigger Job'}
-          </div>
-        </div>
-      );
-    case 'petshop':
-      return (
-        <div className="flex flex-col h-full justify-between p-2 text-white">
-          <div className="flex flex-col gap-2 mt-4">
-            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2">
-              <span className="text-[7px] text-neutral-400">{isID ? 'PROFIL PET' : 'PET PROFILE'}</span>
-              <div className="flex items-center gap-2 mt-1">
-                <div className="w-5 h-5 rounded-full bg-pink-500/20 text-center text-[9px] flex items-center justify-center">🐱</div>
-                <div className="flex flex-col">
-                  <span className="text-[9px] font-bold">Milo</span>
-                  <span className="text-[7px] text-neutral-400">Persian Cat · 2 Yrs</span>
+
+            {/* Selection/Status Screen */}
+            {isIdle && (
+              <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-2.5 flex flex-col gap-1.5">
+                <span className="text-[7.5px] text-neutral-400 uppercase tracking-wider font-bold">
+                  {isID ? 'PILIH TREATMENT MILO' : 'SELECT TREATMENT'}
+                </span>
+                
+                <div className="bg-neutral-950/40 p-2 rounded-lg border border-neutral-850 flex justify-between items-center text-[8.5px]">
+                  <div className="flex flex-col">
+                    <span className="font-bold text-neutral-200">{isID ? 'Grooming Lengkap Kucing' : 'Full Cat Grooming'}</span>
+                    <span className="text-neutral-400">Rp 95.000</span>
+                  </div>
+                  <span className="text-pink-400 font-bold">★ Selected</span>
                 </div>
               </div>
-            </div>
-            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2">
-              <span className="text-[7px] text-neutral-400">{isID ? 'JADWAL GROOMING' : 'GROOMING BOOKING'}</span>
-              <p className="text-[8px] font-medium text-neutral-200 mt-1">{isID ? 'Besok Jam 14:00' : 'Tomorrow 14:00'}</p>
-            </div>
+            )}
+
+            {isBooking && (
+              <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-5 flex flex-col items-center gap-2 text-center">
+                <span className="text-xl animate-bounce">🐾</span>
+                <p className="text-[9.5px] font-bold text-pink-400">{isID ? 'Menjadwalkan Slot Groomer...' : 'Booking Groomer...'}</p>
+                <p className="text-[7px] text-neutral-500">{isID ? 'Menghubungi salon & mencocokkan waktu' : 'Syncing salon schedules'}</p>
+              </div>
+            )}
+
+            {isBooked && (
+              <div className="bg-pink-950/20 border border-pink-500/30 rounded-xl p-2.5 flex flex-col gap-1.5 shadow-[0_4px_12px_rgba(219,39,119,0.1)]">
+                <div className="flex justify-between items-center">
+                  <span className="text-[7.5px] bg-pink-500/20 text-pink-400 px-1.5 py-0.5 rounded font-bold uppercase">
+                    {isID ? 'BOOKING BERHASIL' : 'BOOKING CONFIRMED'}
+                  </span>
+                  <span className="text-[7.5px] text-pink-400 font-bold">🐾 MILO</span>
+                </div>
+                
+                <div className="bg-neutral-900/40 p-2 rounded-lg border border-neutral-800/40 flex flex-col gap-1">
+                  <p className="text-[9px] font-bold text-neutral-200">{isID ? 'Grooming Lengkap Kucing' : 'Full Cat Grooming'}</p>
+                  <div className="flex justify-between text-[7.5px] text-neutral-400">
+                    <span>🕒 {isID ? 'Besok Jam 14:00' : 'Tomorrow 14:00'}</span>
+                    <span>👤 Groomer: Kak Roni</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
           </div>
-          <div className="bg-pink-600 text-center py-1.5 rounded-lg text-[9px] font-bold">
-            {isID ? 'Booking Grooming' : 'Book Session'}
-          </div>
+
+          {/* Action Trigger Button */}
+          <button
+            type="button"
+            disabled={isBooking}
+            onClick={() => {
+              if (isBooked) {
+                setPetState('idle');
+              } else {
+                setPetState('booking');
+                setTimeout(() => {
+                  setPetState('booked');
+                }, 1500);
+              }
+            }}
+            className={`w-full py-2.5 rounded-xl text-[9px] font-bold transition-all duration-300 text-center uppercase tracking-wider shadow-lg ${
+              isIdle
+                ? 'bg-pink-600 hover:bg-pink-500 text-white shadow-pink-600/20 hover:scale-[1.02]'
+                : isBooking
+                ? 'bg-neutral-800 text-neutral-500 border border-neutral-700 cursor-not-allowed'
+                : 'bg-neutral-800 hover:bg-neutral-700 text-neutral-400 border border-neutral-700'
+            }`}
+          >
+            {isIdle
+              ? (isID ? 'Pesan Grooming Milo' : 'Book Grooming Session')
+              : isBooking
+              ? (isID ? 'Menjadwalkan...' : 'Booking Slot...')
+              : (isID ? 'Reset Simulasi' : 'Reset Simulation')}
+          </button>
         </div>
       );
+    }
     case 'booking': {
       const isIdle = bookingState === 'idle';
       const isBooking = bookingState === 'booking';
@@ -1069,44 +1249,121 @@ const renderAppMockContent = (project, lang, erpMode, setErpMode, erpState, setE
         </div>
       );
     }
-    case 'survey':
+    case 'survey': {
+      const isIdle = surveyState === 'idle';
+      const isSubmitting = surveyState === 'submitting';
+      const isSubmitted = surveyState === 'submitted';
+
       return (
         <div className="flex flex-col h-full justify-between p-2 text-white">
-          <div className="flex flex-col gap-2 mt-4">
-            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2">
-              <span className="text-[7px] text-neutral-400">{isID ? 'SURVEI AKTIF' : 'ACTIVE SURVEY'}</span>
-              <p className="text-[9px] font-bold text-neutral-100">Customer Feedback v2</p>
-              <span className="text-[8px] text-neutral-400">142 Responses</span>
+          <div className="flex flex-col gap-2.5 mt-4">
+            
+            {/* Survey Header */}
+            <div className="bg-neutral-900/80 border border-neutral-800/85 rounded-xl p-2.5 flex items-center justify-between">
+              <div className="flex flex-col">
+                <span className="text-[7.5px] text-neutral-400 uppercase tracking-wider font-bold">{isID ? 'SURVEI KEPUASAN' : 'CUSTOMER SATISFACTION'}</span>
+                <p className="text-[9.5px] font-bold text-neutral-200 mt-0.5">Feedback Portofolio v2</p>
+              </div>
+              <span className="text-[7.5px] text-purple-400 bg-purple-500/10 px-1.5 py-0.5 rounded font-bold">142 Resp</span>
             </div>
-            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2 flex flex-col gap-1">
-              <span className="text-[7px] text-neutral-400">{isID ? 'PREVIEW PERTANYAAN' : 'QUESTION PREVIEW'}</span>
-              <p className="text-[8px] font-medium text-neutral-200">"Apakah Anda puas dengan layanan kami?"</p>
+
+            {/* Main Interactive Survey Container */}
+            <div className={`border rounded-xl p-3 text-center transition-all duration-300 ${
+              isIdle 
+                ? 'bg-neutral-900/80 border-neutral-800 text-neutral-400' 
+                : isSubmitting
+                ? 'bg-amber-500/10 border-amber-500/30 text-amber-300 animate-pulse'
+                : 'bg-purple-950/20 border-purple-500/30 text-neutral-200 shadow-[0_4px_12px_rgba(168,85,247,0.1)]'
+            }`}>
+              {isIdle && (
+                <div className="flex flex-col gap-1.5">
+                  <p className="text-[9px] font-medium text-neutral-200 leading-snug">
+                    {isID ? '"Apakah Anda puas dengan layanan portofolio kami?"' : '"Are you satisfied with our portfolio service?"'}
+                  </p>
+                  
+                  {/* Star Rating Grid */}
+                  <div className="flex gap-2 justify-center my-1.5">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => setSurveyRating(star)}
+                        className={`text-xl transition-all duration-200 transform active:scale-125 ${
+                          surveyRating >= star 
+                            ? 'text-yellow-400 drop-shadow-[0_0_6px_rgba(250,204,21,0.55)]' 
+                            : 'text-neutral-700 hover:text-neutral-600'
+                        }`}
+                      >
+                        ★
+                      </button>
+                    ))}
+                  </div>
+                  <span className="text-[7px] text-neutral-500">
+                    {surveyRating > 0 
+                      ? (isID ? `Dipilih: ${surveyRating} Bintang` : `Selected: ${surveyRating} Stars`)
+                      : (isID ? 'Ketuk bintang untuk memberi nilai' : 'Tap stars to rate')}
+                  </span>
+                </div>
+              )}
+
+              {isSubmitting && (
+                <div className="py-4 flex flex-col items-center gap-2">
+                  <div className="w-5 h-5 border-2 border-t-purple-500 border-neutral-800 animate-spin rounded-full"></div>
+                  <p className="text-[9px] font-bold text-purple-400">{isID ? 'Mengirim Tanggapan...' : 'Submitting Feedback...'}</p>
+                </div>
+              )}
+
+              {isSubmitted && (
+                <div className="flex flex-col items-center gap-1.5 py-1">
+                  <span className="text-xl">🙏</span>
+                  <p className="text-[10px] font-bold text-neutral-200">{isID ? 'Tanggapan Terkirim!' : 'Feedback Submitted!'}</p>
+                  <p className="text-[7.5px] text-neutral-400 max-w-[150px]">
+                    {isID 
+                      ? `Rating Anda: ${surveyRating} Bintang. Terima kasih atas masukan berharga Anda!` 
+                      : `Your Rating: ${surveyRating} Stars. Thank you for your valuable feedback!`}
+                  </p>
+                </div>
+              )}
             </div>
+
           </div>
-          <div className="bg-purple-600 text-center py-1.5 rounded-lg text-[9px] font-bold">
-            {isID ? 'Lihat Hasil' : 'View Results'}
-          </div>
+
+          {/* Action Trigger Button */}
+          <button
+            type="button"
+            disabled={isSubmitting || (isIdle && surveyRating === 0)}
+            onClick={() => {
+              if (isSubmitted) {
+                setSurveyState('idle');
+                setSurveyRating(0);
+              } else {
+                setSurveyState('submitting');
+                setTimeout(() => {
+                  setSurveyState('submitted');
+                }, 1200);
+              }
+            }}
+            className={`w-full py-2.5 rounded-xl text-[9px] font-bold transition-all duration-300 text-center uppercase tracking-wider shadow-lg ${
+              isIdle
+                ? (surveyRating > 0 
+                  ? 'bg-purple-600 hover:bg-purple-500 text-white shadow-purple-650/20 hover:scale-[1.02]' 
+                  : 'bg-neutral-800 text-neutral-600 border border-neutral-700 cursor-not-allowed')
+                : isSubmitting
+                ? 'bg-neutral-800 text-neutral-500 border border-neutral-700 cursor-not-allowed'
+                : 'bg-neutral-800 hover:bg-neutral-700 text-neutral-400 border border-neutral-700'
+            }`}
+          >
+            {isIdle
+              ? (isID ? 'Kirim Survei' : 'Submit Survey')
+              : isSubmitting
+              ? (isID ? 'Mengirim...' : 'Sending...')
+              : (isID ? 'Isi Ulang Survei' : 'Reset Survey')}
+          </button>
         </div>
       );
+    }
     case 'wakaf':
-      return (
-        <div className="flex flex-col h-full justify-between p-2 text-white">
-          <div className="flex flex-col gap-2 mt-4">
-            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2">
-              <span className="text-[7px] text-neutral-400">{isID ? 'REGISTRI TANAH WAKAF' : 'WAKAF REGISTRY'}</span>
-              <p className="text-[9px] font-bold text-neutral-100 mt-1">Sertifikat #938210</p>
-              <span className="text-[8px] text-neutral-400">Luas: 2450m² · Bersertifikat</span>
-            </div>
-            <div className="bg-neutral-800/80 border border-neutral-700/50 rounded-xl p-2">
-              <span className="text-[7px] text-neutral-400">{isID ? 'LOKASI GEOSPASIAL' : 'GEOSPATIAL LOCATION'}</span>
-              <p className="text-[8px] font-medium text-emerald-400">Kec. Ciganjur, Jakarta Selatan</p>
-            </div>
-          </div>
-          <div className="bg-emerald-600 text-center py-1.5 rounded-lg text-[9px] font-bold">
-            {isID ? 'Verifikasi Sertifikat' : 'Verify Certificate'}
-          </div>
-        </div>
-      );
+      return null;
     case 'islamic':
       return (
         <div className="flex flex-col h-full justify-between p-2 text-white">
@@ -1146,6 +1403,12 @@ export default function ThreeUiShelfSection() {
   const [selectedTechnician, setSelectedTechnician] = useState(null); // 'Ahmad Subarjo', 'Siti Rahma'
   const [kosCreated, setKosCreated] = useState(false);
   const [roomStates, setRoomStates] = useState([true, true, false, true, false, true]); // occupied status for 6 rooms
+  const [transitState, setTransitState] = useState('idle'); // 'idle', 'searching', 'matched'
+  const [taskState, setTaskState] = useState('idle'); // 'idle', 'running', 'done'
+  const [petState, setPetState] = useState('idle'); // 'idle', 'booking', 'booked'
+  const [surveyState, setSurveyState] = useState('idle'); // 'idle', 'submitting', 'submitted'
+  const [surveyRating, setSurveyRating] = useState(0); // stars rating: 1-5
+  const [selectedWakafRow, setSelectedWakafRow] = useState(0); // 0, 1, 2
 
   useEffect(() => {
     setErpMode('inside');
@@ -1159,6 +1422,12 @@ export default function ThreeUiShelfSection() {
     setSelectedTechnician(null);
     setKosCreated(false);
     setRoomStates([true, true, false, true, false, true]);
+    setTransitState('idle');
+    setTaskState('idle');
+    setPetState('idle');
+    setSurveyState('idle');
+    setSurveyRating(0);
+    setSelectedWakafRow(0);
   }, [selectedProject]);
 
   const projects = getProjectsData(lang);
@@ -1325,7 +1594,9 @@ export default function ThreeUiShelfSection() {
           onClick={() => setShowMockup(false)}
         >
           <div 
-            className="relative bg-neutral-950 border border-neutral-800 rounded-3xl p-6 max-w-[340px] w-full flex flex-col items-center shadow-2xl transition-all duration-300" 
+            className={`relative bg-neutral-950 border border-neutral-800 rounded-3xl p-6 w-full flex flex-col items-center shadow-2xl transition-all duration-300 ${
+              selectedProject.id === 'wakaf' ? 'max-w-[820px]' : 'max-w-[340px]'
+            }`}
             onClick={(e) => e.stopPropagation()}
           >
             <button 
@@ -1340,78 +1611,215 @@ export default function ThreeUiShelfSection() {
             <h3 className="text-xl font-bold text-white mb-1 text-center">{selectedProject.title}</h3>
             <p className="text-xs text-neutral-400 mb-6 text-center">{selectedProject.discipline}</p>
             
-            {/* The Phone Mockup Code */}
-            <div className="group relative flex justify-center h-[460px] w-[230px] border-[4px] border-neutral-800 rounded-[40px] bg-neutral-900 shadow-2xl ring-1 ring-neutral-950/50 transition-all duration-500 hover:shadow-3xl hover:-translate-y-1 select-none cursor-pointer">
-              {/* Internal phone screen border reset */}
-              <div className="absolute inset-0 rounded-[38px] border border-white/10 pointer-events-none"></div>
-
-              <div className="relative h-full w-full overflow-hidden rounded-[36px] bg-black">
-                {/* Background animations */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-slate-900 via-indigo-950 to-slate-900 transition-transform duration-700 group-hover:scale-110"></div>
-                <div className="absolute top-0 right-0 w-[150px] h-[150px] bg-purple-600/20 blur-[40px] rounded-full mix-blend-screen transition-all duration-700 group-hover:translate-x-4 group-hover:-translate-y-4"></div>
-                <div className="absolute bottom-0 left-0 w-[150px] h-[150px] bg-cyan-600/20 blur-[40px] rounded-full mix-blend-screen transition-all duration-700 group-hover:-translate-x-4 group-hover:translate-y-4"></div>
-
-                {/* Shine effect (moved inside the screen to clip reflection within screen borders) */}
-                <div className="absolute top-0 right-0 w-[120%] h-full bg-gradient-to-tr from-white/0 via-white/5 to-white/0 -skew-x-12 translate-x-[20%] pointer-events-none group-hover:translate-x-[-100%] transition-transform duration-1000 ease-in-out z-30"></div>
-
-                {/* Status Bar */}
-                <div className="absolute top-2 w-full px-6 py-1 flex justify-between items-center z-20 text-white text-[10px] font-medium opacity-80">
-                  <span>9:41</span>
-                  <div className="flex gap-1 items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3">
-                      <path d="M3 20h18V2L3 20z"></path>
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-                      <path fillRule="evenodd" d="M3 5.25a.75.75 0 01.75-.75h14.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H3.75a.75.75 0 01-.75-.75V5.25zm17.5 4.5a.75.75 0 01.75.75v3a.75.75 0 01-.75.75h-1.5v-4.5h1.5z" clipRule="evenodd"></path>
-                    </svg>
+            {/* Conditional Mockup: Web for Wakaf, Smartphone for others */}
+            {selectedProject.id === 'wakaf' ? (
+              /* Desktop Web Browser Mockup for Wakaf Database */
+              <div className="group relative w-full h-[460px] border-[4px] border-neutral-800 rounded-[24px] bg-neutral-900 shadow-2xl ring-1 ring-neutral-950/50 flex flex-col overflow-hidden select-none">
+                
+                {/* Browser Title Bar */}
+                <div className="bg-neutral-950 px-4 py-2.5 border-b border-neutral-850 flex items-center justify-between z-20 text-[10px] font-medium text-white/80">
+                  <div className="flex gap-1.5">
+                    <div className="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                    <div className="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
+                    <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
                   </div>
+                  <div className="bg-neutral-900 border border-neutral-800 rounded-md px-3 py-0.5 text-[8.5px] font-mono text-neutral-400 w-[55%] truncate text-center">
+                    https://wakafdb.id/dashboard/registry
+                  </div>
+                  <span className="text-[7.5px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">
+                    {lang === 'ID' ? 'SISTEM WEB B2B' : 'B2B WEB SYSTEM'}
+                  </span>
                 </div>
 
-                {/* Lockscreen Interface */}
-                <div className="absolute inset-0 flex flex-col items-center pt-16 transition-all duration-500 ease-in-out group-hover:opacity-0 group-hover:-translate-y-4 group-hover:scale-95 group-hover:pointer-events-none z-10">
-                  <div className="flex flex-col items-center text-white/90">
-                    <span className="text-[10px] font-semibold tracking-wider">
-                      {new Date().toLocaleDateString(lang === 'ID' ? 'id-ID' : 'en-US', { weekday: 'long', day: 'numeric', month: 'short' }).toUpperCase()}
-                    </span>
-                    <span className="text-7xl font-thin tracking-tighter -mt-2">09:41</span>
+                {/* Web Body (Table + Map Panel) */}
+                <div className="flex-1 bg-black text-white p-3 flex gap-3 overflow-hidden">
+                  
+                  {/* Left Panel: Table of Wakaf lands */}
+                  <div className="flex-1 bg-neutral-900/60 border border-neutral-800/80 rounded-xl p-3 flex flex-col justify-between h-[380px]">
+                    <div className="flex flex-col gap-2">
+                      <div className="flex justify-between items-center pb-1 border-b border-neutral-850">
+                        <span className="text-[9px] text-neutral-400 uppercase tracking-wider font-bold">
+                          {lang === 'ID' ? 'REGISTRI TANAH WAKAF' : 'LAND WAKAF REGISTRY'}
+                        </span>
+                        <span className="text-[8.5px] text-neutral-500 font-bold">3 Properti</span>
+                      </div>
+                      
+                      {/* Table layout */}
+                      <div className="flex flex-col gap-1.5 mt-1">
+                        {/* Table Header */}
+                        <div className="grid grid-cols-12 text-[7px] text-neutral-500 font-bold uppercase px-1">
+                          <span className="col-span-1">No</span>
+                          <span className="col-span-5">{lang === 'ID' ? 'Lokasi' : 'Location'}</span>
+                          <span className="col-span-3">{lang === 'ID' ? 'Luas' : 'Area'}</span>
+                          <span className="col-span-3">Status</span>
+                        </div>
+
+                        {/* Table Rows */}
+                        {[
+                          { id: 0, loc: "Kec. Ciganjur, Jkt Selatan", area: "2.450 m²", verified: true },
+                          { id: 1, loc: "Kec. Sukasari, Bandung Utara", area: "1.200 m²", verified: false },
+                          { id: 2, loc: "Kec. Senen, Jkt Pusat", area: "3.100 m²", verified: true }
+                        ].map((row) => (
+                          <button
+                            key={row.id}
+                            type="button"
+                            onClick={() => setSelectedWakafRow(row.id)}
+                            className={`grid grid-cols-12 text-[8.5px] p-2 rounded-lg border text-left transition-all ${
+                              selectedWakafRow === row.id
+                                ? 'bg-emerald-500/10 border-emerald-500/80 text-emerald-300 shadow-[0_0_6px_rgba(16,185,129,0.1)]'
+                                : 'bg-neutral-850 border-neutral-800 text-neutral-400 hover:border-neutral-700'
+                            }`}
+                          >
+                            <span className="col-span-1 font-mono font-bold text-neutral-500">{row.id + 1}</span>
+                            <span className="col-span-5 truncate pr-1 font-bold text-neutral-200">{row.loc}</span>
+                            <span className="col-span-3 font-mono font-medium">{row.area}</span>
+                            <span className="col-span-3 text-[7.5px] font-bold">
+                              {row.verified 
+                                ? <span className="text-emerald-400 bg-emerald-500/15 px-1 py-0.5 rounded">TERSERTIFIKASI</span>
+                                : <span className="text-amber-400 bg-amber-500/15 px-1 py-0.5 rounded">VERIFIKASI</span>
+                              }
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* Row Detailed Specs */}
+                    <div className="bg-neutral-950/50 border border-neutral-850 p-2.5 rounded-lg flex justify-between items-center text-[8px] text-neutral-400">
+                      <div>
+                        <span>{lang === 'ID' ? 'Nazhir/Pengelola' : 'Manager'}: </span>
+                        <strong className="text-neutral-200 font-bold">
+                          {selectedWakafRow === 0 ? "KUA Ciganjur" : selectedWakafRow === 1 ? "Yayasan Amal" : "KUA Senen"}
+                        </strong>
+                      </div>
+                      <div>
+                        <span>ID Sertifikat: </span>
+                        <strong className="text-neutral-200 font-mono font-bold">
+                          {selectedWakafRow === 0 ? "WKF-0932" : selectedWakafRow === 1 ? "WKF-1042" : "WKF-3849"}
+                        </strong>
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="absolute bottom-8 w-full px-8 flex justify-between">
-                    <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/5">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="white" className="w-5 h-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M11.412 15.655L9.75 21.75l3.745-4.012M9.257 13.5H3.75l2.659-2.849m2.048-2.194L14.25 2.25 12 10.5h8.25l-4.707 5.043M8.457 8.457L3 3m5.457 5.457l7.086 7.086m0 0L21 21"></path>
+                  {/* Right Panel: Geospatial Map Mockup */}
+                  <div className="w-[280px] bg-neutral-900/60 border border-neutral-800/80 rounded-xl p-3 flex flex-col justify-between h-[380px] relative overflow-hidden">
+                    <div className="flex flex-col gap-1 z-10">
+                      <span className="text-[7.5px] text-neutral-400 uppercase tracking-wider font-bold">
+                        {lang === 'ID' ? 'VISUALISASI GEOSPASIAL' : 'GEOSPATIAL VISUALIZATION'}
+                      </span>
+                      <div className="flex justify-between items-center text-[7.5px] font-mono text-neutral-500">
+                        <span>
+                          {selectedWakafRow === 0 ? "Lat: -6.3402, Lon: 106.8021" : selectedWakafRow === 1 ? "Lat: -6.8604, Lon: 107.5912" : "Lat: -6.1847, Lon: 106.8444"}
+                        </span>
+                        <span className="text-emerald-400 font-bold">📍 ACTIVE</span>
+                      </div>
+                    </div>
+
+                    {/* Map Graphic Box */}
+                    <div className="absolute inset-0 bg-neutral-950 flex items-center justify-center pointer-events-none">
+                      {/* Grid pattern background */}
+                      <div 
+                        className="absolute inset-0 opacity-10 bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)]"
+                        style={{ backgroundSize: '15px 15px' }}
+                      ></div>
+                      
+                      {/* Radar circular guidelines */}
+                      <div className="absolute w-36 h-36 rounded-full border border-neutral-800/50"></div>
+                      <div className="absolute w-24 h-24 rounded-full border border-neutral-800/30"></div>
+                      
+                      {/* Pinpoint marker */}
+                      <div className="relative flex flex-col items-center">
+                        <span className="absolute w-6 h-6 rounded-full bg-emerald-500/20 animate-ping"></span>
+                        <span className="text-2xl z-10">📍</span>
+                        
+                        <div className="bg-neutral-900 border border-neutral-800 text-[8px] px-2 py-0.5 rounded shadow-lg mt-1 font-bold text-neutral-200 z-10">
+                          {selectedWakafRow === 0 ? "Jakarta Selatan" : selectedWakafRow === 1 ? "Bandung Utara" : "Jakarta Pusat"}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Footer Info */}
+                    <div className="z-10 bg-neutral-950/80 border border-neutral-850 p-2 rounded-lg text-center text-[7.5px] text-neutral-400">
+                      {lang === 'ID' 
+                        ? 'Klik baris tabel kiri untuk memindahkan pin lokasi GPS BPN' 
+                        : 'Click left table row to relocate the BPN GPS pin'}
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            ) : (
+              /* Smartphone Mockup Frame for mobile apps */
+              <div className="group relative flex justify-center h-[460px] w-[230px] border-[4px] border-neutral-800 rounded-[40px] bg-neutral-900 shadow-2xl ring-1 ring-neutral-950/50 transition-all duration-500 hover:shadow-3xl hover:-translate-y-1 select-none cursor-pointer">
+                <div className="absolute inset-0 rounded-[38px] border border-white/10 pointer-events-none"></div>
+
+                <div className="relative h-full w-full overflow-hidden rounded-[36px] bg-black">
+                  <div className="absolute inset-0 bg-gradient-to-tr from-slate-900 via-indigo-950 to-slate-900 transition-transform duration-700 group-hover:scale-110"></div>
+                  <div className="absolute top-0 right-0 w-[150px] h-[150px] bg-purple-600/20 blur-[40px] rounded-full mix-blend-screen transition-all duration-700 group-hover:translate-x-4 group-hover:-translate-y-4"></div>
+                  <div className="absolute bottom-0 left-0 w-[150px] h-[150px] bg-cyan-600/20 blur-[40px] rounded-full mix-blend-screen transition-all duration-700 group-hover:-translate-x-4 group-hover:translate-y-4"></div>
+
+                  <div className="absolute top-0 right-0 w-[120%] h-full bg-gradient-to-tr from-white/0 via-white/5 to-white/0 -skew-x-12 translate-x-[20%] pointer-events-none group-hover:translate-x-[-100%] transition-transform duration-1000 ease-in-out z-30"></div>
+
+                  {/* Status Bar */}
+                  <div className="absolute top-2 w-full px-6 py-1 flex justify-between items-center z-20 text-white text-[10px] font-medium opacity-80">
+                    <span>9:41</span>
+                    <div className="flex gap-1 items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3">
+                        <path d="M3 20h18V2L3 20z"></path>
+                      </svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                        <path fillRule="evenodd" d="M3 5.25a.75.75 0 01.75-.75h14.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H3.75a.75.75 0 01-.75-.75V5.25zm17.5 4.5a.75.75 0 01.75.75v3a.75.75 0 01-.75.75h-1.5v-4.5h1.5z" clipRule="evenodd"></path>
                       </svg>
                     </div>
-                    <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/5">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="white" className="w-5 h-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"></path>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z"></path>
-                      </svg>
+                  </div>
+
+                  {/* Lockscreen Interface */}
+                  <div className="absolute inset-0 flex flex-col items-center pt-16 transition-all duration-500 ease-in-out group-hover:opacity-0 group-hover:-translate-y-4 group-hover:scale-95 group-hover:pointer-events-none z-10">
+                    <div className="flex flex-col items-center text-white/90">
+                      <span className="text-[10px] font-semibold tracking-wider">
+                        {new Date().toLocaleDateString(lang === 'ID' ? 'id-ID' : 'en-US', { weekday: 'long', day: 'numeric', month: 'short' }).toUpperCase()}
+                      </span>
+                      <span className="text-7xl font-thin tracking-tighter -mt-2">09:41</span>
+                    </div>
+
+                    <div className="absolute bottom-8 w-full px-8 flex justify-between">
+                      <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/5">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="white" className="w-5 h-5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M11.412 15.655L9.75 21.75l3.745-4.012M9.257 13.5H3.75l2.659-2.849m2.048-2.194L14.25 2.25 12 10.5h8.25l-4.707 5.043M8.457 8.457L3 3m5.457 5.457l7.086 7.086m0 0L21 21"></path>
+                        </svg>
+                      </div>
+                      <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/5">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="white" className="w-5 h-5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"></path>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z"></path>
+                        </svg>
+                      </div>
+                    </div>
+
+                    <div className="absolute bottom-2 w-[40%] h-[3px] bg-white/50 rounded-full"></div>
+                  </div>
+
+                  {/* App UI (Home Screen State) */}
+                  <div className="absolute inset-0 pt-12 pb-4 px-4 flex flex-col justify-between opacity-0 scale-105 translate-y-4 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 z-0">
+                    {renderAppMockContent(selectedProject, lang, erpMode, setErpMode, erpState, setErpState, volJoined, setVolJoined, volDonation, setVolDonation, ticketState, setTicketState, bookingState, setBookingState, bookingSlot, setBookingSlot, serviceState, setServiceState, selectedTechnician, setSelectedTechnician, kosCreated, setKosCreated, roomStates, setRoomStates, transitState, setTransitState, taskState, setTaskState, petState, setPetState, surveyState, setSurveyState, surveyRating, setSurveyRating, selectedWakafRow, setSelectedWakafRow)}
+                    <div className="w-full flex justify-center">
+                      <div className="w-[40%] h-[3px] bg-white/50 rounded-full"></div>
                     </div>
                   </div>
-
-                  <div className="absolute bottom-2 w-[40%] h-[3px] bg-white/50 rounded-full"></div>
                 </div>
 
-                {/* App UI (Home Screen State) */}
-                <div className="absolute inset-0 pt-12 pb-4 px-4 flex flex-col justify-between opacity-0 scale-105 translate-y-4 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 z-0">
-                  {renderAppMockContent(selectedProject, lang, erpMode, setErpMode, erpState, setErpState, volJoined, setVolJoined, volDonation, setVolDonation, ticketState, setTicketState, bookingState, setBookingState, bookingSlot, setBookingSlot, serviceState, setServiceState, selectedTechnician, setSelectedTechnician, kosCreated, setKosCreated, roomStates, setRoomStates)}
-                  <div className="w-full flex justify-center">
-                    <div className="w-[40%] h-[3px] bg-white/50 rounded-full"></div>
-                  </div>
+                {/* Notch */}
+                <div className="absolute top-[10px] z-30 h-5 w-18 rounded-full bg-black flex items-center justify-center shadow-lg border border-white/5">
+                  <div className="w-2 h-2 rounded-full bg-neutral-900 border border-neutral-800 ml-auto mr-2"></div>
                 </div>
               </div>
-
-              {/* Notch */}
-              <div className="absolute top-[10px] z-30 h-5 w-18 rounded-full bg-black flex items-center justify-center shadow-lg border border-white/5">
-                <div className="w-2 h-2 rounded-full bg-neutral-900 border border-neutral-800 ml-auto mr-2"></div>
-              </div>
-            </div>
+            )}
             
             <p className="text-[10px] text-neutral-500 mt-4 text-center">
-              {lang === 'ID' 
-                ? 'Arahkan kursor / klik layar HP untuk membuka kunci aplikasi' 
-                : 'Hover / click the screen to unlock the application'}
+              {selectedProject.id === 'wakaf'
+                ? (lang === 'ID' ? 'Klik data baris tabel untuk mengubah koordinat GPS peta' : 'Click table data row to relocate coordinates GPS pin')
+                : (lang === 'ID' ? 'Arahkan kursor / klik layar HP untuk membuka kunci aplikasi' : 'Hover / click the screen to unlock the application')}
             </p>
           </div>
         </div>

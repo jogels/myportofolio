@@ -58,12 +58,28 @@ export default function ManifestoShowcase() {
     }
   ];
 
+  const handleCardClick = (id) => {
+    // 1. Scroll to the cost calculator section
+    const calcElem = document.getElementById('calculator');
+    if (calcElem) {
+      calcElem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // 2. Dispatch a custom event to update calculator selections
+    const event = new CustomEvent('select-service-platform', { detail: { serviceId: id } });
+    window.dispatchEvent(event);
+  };
+
   return (
     <div className="manifesto-showcase">
       <div className="presentation-stage">
         <div className="services-cards-grid">
           {SERVICES_DATA.map((service) => (
-            <div key={service.id} className="poster-card">
+            <div 
+              key={service.id} 
+              className="poster-card cursor-pointer group"
+              onClick={() => handleCardClick(service.id)}
+            >
               <div className="css-mesh-grain"></div>
               <div className="drafting-grid"></div>
 
@@ -75,15 +91,20 @@ export default function ManifestoShowcase() {
               </div>
 
               <div className="tape-ribbon">
-                <div className="tape-track">
+                <div className="tape-scroll">
                   <span>{service.tape}</span>
                   <span>{service.tape}</span>
                 </div>
               </div>
 
-              <div className="card-footer-meta">
-                <span className="vol-stamp">{service.vol}</span>
-                <p className="manifesto-desc">{service.desc}</p>
+              <div className="poster-footer">
+                <div className="barcode"></div>
+                <div className="manifesto-text">
+                  <div className="desc">{service.desc}</div>
+                  <span className="calculate-trigger-text text-[8px] font-bold text-red-500 uppercase mt-1.5 block group-hover:underline transition-all">
+                    {lang === 'ID' ? 'Kalkulasi Biaya Proyek ↗' : 'Calculate Project Cost ↗'}
+                  </span>
+                </div>
               </div>
             </div>
           ))}

@@ -16,8 +16,8 @@
     var(--text-main) 0 2px,
     transparent 2px 10px
   );
-  --geo-pos-x: -10%;
-  --geo-pos-y: -10%;
+  --geo-pos-x: 6%;
+  --geo-pos-y: 6%;
 
   --font-display: 'Outfit', sans-serif;
   --font-body: 'Outfit', sans-serif;
@@ -169,8 +169,8 @@
   position: absolute;
   top: var(--geo-pos-y);
   right: var(--geo-pos-x);
-  width: 60%;
-  height: 45%;
+  width: 28%;
+  height: 20%;
   background: var(--geo-bg);
   border-radius: var(--geo-radius);
   transition: all 0.8s cubic-bezier(0.83, 0, 0.17, 1);

@@ -137,7 +137,7 @@ export default function PortfolioHome({ onNavigateContohUi }) {
                   </button>
                 </div>
                 <a
-                  href="https://wa.me/6281234567890?text=Halo%20Mas%20Erza,%20saya%20tertarik%20konsultasi%20pembuatan%20aplikasi!"
+                  href="https://wa.me/6285719416778?text=Halo%20Mas%20Erza,%20saya%20tertarik%20konsultasi%20pembuatan%20aplikasi!"
                   target="_blank" rel="noreferrer"
                   className="btn-pill-border"
                 >{t('nav_hire_me')}</a>
@@ -280,7 +280,7 @@ export default function PortfolioHome({ onNavigateContohUi }) {
               <ul className="footer-links-list">
                 <li>
                   <a
-                    href="https://wa.me/6281234567890?text=Halo%20Mas%20Erza,%20saya%20tertarik%20konsultasi%20proyek!"
+                    href="https://wa.me/6285719416778?text=Halo%20Mas%20Erza,%20saya%20tertarik%20konsultasi%20proyek!"
                     target="_blank"
                     rel="noreferrer"
                     className="footer-link-item contact-highlight"
@@ -288,9 +288,9 @@ export default function PortfolioHome({ onNavigateContohUi }) {
                     WhatsApp Chat ↗
                   </a>
                 </li>
-                <li><a href="mailto:erzasaleh@gmail.com" className="footer-link-item">Email (erzasaleh@gmail.com)</a></li>
-                <li><a href="https://linkedin.com" target="_blank" rel="noreferrer" className="footer-link-item">LinkedIn Profile ↗</a></li>
-                <li><a href="https://github.com" target="_blank" rel="noreferrer" className="footer-link-item">GitHub Codebase ↗</a></li>
+                <li><a href="mailto:erza.developers@gmail.com" className="footer-link-item">Email (erza.developers@gmail.com)</a></li>
+                <li><a href="https://www.linkedin.com/in/erzamazde/" target="_blank" rel="noreferrer" className="footer-link-item">LinkedIn Profile ↗</a></li>
+                <li><a href="https://github.com/jogels" target="_blank" rel="noreferrer" className="footer-link-item">GitHub Codebase ↗</a></li>
               </ul>
             </div>
           </div>
@@ -302,8 +302,6 @@ export default function PortfolioHome({ onNavigateContohUi }) {
             </span>
             <div className="footer-bottom-meta">
               <span>Jakarta, Indonesia 🇮🇩</span>
-              <span className="meta-separator">•</span>
-              <span>Made with React &amp; Three.js</span>
             </div>
           </div>
         </footer>

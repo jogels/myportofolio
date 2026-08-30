@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import {
@@ -24,12 +24,48 @@ import {
 } from 'lucide-react';
 
 export default function CostCalculator() {
-  const [platform, setPlatform] = useState('web-app');
-  const [scope, setScope] = useState('mvp');
-  const [selectedFeatures, setSelectedFeatures] = useState(['auth', 'dashboard', 'seo']);
+  const [platform, setPlatform] = useState('landing');
+  const [scope, setScope] = useState('simple');
+  const [selectedFeatures, setSelectedFeatures] = useState([]);
   const [speed, setSpeed] = useState('standard');
   const [maxLimitWarning, setMaxLimitWarning] = useState(false);
   const [customFeatureText, setCustomFeatureText] = useState('');
+
+  useEffect(() => {
+    const handleServiceSelect = (e) => {
+      const { serviceId } = e.detail;
+      if (serviceId === 'mobile') {
+        setPlatform('mobile');
+        setScope('simple');
+        setSelectedFeatures([]);
+      } else if (serviceId === 'web') {
+        setPlatform('web-app');
+        setScope('simple');
+        setSelectedFeatures([]);
+      } else if (serviceId === 'backend') {
+        setPlatform('web-app');
+        setScope('simple');
+        setSelectedFeatures(['auth']);
+      } else if (serviceId === 'deploy') {
+        setPlatform('landing');
+        setScope('simple');
+        setSelectedFeatures(['seo']);
+      } else if (serviceId === 'maintenance') {
+        setPlatform('landing');
+        setScope('simple');
+        setSelectedFeatures([]);
+      } else if (serviceId === 'ai-automation') {
+        setPlatform('web-app');
+        setScope('simple');
+        setSelectedFeatures(['ai']);
+      }
+    };
+
+    window.addEventListener('select-service-platform', handleServiceSelect);
+    return () => {
+      window.removeEventListener('select-service-platform', handleServiceSelect);
+    };
+  }, []);
 
   const platforms = [
     {
@@ -115,7 +151,7 @@ export default function CostCalculator() {
       id: 'ai',
       name: 'Integrasi AI / LLM (Gemini & OpenAI)',
       desc: 'Smart Chatbot, AI copy generator, prompt pipeline',
-      price: 1800000,
+      price: 2500000,
       days: 4,
     },
     {
@@ -245,9 +281,9 @@ export default function CostCalculator() {
       ? 'Custom / Perlu Diskusi Spesifikasi Enterprise'
       : formatRupiah(calculation.finalPrice);
 
-    const message = `Halo Mas Erza Saleh! 👋%0A%0ASaya tertarik membuat aplikasi dengan rincian kalkulator berikut:%0A%0A📱 *Platform*: ${calculation.platformName}%0A🎯 *Skala*: ${calculation.scopeName}%0A⏱️ *Timeline*: ${speed === 'rush' ? 'Mode RUSH (Ekspres)' : speed === 'relaxed' ? 'Santai' : 'Standar'} (~${calculation.totalDays} Hari kerja)%0A%0A✨ *Fitur yang Dipilih* (${calculation.featuresCount} Modul):%0A${featureNames || '- Fitur Standar Dasar'}%0A%0A💰 *Estimasi Biaya*: ${priceText}%0A%0ABisa kita jadwalkan diskusi lebih lanjut mengenai proyek ini? Terima kasih!`;
+    const message = `Halo Mas Erza Saleh!%0A%0ASaya tertarik membuat aplikasi dengan rincian kalkulator berikut:%0A%0A*Platform*: ${calculation.platformName}%0A*Skala*: ${calculation.scopeName}%0A*Timeline*: ${speed === 'rush' ? 'Mode RUSH (Ekspres)' : speed === 'relaxed' ? 'Santai' : 'Standar'} (~${calculation.totalDays} Hari kerja)%0A%0A*Fitur yang Dipilih* (${calculation.featuresCount} Modul):%0A${featureNames || '- Fitur Standar Dasar'}%0A%0A*Estimasi Biaya*: ${priceText}%0A%0ABisa kita jadwalkan diskusi lebih lanjut mengenai proyek ini? Terima kasih!`;
 
-    const waUrl = `https://wa.me/6281234567890?text=${message}`;
+    const waUrl = `https://wa.me/6285719416778?text=${message}`;
     window.open(waUrl, '_blank');
   };
 
@@ -448,7 +484,7 @@ export default function CostCalculator() {
             </div>
             <div className="receipt-row">
               <span>Skala Proyek</span>
-              <b style={{ color: (calculation.isEnterprise || selectedFeatures.includes('custom')) ? '#d4ff00' : '#fff' }}>
+              <b style={{ color: (calculation.isEnterprise || selectedFeatures.includes('custom')) ? '#ff2a00' : '#0a0a0a' }}>
                 {calculation.scopeName}
               </b>
             </div>
@@ -496,8 +532,8 @@ export default function CostCalculator() {
           >
             <span>
               {(calculation.isEnterprise || selectedFeatures.includes('custom'))
-                ? 'Konsultasi Spesifikasi Custom 🚀'
-                : 'Kirim Rincian ke WhatsApp Erza 🚀'}
+                ? 'Konsultasi Spesifikasi Custom'
+                : 'Kirim Rincian ke WhatsApp Erza'}
             </span>
             <div className="btn-circle-arrow">
               <ArrowUpRight size={16} />

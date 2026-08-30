@@ -1439,53 +1439,63 @@ body {
 .dark-emerald-receipt-card {
   position: sticky;
   top: 2rem;
-  background: #0c241c;
-  background-image: radial-gradient(circle at 100% 0%, rgba(47, 224, 136, 0.15), transparent 70%);
+  background: #fff9be;
+  border: 2.5px solid #0a0a0a;
+  box-shadow: 8px 8px 0px #0a0a0a;
   border-radius: var(--radius-card);
   padding: 1.75rem;
-  color: #fff;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  color: #0a0a0a;
 }
 
 .receipt-badge {
+  font-family: var(--font-body), sans-serif;
   font-size: 0.7rem;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--accent-green-bright);
+  color: #0a0a0a;
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid #0a0a0a;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  display: inline-block;
 }
 
 .receipt-header h3 {
-  font-family: var(--font-body);
+  font-family: var(--font-body), sans-serif;
   font-size: 1.4rem;
-  font-weight: 900;
+  font-weight: 950;
   letter-spacing: -0.02em;
-  color: #ffffff;
-  margin: 0.35rem 0 1.25rem;
+  color: #0a0a0a;
+  margin: 0.75rem 0 1.25rem;
 }
 
 .receipt-price-box {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 16px;
+  background: #fffdf0;
+  border: 2px solid #0a0a0a;
+  border-radius: 12px;
   padding: 1.35rem 1rem;
   text-align: center;
   margin-bottom: 1.25rem;
+  box-shadow: 3px 3px 0px #0a0a0a;
 }
 
 .receipt-price-value {
-  font-family: var(--font-body);
+  font-family: var(--font-body), sans-serif;
   font-size: clamp(1.8rem, 2.5vw, 2.3rem);
-  font-weight: 900;
+  font-weight: 950;
   letter-spacing: -0.03em;
-  color: #d4ff00;
+  color: #0a0a0a;
   display: block;
   line-height: 1.2;
 }
 
 .receipt-price-sub {
+  font-family: var(--font-body), sans-serif;
   font-size: 0.7rem;
-  color: #9ab4aa;
+  color: #666666;
+  margin-top: 0.25rem;
+  display: block;
 }
 
 .receipt-specs {
@@ -1499,24 +1509,27 @@ body {
 .receipt-row {
   display: flex;
   justify-content: space-between;
-  color: #9ab4aa;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+  color: #444444;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.15);
   padding-bottom: 0.35rem;
+  font-family: var(--font-body), sans-serif;
 }
 
 .receipt-row b {
-  color: #fff;
+  color: #0a0a0a;
+  font-weight: 800;
 }
 
 .receipt-row.highlight {
   border-bottom: none;
-  background: rgba(47, 224, 136, 0.1);
+  background: rgba(5, 150, 105, 0.08);
+  border: 1px solid rgba(5, 150, 105, 0.25);
   padding: 0.5rem 0.75rem;
   border-radius: 8px;
 }
 
 .text-light-green {
-  color: var(--accent-green-bright) !important;
+  color: #059669 !important; /* emerald green */
 }
 
 .receipt-perks {
@@ -1525,7 +1538,8 @@ body {
   gap: 0.35rem;
   margin-bottom: 1.5rem;
   font-size: 0.75rem;
-  color: #c4ded2;
+  color: #444444;
+  font-family: var(--font-body), sans-serif;
 }
 
 .perk-item {
@@ -1536,37 +1550,46 @@ body {
 
 .btn-emerald-whatsapp {
   width: 100%;
-  background: #ffffff;
-  color: #0b231c;
-  border: none;
+  background: #000000;
+  color: #ffffff;
+  border: 2px solid #000000;
   padding: 0.85rem 1rem;
   border-radius: var(--radius-pill);
   font-size: 0.9rem;
-  font-weight: 800;
+  font-weight: 850;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.15);
+  font-family: var(--font-body), sans-serif;
+  transition: all 0.2s ease;
+}
+
+.btn-emerald-whatsapp:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px #059669;
 }
 
 .btn-circle-arrow {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #0b231c;
-  color: #fff;
+  background: #ffffff;
+  color: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .receipt-caption {
-  font-size: 0.7rem;
-  color: #79988b;
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.72rem;
+  color: #555555;
   text-align: center;
   margin: 0.75rem 0 0;
-  line-height: 1.4;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
 }
 
 
