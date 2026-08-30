@@ -175,9 +175,9 @@ export default function PortfolioHome({ onNavigateContohUi }) {
                 className="hero-scrolled-intro-content"
               >
                 <div className="intro-text-chunky">
-                  <span className="line-highlight-yellow">Halo, Saya Erza</span>
-                  <span className="line-highlight-yellow">Lagi banyak ide?</span>
-                  <span className="line-highlight-white">Saya bantu mewujudkannya.</span>
+                  <span className="line-highlight-yellow">{lang === 'ID' ? 'Halo, Saya Erza' : "Hello, I'm Erza"}</span>
+                  <span className="line-highlight-yellow">{lang === 'ID' ? 'Lagi banyak ide?' : 'Got big ideas?'}</span>
+                  <span className="line-highlight-white">{lang === 'ID' ? 'Saya bantu mewujudkannya.' : 'Let me bring them to life.'}</span>
                 </div>
               </motion.div>
             </div>
@@ -254,33 +254,35 @@ export default function PortfolioHome({ onNavigateContohUi }) {
                 <span className="footer-logo-text">erzadev</span>
               </div>
               <p className="footer-brand-desc">
-                Crafting premium, high-performance web applications and native mobile experiences that elevate your business.
+                {lang === 'ID' 
+                  ? 'Membangun aplikasi web dan mobile premium berkinerja tinggi yang meningkatkan bisnis Anda.' 
+                  : 'Crafting premium, high-performance web applications and native mobile experiences that elevate your business.'}
               </p>
               <div className="footer-status-badge">
                 <span className="status-dot"></span>
-                <span>Available for Select Client Projects</span>
+                <span>{lang === 'ID' ? 'Tersedia untuk Proyek Klien Pilihan' : 'Available for Select Client Projects'}</span>
               </div>
             </div>
 
             {/* Middle Column: Navigation */}
             <div className="footer-links-column">
-              <h4 className="footer-column-title">Sitemap</h4>
+              <h4 className="footer-column-title">{lang === 'ID' ? 'Peta Situs' : 'Sitemap'}</h4>
               <ul className="footer-links-list">
-                <li><a href="#" className="footer-link-item">Home</a></li>
-                <li><a href="#services" className="footer-link-item">Services</a></li>
-                <li><a href="#projects" className="footer-link-item">Selected Works</a></li>
-                <li><a href="#calculator" className="footer-link-item">Cost Calculator</a></li>
-                <li><button onClick={onNavigateContohUi} className="footer-link-item link-btn-style">Showcase Lab</button></li>
+                <li><a href="#" className="footer-link-item">{t('nav_home')}</a></li>
+                <li><a href="#services" className="footer-link-item">{t('nav_services')}</a></li>
+                <li><a href="#projects" className="footer-link-item">{t('nav_works')}</a></li>
+                <li><a href="#calculator" className="footer-link-item">{t('nav_calculator')}</a></li>
+                <li><button onClick={onNavigateContohUi} className="footer-link-item link-btn-style">{lang === 'ID' ? 'Showcase Lab' : 'Showcase Lab'}</button></li>
               </ul>
             </div>
 
             {/* Right Column: Contact & Socials */}
             <div className="footer-links-column">
-              <h4 className="footer-column-title">Let's Connect</h4>
+              <h4 className="footer-column-title">{lang === 'ID' ? 'Hubungi Saya' : "Let's Connect"}</h4>
               <ul className="footer-links-list">
                 <li>
                   <a
-                    href="https://wa.me/6285719416778?text=Halo%20Mas%20Erza,%20saya%20tertarik%20konsultasi%20proyek!"
+                    href={`https://wa.me/6285719416778?text=${lang === 'ID' ? 'Halo%20Mas%20Erza,%20saya%20tertarik%20konsultasi%20proyek!' : 'Hello%20Erza,%20I%20am%2520interested%2520in%2520consulting%2520about%2520a%2520project!'}`}
                     target="_blank"
                     rel="noreferrer"
                     className="footer-link-item contact-highlight"

@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import {
@@ -24,6 +25,7 @@ import {
 } from 'lucide-react';
 
 export default function CostCalculator() {
+  const { lang, t } = useLanguage();
   const [platform, setPlatform] = useState('landing');
   const [scope, setScope] = useState('simple');
   const [selectedFeatures, setSelectedFeatures] = useState([]);
@@ -71,28 +73,28 @@ export default function CostCalculator() {
     {
       id: 'landing',
       title: 'Modern Landing Page',
-      desc: 'High-converting company profile / product showcase',
+      desc: lang === 'ID' ? 'Company profile / showcase produk konversi tinggi' : 'High-converting company profile / product showcase',
       basePrice: 2500000,
       baseDays: 5,
     },
     {
       id: 'web-app',
       title: 'Fullstack Web App',
-      desc: 'Dynamic web application with custom backend & database',
+      desc: lang === 'ID' ? 'Aplikasi web dinamis dengan kustom backend & database' : 'Dynamic web application with custom backend & database',
       basePrice: 5500000,
       baseDays: 14,
     },
     {
       id: 'mobile',
       title: 'Mobile App (iOS & Android)',
-      desc: 'Native-feel cross-platform React Native / Flutter app',
+      desc: lang === 'ID' ? 'Aplikasi mobile lintas platform native React Native / Flutter' : 'Native-feel cross-platform React Native / Flutter app',
       basePrice: 6500000,
       baseDays: 18,
     },
     {
       id: 'ecosystem',
-      title: 'Complete Digital Ecosystem',
-      desc: 'Web App + Mobile iOS/Android + Admin Dashboard',
+      title: lang === 'ID' ? 'Ekosistem Digital Lengkap' : 'Complete Digital Ecosystem',
+      desc: lang === 'ID' ? 'Web App + Mobile iOS/Android + Admin Dashboard terintegrasi' : 'Web App + Mobile iOS/Android + Admin Dashboard',
       basePrice: 12000000,
       baseDays: 28,
     },
@@ -101,24 +103,24 @@ export default function CostCalculator() {
   const scopes = [
     {
       id: 'simple',
-      label: 'Simple / Starter',
-      badge: 'Maks. 3 Modul',
+      label: lang === 'ID' ? 'Sederhana / Pemula' : 'Simple / Starter',
+      badge: lang === 'ID' ? 'Maks. 3 Modul' : 'Max 3 Modules',
       maxFeatures: 3,
       multiplier: 0.9,
       daysAdd: 0
     },
     {
       id: 'mvp',
-      label: 'MVP / Startup Scalable',
-      badge: 'Maks. 6 Modul',
+      label: lang === 'ID' ? 'MVP / Skala Startup' : 'MVP / Startup Scalable',
+      badge: lang === 'ID' ? 'Maks. 6 Modul' : 'Max 6 Modules',
       maxFeatures: 6,
       multiplier: 1.0,
       daysAdd: 4
     },
     {
       id: 'enterprise',
-      label: 'Enterprise / Custom SaaS',
-      badge: 'Bebas Modul (Custom)',
+      label: lang === 'ID' ? 'Enterprise / SaaS Kustom' : 'Enterprise / Custom SaaS',
+      badge: lang === 'ID' ? 'Bebas Modul (Kustom)' : 'Unlimited Modules (Custom)',
       maxFeatures: 999,
       multiplier: 1.5,
       daysAdd: 10
@@ -128,66 +130,66 @@ export default function CostCalculator() {
   const featuresList = [
     {
       id: 'auth',
-      name: 'Auth & Role Permissions',
-      desc: 'Login Google, JWT, Email verification, RBAC Admin/User',
+      name: lang === 'ID' ? 'Auth & Hak Akses User' : 'Auth & Role Permissions',
+      desc: lang === 'ID' ? 'Login Google, JWT, verifikasi email, RBAC Admin/User' : 'Google Login, JWT, Email verification, RBAC Admin/User',
       price: 800000,
       days: 3,
     },
     {
       id: 'payment',
       name: 'Payment Gateway (Midtrans/Xendit/Stripe)',
-      desc: 'Direct QRIS, Virtual Account, Credit Card & e-Wallet',
+      desc: lang === 'ID' ? 'Pembayaran langsung QRIS, Virtual Account, e-Wallet & CC' : 'Direct QRIS, Virtual Account, Credit Card & e-Wallet',
       price: 1200000,
       days: 4,
     },
     {
       id: 'chat',
-      name: 'Realtime Chat & Sockets',
-      desc: 'Instant messaging & push notifications system',
+      name: lang === 'ID' ? 'Chat Realtime & Sockets' : 'Realtime Chat & Sockets',
+      desc: lang === 'ID' ? 'Sistem pesan instan & push notifications' : 'Instant messaging & push notifications system',
       price: 1500000,
       days: 5,
     },
     {
       id: 'ai',
-      name: 'Integrasi AI / LLM (Gemini & OpenAI)',
-      desc: 'Smart Chatbot, AI copy generator, prompt pipeline',
+      name: lang === 'ID' ? 'Integrasi AI / LLM (Gemini & OpenAI)' : 'AI / LLM Integration (Gemini & OpenAI)',
+      desc: lang === 'ID' ? 'Chatbot pintar, AI copy generator, prompt pipeline' : 'Smart Chatbot, AI copy generator, prompt pipeline',
       price: 2500000,
       days: 4,
     },
     {
       id: 'dashboard',
-      name: 'Admin Panel & Analytics Charts',
-      desc: 'Visual data reports, Excel/PDF export, full CRUD management',
+      name: lang === 'ID' ? 'Panel Admin & Grafik Analitik' : 'Admin Panel & Analytics Charts',
+      desc: lang === 'ID' ? 'Laporan visual data, ekspor Excel/PDF, manajemen CRUD penuh' : 'Visual data reports, Excel/PDF export, full CRUD management',
       price: 1400000,
       days: 5,
     },
     {
       id: 'seo',
       name: 'SEO & Speed Turbo (Score 95+)',
-      desc: 'Google indexing optimization & sub-second loading speed',
+      desc: lang === 'ID' ? 'Optimasi indeks Google & kecepatan loading sub-detik' : 'Google indexing optimization & sub-second loading speed',
       price: 600000,
       days: 2,
     },
     {
       id: 'i18n',
-      name: 'Multi-Language (ID & EN)',
-      desc: 'Seamless dual-language localization switch',
+      name: lang === 'ID' ? 'Multi-Bahasa (ID & EN)' : 'Multi-Language (ID & EN)',
+      desc: lang === 'ID' ? 'Transisi bahasa lokal terintegrasi yang mulus' : 'Seamless dual-language localization switch',
       price: 500000,
       days: 2,
     },
     {
       id: 'custom',
-      name: 'Custom / Fitur Lainnya (Tulis Sendiri)',
-      desc: 'Tuliskan modul, integrasi pihak ketiga, atau kebutuhan khusus Anda',
+      name: lang === 'ID' ? 'Custom / Fitur Lainnya (Tulis Sendiri)' : 'Custom / Other Features (Write Yourself)',
+      desc: lang === 'ID' ? 'Tuliskan modul, integrasi pihak ketiga, atau kebutuhan khusus Anda' : 'Write down custom modules, third-party integrations, or special specs',
       price: 0,
       days: 0,
     },
   ];
 
   const speedOptions = [
-    { id: 'relaxed', label: 'Santai (Diskon 5%)', feeFactor: 0.95, dayFactor: 1.2 },
-    { id: 'standard', label: 'Standar (Direkomendasikan)', feeFactor: 1.0, dayFactor: 1.0 },
-    { id: 'rush', label: 'Mode RUSH Ekspres (+25%)', feeFactor: 1.25, dayFactor: 0.65 },
+    { id: 'relaxed', label: lang === 'ID' ? 'Santai (Diskon 5%)' : 'Relaxed (5% Discount)', feeFactor: 0.95, dayFactor: 1.2 },
+    { id: 'standard', label: lang === 'ID' ? 'Standar (Direkomendasikan)' : 'Standard (Recommended)', feeFactor: 1.0, dayFactor: 1.0 },
+    { id: 'rush', label: lang === 'ID' ? 'Mode RUSH Ekspres (+25%)' : 'Express RUSH Mode (+25%)', feeFactor: 1.25, dayFactor: 0.65 },
   ];
 
   const handleScopeChange = (newScopeId) => {
@@ -278,10 +280,12 @@ export default function CostCalculator() {
       .join('%0A');
 
     const priceText = calculation.isEnterprise
-      ? 'Custom / Perlu Diskusi Spesifikasi Enterprise'
+      ? (lang === 'ID' ? 'Custom / Perlu Diskusi Spesifikasi Enterprise' : 'Custom / Enterprise Spec Discussion Required')
       : formatRupiah(calculation.finalPrice);
 
-    const message = `Halo Mas Erza Saleh!%0A%0ASaya tertarik membuat aplikasi dengan rincian kalkulator berikut:%0A%0A*Platform*: ${calculation.platformName}%0A*Skala*: ${calculation.scopeName}%0A*Timeline*: ${speed === 'rush' ? 'Mode RUSH (Ekspres)' : speed === 'relaxed' ? 'Santai' : 'Standar'} (~${calculation.totalDays} Hari kerja)%0A%0A*Fitur yang Dipilih* (${calculation.featuresCount} Modul):%0A${featureNames || '- Fitur Standar Dasar'}%0A%0A*Estimasi Biaya*: ${priceText}%0A%0ABisa kita jadwalkan diskusi lebih lanjut mengenai proyek ini? Terima kasih!`;
+    const message = lang === 'ID'
+      ? `Halo Mas Erza Saleh!%0A%0ASaya tertarik membuat aplikasi dengan rincian kalkulator berikut:%0A%0A*Platform*: ${calculation.platformName}%0A*Skala*: ${calculation.scopeName}%0A*Timeline*: ${speed === 'rush' ? 'Mode RUSH (Ekspres)' : speed === 'relaxed' ? 'Santai' : 'Standar'} (~${calculation.totalDays} Hari kerja)%0A%0A*Fitur yang Dipilih* (${calculation.featuresCount} Modul):%0A${featureNames || '- Fitur Standar Dasar'}%0A%0A*Estimasi Biaya*: ${priceText}%0A%0ABisa kita jadwalkan diskusi lebih lanjut mengenai proyek ini? Terima kasih!`
+      : `Hello Erza Saleh!%0A%0AI am interested in building an application with the following calculator details:%0A%0A*Platform*: ${calculation.platformName}%0A*Scale*: ${calculation.scopeName}%0A*Timeline*: ${speed === 'rush' ? 'RUSH Mode (Express)' : speed === 'relaxed' ? 'Relaxed' : 'Standard'} (~${calculation.totalDays} Working Days)%0A%0A*Selected Features* (${calculation.featuresCount} Modules):%0A${featureNames || '- Standard Basic Features'}%0A%0A*Estimated Cost*: ${priceText}%0A%0ACan we schedule a further discussion about this project? Thank you!`;
 
     const waUrl = `https://wa.me/6285719416778?text=${message}`;
     window.open(waUrl, '_blank');
@@ -297,7 +301,7 @@ export default function CostCalculator() {
         <div className="calc-card-editorial">
           <div className="calc-step-header">
             <span className="step-num-pill">01</span>
-            <h3>Pilih Platform Aplikasi</h3>
+            <h3>{lang === 'ID' ? 'Pilih Platform Aplikasi' : 'Choose Application Platform'}</h3>
           </div>
           <div className="platform-pills-grid">
             {platforms.map((p) => {
@@ -315,7 +319,7 @@ export default function CostCalculator() {
                     </div>
                   </div>
                   <p>{p.desc}</p>
-                  <span className="platform-price-label">Mulai {formatRupiah(p.basePrice)}</span>
+                  <span className="platform-price-label">{lang === 'ID' ? 'Mulai' : 'Starts at'} {formatRupiah(p.basePrice)}</span>
                 </div>
               );
             })}
@@ -326,7 +330,7 @@ export default function CostCalculator() {
         <div className="calc-card-editorial">
           <div className="calc-step-header">
             <span className="step-num-pill">02</span>
-            <h3>Skala &amp; Kompleksitas</h3>
+            <h3>{lang === 'ID' ? 'Skala & Kompleksitas' : 'Scale & Complexity'}</h3>
           </div>
           <div className="pill-selector-row">
             {scopes.map((s) => (
@@ -347,12 +351,12 @@ export default function CostCalculator() {
           <div className="calc-step-header" style={{ justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
               <span className="step-num-pill">03</span>
-              <h3>Fitur &amp; Integrasi Tambahan</h3>
+              <h3>{lang === 'ID' ? 'Fitur & Integrasi Tambahan' : 'Additional Features & Integrations'}</h3>
             </div>
             <span className="feature-quota-pill">
               {scope === 'enterprise'
-                ? `${selectedFeatures.length} Modul (Bebas / Custom)`
-                : `${selectedFeatures.length} / ${currentScopeObj.maxFeatures} Modul`}
+                ? (lang === 'ID' ? `${selectedFeatures.length} Modul (Bebas / Kustom)` : `${selectedFeatures.length} Modules (Unlimited / Custom)`)
+                : (lang === 'ID' ? `${selectedFeatures.length} / ${currentScopeObj.maxFeatures} Modul` : `${selectedFeatures.length} / ${currentScopeObj.maxFeatures} Modules`)}
             </span>
           </div>
 
@@ -360,8 +364,17 @@ export default function CostCalculator() {
             <div className="calc-warning-banner">
               <AlertCircle size={16} />
               <span>
-                Paket <strong>{currentScopeObj.label}</strong> dibatasi maksimal {currentScopeObj.maxFeatures} modul.
-                Pilih <strong>{scope === 'simple' ? 'MVP' : 'Enterprise'}</strong> untuk menambah lebih banyak fitur.
+                {lang === 'ID' ? (
+                  <>
+                    Paket <strong>{currentScopeObj.label}</strong> dibatasi maksimal {currentScopeObj.maxFeatures} modul.
+                    Pilih <strong>{scope === 'simple' ? 'MVP' : 'Enterprise'}</strong> untuk menambah lebih banyak fitur.
+                  </>
+                ) : (
+                  <>
+                    Package <strong>{currentScopeObj.label}</strong> is limited to a maximum of {currentScopeObj.maxFeatures} modules.
+                    Choose <strong>{scope === 'simple' ? 'MVP' : 'Enterprise'}</strong> to add more features.
+                  </>
+                )}
               </span>
             </div>
           )}
@@ -389,16 +402,16 @@ export default function CostCalculator() {
                       {isCustom ? (
                         <>
                           <span className="feat-price" style={{ fontSize: '0.8rem', color: '#718096' }}>
-                            Hubungi Saya
+                            {lang === 'ID' ? 'Hubungi Saya' : 'Contact Me'}
                           </span>
                           <span className="feat-days" style={{ fontSize: '0.72rem', color: '#a0aec0' }}>
-                            Nego
+                            {lang === 'ID' ? 'Nego' : 'Negotiable'}
                           </span>
                         </>
                       ) : (
                         <>
                           <span className="feat-price">+{formatRupiah(feat.price)}</span>
-                          <span className="feat-days">+{feat.days} hari</span>
+                          <span className="feat-days">+{feat.days} {lang === 'ID' ? 'hari' : 'days'}</span>
                         </>
                       )}
                     </div>
@@ -417,7 +430,7 @@ export default function CostCalculator() {
                       >
                         <input
                           type="text"
-                          placeholder="Tuliskan fitur/integrasi yang Anda butuhkan (misal: Live Streaming, Custom API, dll)"
+                          placeholder={lang === 'ID' ? 'Tuliskan fitur/integrasi yang Anda butuhkan (misal: Live Streaming, Custom API, dll)' : 'Write down the features/integrations you need (e.g. Live Streaming, Custom API, etc)'}
                           value={customFeatureText}
                           onChange={(e) => setCustomFeatureText(e.target.value)}
                           className="custom-feature-textbox"
@@ -435,7 +448,7 @@ export default function CostCalculator() {
         <div className="calc-card-editorial">
           <div className="calc-step-header">
             <span className="step-num-pill">04</span>
-            <h3>Kecepatan Timeline</h3>
+            <h3>{lang === 'ID' ? 'Kecepatan Timeline' : 'Timeline Speed'}</h3>
           </div>
           <div className="pill-selector-row">
             {speedOptions.map((sp) => (
@@ -456,23 +469,23 @@ export default function CostCalculator() {
         <div className="dark-emerald-receipt-card">
           <div className="receipt-header">
             <span className="receipt-badge">Live Estimated Investment</span>
-            <h3>Ringkasan Investasi</h3>
+            <h3>{lang === 'ID' ? 'Ringkasan Investasi' : 'Investment Summary'}</h3>
           </div>
 
           <div className="receipt-price-box">
             {(calculation.isEnterprise || selectedFeatures.includes('custom')) ? (
               <>
-                <span className="receipt-price-value" style={{ fontSize: '1.75rem', color: '#d4ff00' }}>
-                  Custom / Hubungi Saya
+                <span className="receipt-price-value" style={{ fontSize: '1.75rem', color: '#0a0a0a' }}>
+                  {lang === 'ID' ? 'Kustom / Hubungi Saya' : 'Custom / Contact Me'}
                 </span>
                 <span className="receipt-price-sub">
-                  *Estimasi biaya akhir akan disesuaikan dengan detail fitur custom Anda
+                  {lang === 'ID' ? '*Estimasi biaya akhir akan disesuaikan dengan detail fitur kustom Anda' : '*Final cost will be adjusted to your custom feature details'}
                 </span>
               </>
             ) : (
               <>
                 <span className="receipt-price-value">{formatRupiah(calculation.finalPrice)}</span>
-                <span className="receipt-price-sub">*Transparan &amp; siap disesuaikan dengan brief Anda</span>
+                <span className="receipt-price-sub">{lang === 'ID' ? '*Transparan & siap disesuaikan dengan brief Anda' : '*Transparent & ready to fit your brief'}</span>
               </>
             )}
           </div>
@@ -483,19 +496,19 @@ export default function CostCalculator() {
               <b>{calculation.platformName}</b>
             </div>
             <div className="receipt-row">
-              <span>Skala Proyek</span>
+              <span>{lang === 'ID' ? 'Skala Proyek' : 'Project Scale'}</span>
               <b style={{ color: (calculation.isEnterprise || selectedFeatures.includes('custom')) ? '#ff2a00' : '#0a0a0a' }}>
                 {calculation.scopeName}
               </b>
             </div>
             <div className="receipt-row">
-              <span>Fitur Terpilih</span>
-              <b>{calculation.featuresCount} Modul</b>
+              <span>{lang === 'ID' ? 'Fitur Terpilih' : 'Selected Features'}</span>
+              <b>{calculation.featuresCount} {lang === 'ID' ? 'Modul' : 'Modules'}</b>
             </div>
             <div className="receipt-row highlight">
-              <span>Estimasi Durasi</span>
+              <span>{lang === 'ID' ? 'Estimasi Durasi' : 'Estimated Duration'}</span>
               <b className="text-light-green">
-                ~{calculation.totalDays} Hari Kerja ({calculation.weeks} Minggu)
+                ~{calculation.totalDays} {lang === 'ID' ? 'Hari Kerja' : 'Working Days'} ({calculation.weeks} {lang === 'ID' ? 'Minggu' : 'Weeks'})
               </b>
             </div>
             {selectedFeatures.includes('custom') && customFeatureText.trim() && (
@@ -507,7 +520,7 @@ export default function CostCalculator() {
                 paddingTop: '0.75rem',
                 marginTop: '0.5rem'
               }}>
-                <span style={{ fontSize: '0.75rem', opacity: 0.8 }}>Fitur Custom:</span>
+                <span style={{ fontSize: '0.75rem', opacity: 0.8 }}>{lang === 'ID' ? 'Fitur Kustom:' : 'Custom Feature:'}</span>
                 <b style={{ color: '#d4ff00', fontSize: '0.85rem', wordBreak: 'break-word', textAlign: 'left' }}>
                   "{customFeatureText.trim()}"
                 </b>
@@ -517,10 +530,10 @@ export default function CostCalculator() {
 
           <div className="receipt-perks">
             <div className="perk-item">
-              <Check size={14} /> Garansi Bug-Free 30 Hari Pasca Rilis
+              <Check size={14} /> {lang === 'ID' ? 'Garansi Bebas-Bug 30 Hari Pasca Rilis' : '30-Day Bug-Free Guarantee Post-Launch'}
             </div>
             <div className="perk-item">
-              <Check size={14} /> Full Hak Milik Source Code &amp; Dokumentasi
+              <Check size={14} /> {lang === 'ID' ? 'Kepemilikan Penuh Source Code & Dokumentasi' : 'Full Source Code Ownership & Documentation'}
             </div>
           </div>
 
@@ -532,8 +545,8 @@ export default function CostCalculator() {
           >
             <span>
               {(calculation.isEnterprise || selectedFeatures.includes('custom'))
-                ? 'Konsultasi Spesifikasi Custom'
-                : 'Kirim Rincian ke WhatsApp Erza'}
+                ? (lang === 'ID' ? 'Konsultasi Spesifikasi Kustom' : 'Consult Custom Specification')
+                : (lang === 'ID' ? 'Kirim Rincian ke WhatsApp Erza' : 'Send Details to Erza on WhatsApp')}
             </span>
             <div className="btn-circle-arrow">
               <ArrowUpRight size={16} />
@@ -542,8 +555,12 @@ export default function CostCalculator() {
 
           <p className="receipt-caption">
             {(calculation.isEnterprise || selectedFeatures.includes('custom'))
-              ? 'Pilihan modul custom/enterprise akan otomatis terformat untuk didiskusikan langsung via WhatsApp bersama Mas Erza.'
-              : 'Rincian di atas akan otomatis diformat dan siap dikirimkan ke WhatsApp Mas Erza untuk konsultasi langsung.'}
+              ? (lang === 'ID' 
+                ? 'Pilihan modul kustom/enterprise akan otomatis terformat untuk didiskusikan langsung via WhatsApp bersama Mas Erza.' 
+                : 'Custom/enterprise module choices will be automatically formatted for direct discussion via WhatsApp with Erza.')
+              : (lang === 'ID' 
+                ? 'Rincian di atas akan otomatis diformat dan siap dikirimkan ke WhatsApp Mas Erza untuk konsultasi langsung.' 
+                : 'The details above will be automatically formatted and ready to send to Erza on WhatsApp for direct consultation.')}
           </p>
         </div>
       </div>
