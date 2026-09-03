@@ -5,8 +5,29 @@ import "./ThreeUiShelfSection.css";
 
 const getProjectsData = (lang) => [
   {
-    id: "erp",
+    id: "gymmembership",
     vol: "VOL. 01",
+    title: lang === 'ID' ? "Sistem Manajemen Gym & Membership" : "Gym & Membership Management System",
+    discipline: lang === 'ID' ? "Web Dashboard & App E-Membership" : "Web Dashboard & E-Membership App",
+    category: "enterprise",
+    deck: lang === 'ID'
+      ? "Sistem terpadu (Website & Mobile App) untuk manajemen kunjungan member gym: presensi check-in QR instan, otomatisasi durasi masa aktif keanggotaan, pengingat perpanjangan via WhatsApp, booking personal trainer, dan analitik jam ramai gym."
+      : "Unified Web & Mobile platform for gym management: real-time QR member check-in, automated membership expiry duration tracking, WhatsApp auto-renewal alerts, personal trainer booking, and peak-hour visit analytics.",
+    chapters: lang === 'ID' ? [
+      { title: "Otomatisasi Masa Aktif & Durasi Member", desc: "Kalkulasi tanggal kadaluarsa keanggotaan otomatis, fitur jeda/freeze paket, dan pengingat perpanjangan otomatis via WhatsApp." },
+      { title: "Presensi Check-In QR & E-Membership Mobile", desc: "Pemindaian QR e-membership card instan di pintu masuk gym, log kedatangan member, dan validasi kuota kunjungan harian." },
+      { title: "Web Dashboard Admin & Booking Trainer", desc: "Grafik analitik jam ramai kunjungan (peak hours), rekap pendapatan iuran bulanan, dan reservasi jadwal personal trainer." }
+    ] : [
+      { title: "Automated Membership Duration & Expiry", desc: "Automated membership expiry countdown, subscription freeze/pause, and WhatsApp auto-renewal notifications." },
+      { title: "Mobile E-Card & QR Gate Check-In", desc: "Instant QR code e-card scanning at gym turnstiles, member arrival logs, and daily access guards." },
+      { title: "Web Admin Dashboard & Trainer Booking", desc: "Peak hour visit analytics, monthly revenue reporting, and personal trainer appointment booking." }
+    ],
+    tech: ["React", "Next.js", "React Native", "Node.js", "PostgreSQL", "WhatsApp API"],
+    color: "#ec4899"
+  },
+  {
+    id: "erp",
+    vol: "VOL. 02",
     title: lang === 'ID' ? "Aplikasi ERP & HR" : "ERP Apps",
     discipline: lang === 'ID' ? "Portal HR & Operasional Enterprise" : "HR & Operations Portal",
     category: "enterprise",
@@ -234,12 +255,157 @@ const getProjectsData = (lang) => [
     ],
     tech: ["React", "Node.js", "Vimeo API", "PostgreSQL"],
     color: "#c83222"
+  },
+  {
+    id: "tourbooking",
+    vol: "VOL. 12",
+    title: lang === 'ID' ? "Aplikasi Booking Tour & Travel" : "Tour Booking & Travel App",
+    discipline: lang === 'ID' ? "Platform Reservasi & E-Invoice" : "Reservation & E-Invoice Platform",
+    category: "mobile",
+    deck: lang === 'ID'
+      ? "Sistem booking tour terintegrasi: pemilihan paket wisata, pengisian data pemesan, pembayaran online, notifikasi invoice ke email admin/owner, dan receipt ke email customer."
+      : "End-to-end tour booking engine with package selection, customer detail capture, online payment, admin booking email alert, and customer e-receipt.",
+    chapters: lang === 'ID' ? [
+      { title: "Katalog Tour & Formulir Detail", desc: "Pemilihan paket destinasi wisata interaktif, tanggal keberangkatan, dan pengisian identitas pemesan." },
+      { title: "Payment Gateway & Webhook", desc: "Integrasi pembayaran online (QRIS/VA/Kartu), konfirmasi transaksi otomatis, dan status booking real-time." },
+      { title: "Notifikasi Email Invoice Ganda", desc: "Pengiriman otomatis invoice booking ke email admin (Owner) dan e-receipt tanda bukti ke email customer." }
+    ] : [
+      { title: "Tour Catalog & Detail Capture", desc: "Interactive tour destination selection, travel dates picker, and customer details capture form." },
+      { title: "Payment Gateway & Webhook", desc: "Online payment integration (QRIS/VA/Credit Card), instant transaction webhook, and booking status updates." },
+      { title: "Dual Email Invoice Dispatch", desc: "Automated dispatch of booking notifications to admin email and official e-receipts to customer email." }
+    ],
+    tech: ["Next.js", "Node.js", "Nodemailer / Resend", "Midtrans"],
+    color: "#059669"
   }
 ];
 
-const renderAppMockContent = (project, lang, erpMode, setErpMode, erpState, setErpState, volJoined, setVolJoined, volDonation, setVolDonation, ticketState, setTicketState, bookingState, setBookingState, bookingSlot, setBookingSlot, serviceState, setServiceState, selectedTechnician, setSelectedTechnician, kosCreated, setKosCreated, roomStates, setRoomStates, transitState, setTransitState, taskState, setTaskState, petState, setPetState, surveyState, setSurveyState, surveyRating, setSurveyRating, selectedWakafRow, setSelectedWakafRow) => {
+const renderAppMockContent = (project, lang, erpMode, setErpMode, erpState, setErpState, volJoined, setVolJoined, volDonation, setVolDonation, ticketState, setTicketState, bookingState, setBookingState, bookingSlot, setBookingSlot, serviceState, setServiceState, selectedTechnician, setSelectedTechnician, kosCreated, setKosCreated, roomStates, setRoomStates, transitState, setTransitState, taskState, setTaskState, petState, setPetState, surveyState, setSurveyState, surveyRating, setSurveyRating, selectedWakafRow, setSelectedWakafRow, tourStep, setTourStep, selectedTourPkg, setSelectedTourPkg, gymStep, setGymStep) => {
   const isID = lang === 'ID';
   switch (project.id) {
+    case 'gymmembership': {
+      const step = gymStep || 'status';
+
+      return (
+        <div className="flex flex-col h-full justify-between p-2 text-white">
+          <div className="flex flex-col gap-2 mt-4">
+            
+            {/* Step Indicator Header */}
+            <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-2 flex items-center justify-between">
+              <span className="text-[7.5px] text-pink-400 font-bold uppercase tracking-wider">
+                {step === 'status' ? (isID ? '1. Kartu & Durasi Member' : '1. Member Card & Duration')
+                  : step === 'scan' ? (isID ? '2. Presensi Check-In QR' : '2. QR Check-In Gate')
+                  : step === 'expiry' ? (isID ? '3. Pengingat WhatsApp' : '3. WhatsApp Renewal Alert')
+                  : (isID ? '4. Perpanjangan Sukses' : '4. Membership Renewed')}
+              </span>
+              <span className="text-[7.5px] text-neutral-400">#GYM-8910</span>
+            </div>
+
+            {/* Step 1: E-Membership Card & Duration Status */}
+            {step === 'status' && (
+              <div className="bg-gradient-to-br from-pink-950/40 to-neutral-900 border border-pink-500/30 rounded-xl p-2.5 flex flex-col gap-2 shadow-[0_4px_12px_rgba(236,72,153,0.15)]">
+                <div className="flex justify-between items-center">
+                  <span className="text-[8px] bg-pink-500/20 text-pink-300 px-1.5 py-0.5 rounded font-bold uppercase">
+                    E-MEMBERSHIP GOLD
+                  </span>
+                  <span className="text-[7.5px] text-green-400 font-bold">🟢 AKTIF</span>
+                </div>
+
+                <div className="flex flex-col gap-0.5">
+                  <p className="text-[10px] font-bold text-white">Budi Santoso</p>
+                  <span className="text-[7.5px] text-neutral-400">ID: GYM-MEMBER-094</span>
+                </div>
+
+                <div className="bg-neutral-950/70 p-2 rounded-lg border border-neutral-800 flex flex-col gap-1">
+                  <div className="flex justify-between text-[8px]">
+                    <span className="text-neutral-400">{isID ? 'Sisa Masa Aktif:' : 'Remaining Duration:'}</span>
+                    <span className="font-extrabold text-pink-400">24 Hari</span>
+                  </div>
+                  <div className="w-full bg-neutral-800 h-1.5 rounded-full overflow-hidden">
+                    <div className="bg-pink-500 h-full w-[80%]" />
+                  </div>
+                  <span className="text-[6.5px] text-neutral-400 text-right">{isID ? 'Kadaluarsa: 27 Sep 2026' : 'Expires: 27 Sep 2026'}</span>
+                </div>
+              </div>
+            )}
+
+            {/* Step 2: QR Check-In Gate */}
+            {step === 'scan' && (
+              <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-2.5 flex flex-col gap-2 items-center text-center py-2">
+                <div className="w-14 h-14 bg-white p-1.5 rounded-lg flex items-center justify-center border border-pink-500/50 shadow-md">
+                  <div className="w-full h-full bg-neutral-900 rounded flex items-center justify-center text-[18px]">
+                    📱
+                  </div>
+                </div>
+                <span className="text-[9.5px] font-bold text-green-400 bg-green-500/10 px-2 py-0.5 rounded">
+                  ✓ {isID ? 'CHECK-IN BERHASIL' : 'CHECK-IN SUCCESS'}
+                </span>
+                <p className="text-[7.5px] text-neutral-400 max-w-[170px]">
+                  {isID ? 'Gerbang gym terbuka. Jam kedatangan dicatat otomatis ke Web Admin Dashboard.' : 'Gate opened. Visit timestamp logged into Web Admin Dashboard.'}
+                </p>
+              </div>
+            )}
+
+            {/* Step 3: WhatsApp Auto Renewal Notification */}
+            {step === 'expiry' && (
+              <div className="bg-neutral-900/90 border border-amber-500/40 rounded-xl p-2.5 flex flex-col gap-1.5 shadow-[0_4px_12px_rgba(245,158,11,0.15)]">
+                <div className="flex justify-between items-center">
+                  <span className="text-[7.5px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded font-bold uppercase flex items-center gap-1">
+                    💬 WHATSAPP BOT AUTO-ALERT
+                  </span>
+                  <span className="text-[7.5px] text-amber-400 font-bold">3 HARI LAGI</span>
+                </div>
+
+                <div className="bg-neutral-950/80 p-2 rounded-lg border border-neutral-800 text-[7.5px] text-neutral-300 flex flex-col gap-1">
+                  <p className="font-semibold text-amber-200">
+                    {isID ? 'Halo Budi! Masa aktif membership Gym Anda tersisa 3 hari lagi (H-3).' : 'Hi Budi! Your Gym membership expires in 3 days.'}
+                  </p>
+                  <p className="text-neutral-400">
+                    {isID ? 'Klik tombol di bawah untuk perpanjang otomatis tanpa harus antre di kasir.' : 'Click below to instantly auto-renew without queueing.'}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Step 4: Renewed Success */}
+            {step === 'renewed' && (
+              <div className="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-2.5 flex flex-col gap-2 items-center text-center py-3">
+                <span className="text-[20px]">🎉</span>
+                <span className="text-[10px] font-bold text-emerald-400 uppercase">
+                  {isID ? 'MEMBERSHIP DIPERPANJANG!' : 'MEMBERSHIP RENEWED!'}
+                </span>
+                <span className="text-[11px] font-extrabold text-white bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/40">
+                  +30 HARI AKTIF (S/D 27 OKT)
+                </span>
+                <p className="text-[7.5px] text-neutral-400 max-w-[170px]">
+                  {isID ? 'Sistem otomatis memperbarui masa aktif member di Web Dashboard & Mobile App.' : 'System updated member validity on Web Dashboard & Mobile App.'}
+                </p>
+              </div>
+            )}
+
+          </div>
+
+          {/* Interactive Action Button */}
+          <button
+            type="button"
+            onClick={() => {
+              if (step === 'status') setGymStep('scan');
+              else if (step === 'scan') setGymStep('expiry');
+              else if (step === 'expiry') setGymStep('renewed');
+              else setGymStep('status');
+            }}
+            className="w-full py-2.5 rounded-xl text-[9px] font-bold bg-pink-600 hover:bg-pink-500 text-white transition-all text-center uppercase tracking-wider shadow-lg shadow-pink-600/20"
+          >
+            {step === 'status'
+              ? (isID ? '1. Simulasi QR Check-In' : '1. Simulate QR Check-In')
+              : step === 'scan'
+              ? (isID ? '2. Tes Notifikasi H-3 WA' : '2. Test WA H-3 Alert')
+              : step === 'expiry'
+              ? (isID ? '3. Perpanjang (Auto-Renew)' : '3. Auto-Renew Member')
+              : (isID ? '4. Reset Flow Simulasi' : '4. Reset Gym Demo')}
+          </button>
+        </div>
+      );
+    }
     case 'erp': {
       const attendanceState = erpState || 'idle';
       const isInside = erpMode === 'inside';
@@ -1362,6 +1528,175 @@ const renderAppMockContent = (project, lang, erpMode, setErpMode, erpState, setE
         </div>
       );
     }
+    case 'tourbooking': {
+      const step = tourStep || 'catalog';
+
+      return (
+        <div className="flex flex-col h-full justify-between p-2 text-white">
+          <div className="flex flex-col gap-2 mt-4">
+            
+            {/* Step Indicator Header */}
+            <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-2 flex items-center justify-between">
+              <span className="text-[7.5px] text-emerald-400 font-bold uppercase tracking-wider">
+                {step === 'catalog' ? (isID ? '1. Pilih Tour' : '1. Select Tour')
+                  : step === 'details' ? (isID ? '2. Isi Details' : '2. Enter Details')
+                  : step === 'payment' ? (isID ? '3. Pembayaran' : '3. Payment')
+                  : (isID ? '4. Invoice & Receipt' : '4. Invoice & Receipt')}
+              </span>
+              <span className="text-[7.5px] text-neutral-400">#TOUR-8921</span>
+            </div>
+
+            {/* Step 1: Catalog */}
+            {step === 'catalog' && (
+              <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-2.5 flex flex-col gap-2">
+                <span className="text-[8px] text-neutral-400 uppercase tracking-wider font-bold">
+                  {isID ? 'PAKET WISATA POPULER' : 'POPULAR TOUR PACKAGES'}
+                </span>
+                
+                <div className="flex flex-col gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedTourPkg('bali')}
+                    className={`p-2 rounded-lg border text-left transition-all ${
+                      selectedTourPkg === 'bali'
+                        ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300'
+                        : 'bg-neutral-800/60 border-neutral-700/60 text-neutral-300'
+                    }`}
+                  >
+                    <div className="flex justify-between items-center">
+                      <span className="text-[9px] font-bold">🏝️ Bali Escape (3D2N)</span>
+                      <span className="text-[8px] text-emerald-400 font-bold">Rp 2.500.000</span>
+                    </div>
+                    <p className="text-[7px] text-neutral-400 mt-0.5">Hotel 4★, Transport, & Guide Tour</p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setSelectedTourPkg('bromo')}
+                    className={`p-2 rounded-lg border text-left transition-all ${
+                      selectedTourPkg === 'bromo'
+                        ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300'
+                        : 'bg-neutral-800/60 border-neutral-700/60 text-neutral-300'
+                    }`}
+                  >
+                    <div className="flex justify-between items-center">
+                      <span className="text-[9px] font-bold">🌋 Bromo Sunrise Tour</span>
+                      <span className="text-[8px] text-emerald-400 font-bold">Rp 1.200.000</span>
+                    </div>
+                    <p className="text-[7px] text-neutral-400 mt-0.5">Jeep 4x4, Tiket Masuk, & Dokumentasi</p>
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Step 2: Details */}
+            {step === 'details' && (
+              <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-2.5 flex flex-col gap-1.5">
+                <span className="text-[8px] text-neutral-400 uppercase tracking-wider font-bold">
+                  {isID ? 'DATA PEMESAN TOUR' : 'CUSTOMER DETAILS'}
+                </span>
+                <div className="bg-neutral-950/60 p-2 rounded-lg border border-neutral-800 flex flex-col gap-1 text-[8px]">
+                  <div className="flex justify-between">
+                    <span className="text-neutral-400">Paket:</span>
+                    <span className="font-bold text-emerald-400">{selectedTourPkg === 'bali' ? 'Bali Escape 3D2N' : 'Bromo Sunrise'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-neutral-400">Pemesan:</span>
+                    <span className="font-bold text-white">Budi Santoso</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-neutral-400">Email Customer:</span>
+                    <span className="font-bold text-cyan-300">budi@gmail.com</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-neutral-400">Email Owner:</span>
+                    <span className="font-bold text-amber-300">erza@myportofolio.com</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Step 3: Payment */}
+            {step === 'payment' && (
+              <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-2.5 flex flex-col gap-2 items-center text-center py-3">
+                <span className="text-[20px]">💳</span>
+                <span className="text-[9.5px] font-bold text-emerald-400">
+                  {isID ? 'PEMBAYARAN ONLINE' : 'ONLINE PAYMENT GATEWAY'}
+                </span>
+                <span className="text-[12px] font-extrabold text-white">
+                  {selectedTourPkg === 'bali' ? 'Rp 2.500.000' : 'Rp 1.200.000'}
+                </span>
+                <p className="text-[7.5px] text-neutral-400 max-w-[170px]">
+                  {isID ? 'Integrasi Midtrans QRIS / Virtual Account dengan Konfirmasi Instant Webhook' : 'Integrated Payment Webhook & Real-time Confirmation'}
+                </p>
+              </div>
+            )}
+
+            {/* Step 4: Dual Invoice Dispatched (Success) */}
+            {step === 'success' && (
+              <div className="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-2 flex flex-col gap-1.5 shadow-[0_4px_12px_rgba(16,185,129,0.15)]">
+                <div className="flex justify-between items-center">
+                  <span className="text-[7.5px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded font-bold uppercase">
+                    {isID ? 'PEMBAYARAN LUNAS ✓' : 'PAYMENT PAID ✓'}
+                  </span>
+                  <span className="text-[7.5px] text-green-400 font-bold">SENT</span>
+                </div>
+
+                {/* Email 1: Owner/Admin Notification */}
+                <div className="bg-neutral-900/90 p-1.5 rounded-lg border border-amber-500/30 flex flex-col gap-0.5">
+                  <div className="flex items-center gap-1">
+                    <span className="text-[10px]">📧</span>
+                    <span className="text-[8px] font-bold text-amber-300">
+                      {isID ? 'INVOICE BOOKING → EMAIL SAYA (OWNER)' : 'INVOICE BOOKING → OWNER EMAIL'}
+                    </span>
+                  </div>
+                  <p className="text-[7px] text-neutral-300">
+                    {isID ? 'Notifikasi booking tour baru masuk ke erza@myportofolio.com' : 'New booking alert sent to owner email'}
+                  </p>
+                </div>
+
+                {/* Email 2: Customer E-Receipt */}
+                <div className="bg-neutral-900/90 p-1.5 rounded-lg border border-cyan-500/30 flex flex-col gap-0.5">
+                  <div className="flex items-center gap-1">
+                    <span className="text-[10px]">📩</span>
+                    <span className="text-[8px] font-bold text-cyan-300">
+                      {isID ? 'INVOICE RECEIPT → EMAIL CUSTOMER' : 'INVOICE RECEIPT → CUSTOMER EMAIL'}
+                    </span>
+                  </div>
+                  <p className="text-[7px] text-neutral-300">
+                    {isID ? 'Bukti bayar & tiket tour terkirim ke budi@gmail.com' : 'Official receipt & e-ticket sent to customer email'}
+                  </p>
+                </div>
+              </div>
+            )}
+
+          </div>
+
+          {/* Interactive Action Button */}
+          <button
+            type="button"
+            onClick={() => {
+              if (step === 'catalog') setTourStep('details');
+              else if (step === 'details') setTourStep('payment');
+              else if (step === 'payment') setTourStep('success');
+              else {
+                setTourStep('catalog');
+                setSelectedTourPkg('bali');
+              }
+            }}
+            className="w-full py-2.5 rounded-xl text-[9px] font-bold bg-emerald-600 hover:bg-emerald-500 text-white transition-all text-center uppercase tracking-wider shadow-lg shadow-emerald-600/20"
+          >
+            {step === 'catalog'
+              ? (isID ? '1. Pilih Tour & Lanjut' : '1. Select Tour & Next')
+              : step === 'details'
+              ? (isID ? '2. Lanjut Pembayaran' : '2. Proceed to Pay')
+              : step === 'payment'
+              ? (isID ? '3. Bayar (Simulasi Webhook)' : '3. Pay & Dispatch Emails')
+              : (isID ? '4. Reset Flow / Simulasi Ulang' : '4. Reset Tour Demo')}
+          </button>
+        </div>
+      );
+    }
     case 'wakaf':
       return null;
     case 'islamic':
@@ -1409,6 +1744,9 @@ export default function ThreeUiShelfSection() {
   const [surveyState, setSurveyState] = useState('idle'); // 'idle', 'submitting', 'submitted'
   const [surveyRating, setSurveyRating] = useState(0); // stars rating: 1-5
   const [selectedWakafRow, setSelectedWakafRow] = useState(0); // 0, 1, 2
+  const [tourStep, setTourStep] = useState('catalog'); // 'catalog', 'details', 'payment', 'success'
+  const [selectedTourPkg, setSelectedTourPkg] = useState('bali'); // 'bali', 'bromo'
+  const [gymStep, setGymStep] = useState('status'); // 'status', 'scan', 'expiry', 'renewed'
 
   useEffect(() => {
     setErpMode('inside');
@@ -1428,6 +1766,9 @@ export default function ThreeUiShelfSection() {
     setSurveyState('idle');
     setSurveyRating(0);
     setSelectedWakafRow(0);
+    setTourStep('catalog');
+    setSelectedTourPkg('bali');
+    setGymStep('status');
   }, [selectedProject]);
 
   const projects = getProjectsData(lang);
@@ -1802,7 +2143,7 @@ export default function ThreeUiShelfSection() {
 
                   {/* App UI (Home Screen State) */}
                   <div className="absolute inset-0 pt-12 pb-4 px-4 flex flex-col justify-between opacity-0 scale-105 translate-y-4 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 z-0">
-                    {renderAppMockContent(selectedProject, lang, erpMode, setErpMode, erpState, setErpState, volJoined, setVolJoined, volDonation, setVolDonation, ticketState, setTicketState, bookingState, setBookingState, bookingSlot, setBookingSlot, serviceState, setServiceState, selectedTechnician, setSelectedTechnician, kosCreated, setKosCreated, roomStates, setRoomStates, transitState, setTransitState, taskState, setTaskState, petState, setPetState, surveyState, setSurveyState, surveyRating, setSurveyRating, selectedWakafRow, setSelectedWakafRow)}
+                    {renderAppMockContent(selectedProject, lang, erpMode, setErpMode, erpState, setErpState, volJoined, setVolJoined, volDonation, setVolDonation, ticketState, setTicketState, bookingState, setBookingState, bookingSlot, setBookingSlot, serviceState, setServiceState, selectedTechnician, setSelectedTechnician, kosCreated, setKosCreated, roomStates, setRoomStates, transitState, setTransitState, taskState, setTaskState, petState, setPetState, surveyState, setSurveyState, surveyRating, setSurveyRating, selectedWakafRow, setSelectedWakafRow, tourStep, setTourStep, selectedTourPkg, setSelectedTourPkg, gymStep, setGymStep)}
                     <div className="w-full flex justify-center">
                       <div className="w-[40%] h-[3px] bg-white/50 rounded-full"></div>
                     </div>

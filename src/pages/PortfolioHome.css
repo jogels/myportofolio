@@ -1447,6 +1447,15 @@ body {
   color: #0a0a0a;
 }
 
+.receipt-top-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.35rem;
+}
+
 .receipt-badge {
   font-family: var(--font-body), sans-serif;
   font-size: 0.7rem;
@@ -1461,13 +1470,44 @@ body {
   display: inline-block;
 }
 
+.negotiable-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #047857;
+  background: #d1fae5;
+  border: 1.5px solid #047857;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  box-shadow: 2px 2px 0px #0a0a0a;
+}
+
 .receipt-header h3 {
   font-family: var(--font-body), sans-serif;
   font-size: 1.4rem;
   font-weight: 950;
   letter-spacing: -0.02em;
   color: #0a0a0a;
-  margin: 0.75rem 0 1.25rem;
+  margin: 0.5rem 0 0.65rem;
+}
+
+.negotiable-notice-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  background: #ffffff;
+  border: 1.5px solid #0a0a0a;
+  border-radius: 12px;
+  padding: 0.65rem 0.85rem;
+  margin-bottom: 1.1rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #0a0a0a;
+  box-shadow: 3px 3px 0px #0a0a0a;
 }
 
 .receipt-price-box {

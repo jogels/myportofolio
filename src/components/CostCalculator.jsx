@@ -468,8 +468,22 @@ export default function CostCalculator() {
       <div className="editorial-calc-right">
         <div className="dark-emerald-receipt-card">
           <div className="receipt-header">
-            <span className="receipt-badge">Live Estimated Investment</span>
+            <div className="receipt-top-banner">
+              <span className="receipt-badge">Live Estimated Investment</span>
+              <span className="negotiable-badge-pill">
+                <Sparkles size={12} />
+                {lang === 'ID' ? 'Harga Fleksibel / Negotiable' : 'Flexible / Negotiable Price'}
+              </span>
+            </div>
             <h3>{lang === 'ID' ? 'Ringkasan Investasi' : 'Investment Summary'}</h3>
+
+            <div className="negotiable-notice-banner">
+              <span>
+                {lang === 'ID'
+                  ? 'Estimasi di bawah bukan harga mati. Biaya akhir sangat fleksibel & siap didiskusikan (negotiable) sesuai anggaran/budget Anda.'
+                  : 'The estimate below is not a fixed price. Final cost is flexible & open for negotiation to match your budget.'}
+              </span>
+            </div>
           </div>
 
           <div className="receipt-price-box">
@@ -559,7 +573,7 @@ export default function CostCalculator() {
                 ? 'Pilihan modul kustom/enterprise akan otomatis terformat untuk didiskusikan langsung via WhatsApp bersama Erza.'
                 : 'Custom/enterprise module choices will be automatically formatted for direct discussion via WhatsApp with Erza.')
               : (lang === 'ID'
-                ? 'Rincian di atas akan otomatis diformat dan siap dikirimkan ke WhatsApp Mas Erza untuk konsultasi langsung.'
+                ? 'Rincian di atas akan otomatis diformat dan siap dikirimkan ke WhatsApp Erza untuk konsultasi langsung.'
                 : 'The details above will be automatically formatted and ready to send to Erza on WhatsApp for direct consultation.')}
           </p>
         </div>
