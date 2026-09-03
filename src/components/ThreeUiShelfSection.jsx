@@ -48,7 +48,7 @@ const getProjectsData = (lang) => [
   },
   {
     id: "volunteer",
-    vol: "VOL. 02",
+    vol: "VOL. 03",
     title: lang === 'ID' ? "Aplikasi Relawan" : "Volunteer Apps",
     discipline: lang === 'ID' ? "Platform Aksi Sosial" : "Social Engagement Platform",
     category: "mobile",
@@ -69,7 +69,7 @@ const getProjectsData = (lang) => [
   },
   {
     id: "ticketing",
-    vol: "VOL. 03",
+    vol: "VOL. 04",
     title: lang === 'ID' ? "Aplikasi Tiket Event" : "Ticketing Apps",
     discipline: lang === 'ID' ? "Sistem Reservasi & Tiket" : "Event Management Engine",
     category: "enterprise",
@@ -90,7 +90,7 @@ const getProjectsData = (lang) => [
   },
   {
     id: "transit",
-    vol: "VOL. 04",
+    vol: "VOL. 05",
     title: lang === 'ID' ? "Aplikasi Transportasi" : "Transportation Apps",
     discipline: lang === 'ID' ? "Logistik & Pelacakan Armada" : "Logistics & Transit",
     category: "logistics",
@@ -111,7 +111,7 @@ const getProjectsData = (lang) => [
   },
   {
     id: "scheduler",
-    vol: "VOL. 05",
+    vol: "VOL. 06",
     title: lang === 'ID' ? "Aplikasi Task Scheduler" : "Task Scheduler Apps",
     discipline: lang === 'ID' ? "Produktivitas & Otomasi Cloud" : "Productivity & Automation",
     category: "cloud",
@@ -132,7 +132,7 @@ const getProjectsData = (lang) => [
   },
   {
     id: "petshop",
-    vol: "VOL. 06",
+    vol: "VOL. 07",
     title: lang === 'ID' ? "Aplikasi Pet Shop & Care" : "Pet Shop Apps",
     discipline: lang === 'ID' ? "E-Commerce & Layanan Hewan" : "E-Commerce & Care",
     category: "mobile",
@@ -153,7 +153,7 @@ const getProjectsData = (lang) => [
   },
   {
     id: "booking",
-    vol: "VOL. 07",
+    vol: "VOL. 08",
     title: lang === 'ID' ? "Aplikasi Booking Jadwal" : "Appointment Booking Apps",
     discipline: lang === 'ID' ? "Sistem Penjadwalan Cerdas" : "Scheduling Systems",
     category: "enterprise",
@@ -174,7 +174,7 @@ const getProjectsData = (lang) => [
   },
   {
     id: "service",
-    vol: "VOL. 08",
+    vol: "VOL. 09",
     title: lang === 'ID' ? "Aplikasi On-Demand Service" : "Service Apps",
     discipline: lang === 'ID' ? "Layanan Jasa On-Demand" : "On-Demand Services",
     category: "logistics",
@@ -195,7 +195,7 @@ const getProjectsData = (lang) => [
   },
   {
     id: "boarding",
-    vol: "VOL. 09",
+    vol: "VOL. 10",
     title: lang === 'ID' ? "Aplikasi Manajemen Kos" : "Boarding House Management Apps",
     discipline: lang === 'ID' ? "Sistem Manajemen Properti" : "Property Management",
     category: "enterprise",
@@ -216,7 +216,7 @@ const getProjectsData = (lang) => [
   },
   {
     id: "survey",
-    vol: "VOL. 10",
+    vol: "VOL. 11",
     title: lang === 'ID' ? "Aplikasi Survey Dinamis" : "Survey Apps",
     discipline: lang === 'ID' ? "Engine Pengumpulan Data" : "Data Collection Engine",
     category: "cloud",
@@ -237,7 +237,7 @@ const getProjectsData = (lang) => [
   },
   {
     id: "wakaf",
-    vol: "VOL. 11",
+    vol: "VOL. 12",
     title: lang === 'ID' ? "Website Database Tanah Wakaf" : "Wakaf Land Database Website",
     discipline: lang === 'ID' ? "Registri Wakaf & Pertanahan" : "Islamic Endowment Registry",
     category: "enterprise",
@@ -258,7 +258,7 @@ const getProjectsData = (lang) => [
   },
   {
     id: "tourbooking",
-    vol: "VOL. 12",
+    vol: "VOL. 13",
     title: lang === 'ID' ? "Aplikasi Booking Tour & Travel" : "Tour Booking & Travel App",
     discipline: lang === 'ID' ? "Platform Reservasi & E-Invoice" : "Reservation & E-Invoice Platform",
     category: "mobile",
