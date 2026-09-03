@@ -137,7 +137,7 @@ export default function PortfolioHome({ onNavigateContohUi }) {
                   </button>
                 </div>
                 <a
-                  href="https://wa.me/6285719416778?text=Halo%20Mas%20Erza,%20saya%20tertarik%20konsultasi%20pembuatan%20aplikasi!"
+                  href={`https://wa.me/6285719416778?text=${lang === 'ID' ? 'Halo%20Erza%20Dev,%20saya%20tertarik%20konsultasi%20pembuatan%20aplikasi!' : 'Hello%20Erza%20Dev,%20I%20am%20interested%20in%20app%20development%20consultation!'}`}
                   target="_blank" rel="noreferrer"
                   className="btn-pill-border"
                 >{t('nav_hire_me')}</a>
@@ -282,7 +282,7 @@ export default function PortfolioHome({ onNavigateContohUi }) {
               <ul className="footer-links-list">
                 <li>
                   <a
-                    href={`https://wa.me/6285719416778?text=${lang === 'ID' ? 'Halo%20Mas%20Erza,%20saya%20tertarik%20konsultasi%20proyek!' : 'Hello%20Erza,%20I%20am%2520interested%2520in%2520consulting%2520about%2520a%2520project!'}`}
+                    href={`https://wa.me/6285719416778?text=${lang === 'ID' ? 'Halo%20Erza%20Dev,%20saya%20tertarik%20konsultasi%20proyek!' : 'Hello%20Erza%20Dev,%20I%20am%20interested%20in%20consulting%20about%20a%20project!'}`}
                     target="_blank"
                     rel="noreferrer"
                     className="footer-link-item contact-highlight"
