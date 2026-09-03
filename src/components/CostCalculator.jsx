@@ -284,7 +284,7 @@ export default function CostCalculator() {
       : formatRupiah(calculation.finalPrice);
 
     const message = lang === 'ID'
-      ? `Halo Mas Erza Saleh!%0A%0ASaya tertarik membuat aplikasi dengan rincian kalkulator berikut:%0A%0A*Platform*: ${calculation.platformName}%0A*Skala*: ${calculation.scopeName}%0A*Timeline*: ${speed === 'rush' ? 'Mode RUSH (Ekspres)' : speed === 'relaxed' ? 'Santai' : 'Standar'} (~${calculation.totalDays} Hari kerja)%0A%0A*Fitur yang Dipilih* (${calculation.featuresCount} Modul):%0A${featureNames || '- Fitur Standar Dasar'}%0A%0A*Estimasi Biaya*: ${priceText}%0A%0ABisa kita jadwalkan diskusi lebih lanjut mengenai proyek ini? Terima kasih!`
+      ? `Halo Erza Saleh!%0A%0ASaya tertarik membuat aplikasi dengan rincian kalkulator berikut:%0A%0A*Platform*: ${calculation.platformName}%0A*Skala*: ${calculation.scopeName}%0A*Timeline*: ${speed === 'rush' ? 'Mode RUSH (Ekspres)' : speed === 'relaxed' ? 'Santai' : 'Standar'} (~${calculation.totalDays} Hari kerja)%0A%0A*Fitur yang Dipilih* (${calculation.featuresCount} Modul):%0A${featureNames || '- Fitur Standar Dasar'}%0A%0A*Estimasi Biaya*: ${priceText}%0A%0ABisa kita jadwalkan diskusi lebih lanjut mengenai proyek ini? Terima kasih!`
       : `Hello Erza Saleh!%0A%0AI am interested in building an application with the following calculator details:%0A%0A*Platform*: ${calculation.platformName}%0A*Scale*: ${calculation.scopeName}%0A*Timeline*: ${speed === 'rush' ? 'RUSH Mode (Express)' : speed === 'relaxed' ? 'Relaxed' : 'Standard'} (~${calculation.totalDays} Working Days)%0A%0A*Selected Features* (${calculation.featuresCount} Modules):%0A${featureNames || '- Standard Basic Features'}%0A%0A*Estimated Cost*: ${priceText}%0A%0ACan we schedule a further discussion about this project? Thank you!`;
 
     const waUrl = `https://wa.me/6285719416778?text=${message}`;
@@ -555,11 +555,11 @@ export default function CostCalculator() {
 
           <p className="receipt-caption">
             {(calculation.isEnterprise || selectedFeatures.includes('custom'))
-              ? (lang === 'ID' 
-                ? 'Pilihan modul kustom/enterprise akan otomatis terformat untuk didiskusikan langsung via WhatsApp bersama Mas Erza.' 
+              ? (lang === 'ID'
+                ? 'Pilihan modul kustom/enterprise akan otomatis terformat untuk didiskusikan langsung via WhatsApp bersama Erza.'
                 : 'Custom/enterprise module choices will be automatically formatted for direct discussion via WhatsApp with Erza.')
-              : (lang === 'ID' 
-                ? 'Rincian di atas akan otomatis diformat dan siap dikirimkan ke WhatsApp Mas Erza untuk konsultasi langsung.' 
+              : (lang === 'ID'
+                ? 'Rincian di atas akan otomatis diformat dan siap dikirimkan ke WhatsApp Mas Erza untuk konsultasi langsung.'
                 : 'The details above will be automatically formatted and ready to send to Erza on WhatsApp for direct consultation.')}
           </p>
         </div>
