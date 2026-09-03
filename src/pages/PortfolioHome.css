@@ -1592,6 +1592,290 @@ body {
   letter-spacing: 0.01em;
 }
 
+.step-header-space {
+  justify-content: space-between;
+}
+
+.step-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.receipt-price-value.custom-price {
+  font-size: 1.75rem;
+  color: #d4ff00;
+}
+
+/* ==========================================================================
+   RESPONSIVE COST CALCULATOR & INVESTMENT SUMMARY (MOBILE & TABLET)
+   ========================================================================== */
+@media (max-width: 960px) {
+  .editorial-calc-container {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .dark-emerald-receipt-card {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .editorial-calc-container {
+    padding: 0;
+    overflow-x: hidden;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .calc-card-editorial {
+    padding: 1.25rem 1rem;
+    border-radius: 20px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .calc-step-header {
+    flex-wrap: wrap;
+    gap: 0.6rem 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .calc-step-header.step-header-space {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .step-header-left {
+    gap: 0.6rem;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .calc-step-header h3 {
+    font-size: 1.05rem;
+    line-height: 1.35;
+    word-break: break-word;
+  }
+
+  .platform-pills-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .editorial-platform-card {
+    padding: 0.95rem;
+    box-sizing: border-box;
+  }
+
+  .pill-selector-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .pill-toggle-btn {
+    width: 100%;
+    padding: 0.65rem 0.75rem;
+    font-size: 0.8rem;
+    box-sizing: border-box;
+    text-align: center;
+    justify-content: center;
+    min-width: 0;
+    word-break: break-word;
+  }
+
+  .editorial-feature-row {
+    padding: 0.8rem 0.85rem;
+    gap: 0.65rem;
+    align-items: flex-start;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .feature-row-left {
+    min-width: 0;
+    flex: 1;
+    gap: 0.65rem;
+    align-items: flex-start;
+  }
+
+  .feat-title {
+    font-size: 0.85rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+  }
+
+  .feat-desc {
+    font-size: 0.75rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.35;
+  }
+
+  .feature-row-right {
+    flex-shrink: 0;
+    text-align: right;
+    padding-top: 0.1rem;
+  }
+
+  .feat-price {
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  .feat-days {
+    font-size: 0.7rem;
+    white-space: nowrap;
+  }
+
+  .custom-feature-textbox {
+    box-sizing: border-box;
+    font-size: 0.8rem;
+    padding: 0.6rem 0.75rem;
+  }
+
+  /* Investment Summary Card (Ringkasan Investasi) */
+  .editorial-calc-right {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .dark-emerald-receipt-card {
+    padding: 1.35rem 1.1rem;
+    border-radius: 20px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .receipt-header h3 {
+    font-size: 1.25rem;
+    margin: 0.25rem 0 1rem;
+  }
+
+  .receipt-price-box {
+    padding: 1.1rem 0.85rem;
+    border-radius: 14px;
+    box-sizing: border-box;
+  }
+
+  .receipt-price-value {
+    font-size: clamp(1.4rem, 6vw, 1.9rem);
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .receipt-price-value.custom-price {
+    font-size: 1.35rem;
+    line-height: 1.3;
+  }
+
+  .receipt-price-sub {
+    font-size: 0.68rem;
+    line-height: 1.35;
+    display: block;
+    margin-top: 0.25rem;
+  }
+
+  .receipt-specs {
+    gap: 0.5rem;
+    font-size: 0.78rem;
+  }
+
+  .receipt-row {
+    flex-wrap: wrap;
+    gap: 0.25rem 0.5rem;
+    padding-bottom: 0.4rem;
+  }
+
+  .receipt-row span {
+    font-size: 0.75rem;
+  }
+
+  .receipt-row b {
+    font-size: 0.78rem;
+    text-align: right;
+    word-break: break-word;
+  }
+
+  .receipt-perks {
+    font-size: 0.72rem;
+    gap: 0.4rem;
+  }
+
+  .btn-emerald-whatsapp {
+    padding: 0.75rem 0.85rem;
+    font-size: 0.82rem;
+    gap: 0.5rem;
+    box-sizing: border-box;
+  }
+
+  .btn-emerald-whatsapp span {
+    line-height: 1.3;
+    text-align: left;
+    word-break: break-word;
+  }
+
+  .btn-circle-arrow {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+  }
+
+  .receipt-caption {
+    font-size: 0.66rem;
+    line-height: 1.4;
+  }
+}
+
+@media (max-width: 480px) {
+  .calc-card-editorial {
+    padding: 1.1rem 0.85rem;
+    border-radius: 16px;
+  }
+
+  .dark-emerald-receipt-card {
+    padding: 1.15rem 0.85rem;
+    border-radius: 16px;
+  }
+
+  .pill-selector-row {
+    grid-template-columns: 1fr;
+  }
+
+  .editorial-feature-row {
+    padding: 0.65rem 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .feat-title {
+    font-size: 0.82rem;
+  }
+
+  .feat-desc {
+    font-size: 0.72rem;
+  }
+
+  .feature-quota-pill {
+    font-size: 0.68rem;
+    padding: 0.25rem 0.55rem;
+  }
+}
+
+
 
 
 /* ==========================================================================

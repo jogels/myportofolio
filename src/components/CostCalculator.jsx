@@ -348,8 +348,8 @@ export default function CostCalculator() {
 
         {/* Step 3: Features */}
         <div className="calc-card-editorial">
-          <div className="calc-step-header" style={{ justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+          <div className="calc-step-header step-header-space">
+            <div className="step-header-left">
               <span className="step-num-pill">03</span>
               <h3>{lang === 'ID' ? 'Fitur & Integrasi Tambahan' : 'Additional Features & Integrations'}</h3>
             </div>
@@ -475,7 +475,7 @@ export default function CostCalculator() {
           <div className="receipt-price-box">
             {(calculation.isEnterprise || selectedFeatures.includes('custom')) ? (
               <>
-                <span className="receipt-price-value" style={{ fontSize: '1.75rem', color: '#0a0a0a' }}>
+                <span className="receipt-price-value custom-price">
                   {lang === 'ID' ? 'Kustom / Hubungi Saya' : 'Custom / Contact Me'}
                 </span>
                 <span className="receipt-price-sub">
