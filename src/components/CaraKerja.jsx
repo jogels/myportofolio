@@ -1,63 +1,48 @@
 import { useEffect, useRef } from "react";
-import ppcloseupImg from '../assets/ppcloseup.png';
-import { useLanguage } from '../context/LanguageContext';
+import lottie from "lottie-web/build/player/lottie_light.js";
+import ppcloseupImg from "../assets/ppcloseup.png";
+import { useLanguage } from "../context/LanguageContext";
 
-const STEPS = [
-  {
-    num: 1,
-    side: "left",
-    icon: "🕵️‍♂️",
-    quip: '// nggak pakai istilah teknis, janji',
-    title: "Discovery & Ngobrol Santai",
-    desc: "Kita ngobrol soal kebutuhan, target pengguna, dan goal bisnis kamu sambil ngopi virtual. Cerita aja apa yang kamu mau, sisanya saya terjemahin ke bahasa developer.",
-    meta: ["± 2–3 hari", "Zoom / WA", "Notion"],
-  },
-  {
-    num: 2,
-    side: "right",
-    icon: "🎨",
-    quip: '// revisi sampai kamu bilang "nah, ini!"',
-    title: "Desain UI/UX",
-    desc: "Wireframe dulu, baru mockup penuh warna di Figma. Kamu review, kasih coretan, saya perbaiki — sampai desainnya beneran pas di hati.",
-    meta: ["± 5–7 hari", "Figma", "Prototype"],
-  },
-  {
-    num: 3,
-    side: "left",
-    icon: "👨‍💻",
-    quip: "// tahap paling lama saya diem di depan laptop",
-    title: "Development",
-    desc: 'Saya mulai coding sungguhan. Kamu tetap dapat update progress tiap minggu — bukan cuma "lagi dikerjain kak", tapi beneran ada yang bisa dilihat.',
-    meta: ["± 2–6 minggu", "Flutter", "Git"],
-  },
-  {
-    num: 4,
-    side: "right",
-    icon: "🐞",
-    quip: "// bug diburu sebelum user nemuin duluan",
-    title: "Testing & QA",
-    desc: "Dicoba di berbagai device dan skenario aneh-aneh (termasuk pas sinyal jelek). Biar kamu bukan yang pertama nemu bug-nya di depan klien.",
-    meta: ["± 4–7 hari", "Manual QA", "Automated Test"],
-  },
-  {
-    num: 5,
-    side: "left",
-    icon: "📦",
-    quip: "// momen paling deg-degan sekaligus seru",
-    title: "Deploy & Handover",
-    desc: "Rilis ke App Store, Play Store, atau hosting — plus dokumentasi lengkap biar kamu (atau tim kamu) paham cara kerja sistemnya.",
-    meta: ["± 2–3 hari", "App Store", "Play Store"],
-  },
-  {
-    num: 6,
-    side: "right",
-    icon: "🛟",
-    quip: "// nggak menghilang kayak sinyal WiFi kosan",
-    title: "Support Pasca-Launch",
-    desc: "Aplikasi live bukan berarti selesai. Ada masa support buat perbaikan bug dan pertanyaan dadakan — chat aja, nggak perlu drama dulu.",
-    meta: ["Fleksibel", "Bug Fix", "Monitoring"],
-  },
-];
+// Import Lottie animation assets
+import phoneCallAnim from "../assets/lottie/phone-call.json";
+import smartphoneAnim from "../assets/lottie/smartphone.json";
+import webDevAnim from "../assets/lottie/web-development.json";
+import testingAnim from "../assets/lottie/testing-checking.json";
+import taskCompletedAnim from "../assets/lottie/task-completed.json";
+
+function LottieNodeIcon({ animationData, size = 52 }) {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    if (!containerRef.current || !animationData) return;
+
+    const anim = lottie.loadAnimation({
+      container: containerRef.current,
+      renderer: "svg",
+      loop: true,
+      autoplay: true,
+      animationData,
+    });
+
+    return () => {
+      anim.destroy();
+    };
+  }, [animationData]);
+
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        width: `${size}px`,
+        height: `${size}px`,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        pointerEvents: "none",
+      }}
+    />
+  );
+}
 
 export default function CaraKerja() {
   const { lang, t } = useLanguage();
@@ -67,64 +52,60 @@ export default function CaraKerja() {
   const nodeRefs = useRef([]);
   const stepRefs = useRef([]);
 
-  const DYNAMIC_STEPS = [
+  const STEPS_DATA = [
     {
       num: 1,
+      phase: lang === "ID" ? "FASE 01" : "PHASE 01",
       side: "left",
-      icon: "🕵️‍♂️",
-      quip: lang === 'ID' ? '// nggak pakai istilah teknis, janji' : '// no jargon, promised',
-      title: t('step_1_title'),
-      desc: t('step_1_desc'),
-      meta: lang === 'ID' ? ["± 2–3 hari", "Zoom / WA", "Notion"] : ["± 2–3 days", "Zoom / WA", "Notion"],
+      animation: phoneCallAnim,
+      quip: lang === "ID" ? "// diskusi santai tanpa jargon teknis" : "// casual talk, no technical jargon",
+      title: t("step_1_title"),
+      desc: t("step_1_desc"),
+      meta: lang === "ID" ? ["± 2–3 Hari", "Zoom / WhatsApp", "Notion Brief"] : ["± 2–3 Days", "Zoom / WhatsApp", "Notion Brief"],
     },
     {
       num: 2,
+      phase: lang === "ID" ? "FASE 02" : "PHASE 02",
       side: "right",
-      icon: "🎨",
-      quip: lang === 'ID' ? '// revisi sampai kamu bilang "nah, ini!"' : '// revisions until it clicks',
-      title: t('step_2_title'),
-      desc: t('step_2_desc'),
-      meta: lang === 'ID' ? ["± 5–7 hari", "Figma", "Prototype"] : ["± 5–7 days", "Figma", "Prototype"],
+      animation: smartphoneAnim,
+      quip: lang === "ID" ? '// revisi visual sampai kamu bilang "nah, pas!"' : '// visual iterations until it clicks',
+      title: t("step_2_title"),
+      desc: t("step_2_desc"),
+      meta: lang === "ID" ? ["± 5–7 Hari", "Figma Design", "Interactive Prototype"] : ["± 5–7 Days", "Figma Design", "Interactive Prototype"],
     },
     {
       num: 3,
+      phase: lang === "ID" ? "FASE 03" : "PHASE 03",
       side: "left",
-      icon: "👨‍💻",
-      quip: lang === 'ID' ? "// tahap paling lama saya diem di depan laptop" : "// core engineering sprint",
-      title: t('step_3_title'),
-      desc: t('step_3_desc'),
-      meta: lang === 'ID' ? ["± 2–6 minggu", "React/Flutter", "Git"] : ["± 2–6 weeks", "React/Flutter", "Git"],
+      animation: webDevAnim,
+      quip: lang === "ID" ? "// proses koding intensif & sprint mingguan" : "// core engineering & weekly sprints",
+      title: t("step_3_title"),
+      desc: t("step_3_desc"),
+      meta: lang === "ID" ? ["± 2–6 Minggu", "React / Next.js / Flutter", "Clean Git Commits"] : ["± 2–6 Weeks", "React / Next.js / Flutter", "Clean Git Commits"],
     },
     {
       num: 4,
+      phase: lang === "ID" ? "FASE 04" : "PHASE 04",
       side: "right",
-      icon: "🐞",
-      quip: lang === 'ID' ? "// bug diburu sebelum user nemuin duluan" : "// edge-case bug hunting",
-      title: t('step_4_title'),
-      desc: t('step_4_desc'),
-      meta: lang === 'ID' ? ["± 4–7 hari", "Manual QA", "Automated Test"] : ["± 4–7 days", "Manual QA", "Automated Test"],
+      animation: testingAnim,
+      quip: lang === "ID" ? "// uji ketahanan & buru bug sebelum rilis" : "// edge-case testing & bug hunting",
+      title: t("step_4_title"),
+      desc: t("step_4_desc"),
+      meta: lang === "ID" ? ["± 4–7 Hari", "Cross-Device QA", "Automated Security Test"] : ["± 4–7 Days", "Cross-Device QA", "Automated Security Test"],
     },
     {
       num: 5,
+      phase: lang === "ID" ? "FASE 05" : "PHASE 05",
       side: "left",
-      icon: "📦",
-      quip: lang === 'ID' ? "// momen paling deg-degan sekaligus seru" : "// store & cloud release",
-      title: t('step_5_title'),
-      desc: t('step_5_desc'),
-      meta: lang === 'ID' ? ["± 2–3 hari", "App Store", "Play Store"] : ["± 2–3 days", "App Store", "Play Store"],
-    },
-    {
-      num: 6,
-      side: "right",
-      icon: "🛟",
-      quip: lang === 'ID' ? "// dukungan aktif pasca-launch" : "// active post-launch support",
-      title: t('step_6_title'),
-      desc: t('step_6_desc'),
-      meta: lang === 'ID' ? ["Garansi", "Bug Fix", "Monitoring"] : ["Warranty", "Bug Fix", "Monitoring"],
+      animation: taskCompletedAnim,
+      quip: lang === "ID" ? "// rilis live & siap mendampingi bisnismu" : "// live release & post-launch warranty",
+      title: t("step_5_title"),
+      desc: t("step_5_desc"),
+      meta: lang === "ID" ? ["Siap Live", "App Store / Cloud Hosting", "Garansi Support"] : ["Live Ready", "App Store / Cloud Hosting", "Support Warranty"],
     },
   ];
 
-  // ---------- timeline line fill & profile avatar scroll animation ----------
+  // Timeline line fill & profile avatar scroll animation
   useEffect(() => {
     const journey = journeyRef.current;
     const fill = fillRef.current;
@@ -148,9 +129,22 @@ export default function CaraKerja() {
       const progressed = vh * 0.55 - rectTop;
       const progress = total > 0 ? Math.max(0, Math.min(1, progressed / total)) : 0;
 
-      fill.style.height = progress * 100 + "%";
-      sprout.style.top = progress * 100 + "%";
+      fill.style.height = `${progress * 100}%`;
+      sprout.style.top = `${progress * 100}%`;
       sprout.style.transform = `translate3d(-50%,-50%,0)`;
+
+      // Highlight passed nodes
+      nodeRefs.current.forEach((node) => {
+        if (!node) return;
+        const nodeRect = node.getBoundingClientRect();
+        const nodeY = nodeRect.top + nodeRect.height / 2;
+        const triggerY = vh * 0.55;
+        if (nodeY <= triggerY) {
+          node.classList.add("passed");
+        } else {
+          node.classList.remove("passed");
+        }
+      });
     };
 
     measure();
@@ -178,7 +172,7 @@ export default function CaraKerja() {
     };
   }, []);
 
-  // ---------- reveal-on-scroll entrance for each step ----------
+  // Reveal-on-scroll entrance for each step
   useEffect(() => {
     const els = stepRefs.current.filter(Boolean);
     if (!els.length) return;
@@ -197,47 +191,62 @@ export default function CaraKerja() {
   return (
     <section id="process" className="ck-section">
       <div className="ck-container">
-        <div className="ck-eyebrow">
-          <span className="ck-dot" /> {t('process_tag')}
+        {/* Section Header */}
+        <div className="ck-header">
+          <div className="ck-eyebrow">
+            <span className="ck-dot" /> {t("process_tag")}
+          </div>
+          <h2 className="ck-title">{t("process_title")}</h2>
+          <p className="ck-sub">{t("process_desc")}</p>
         </div>
-        <h2 className="ck-title">
-          {t('process_title')}
-        </h2>
-        <p className="ck-sub">
-          {t('process_desc')}
-        </p>
 
+        {/* Timeline Journey */}
         <div className="journey" ref={journeyRef}>
+          {/* Central Track Line */}
           <div className="journey-line">
             <div className="journey-line-fill" ref={fillRef} />
           </div>
-          <div className="journey-sprout" ref={sproutRef} style={{ width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <img src={ppcloseupImg} alt="Erza Saleh" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2.5px solid #c87046', boxShadow: '0 0 14px rgba(200, 112, 70, 0.6)' }} />
+
+          {/* Floating Avatar Sprout indicator */}
+          <div className="journey-sprout" ref={sproutRef}>
+            <div className="sprout-avatar-frame">
+              <img src={ppcloseupImg} alt="Erza Saleh" className="sprout-avatar-img" />
+            </div>
           </div>
 
+          {/* Steps List */}
           <div className="journey-steps">
-            {DYNAMIC_STEPS.map((step, i) => (
+            {STEPS_DATA.map((step, i) => (
               <div
                 key={step.num}
                 ref={(el) => (stepRefs.current[i] = el)}
-                className={`j-step ${step.side} reveal-${
-                  step.side === "left" ? "l" : "r"
-                }`}
+                className={`j-step ${step.side} reveal-${step.side === "left" ? "l" : "r"}`}
               >
+                {/* Center Node with Animated Lottie */}
                 <div
                   className="j-node"
                   data-num={step.num}
                   ref={(el) => (nodeRefs.current[i] = el)}
                 >
-                  {step.icon}
+                  <LottieNodeIcon animationData={step.animation} size={48} />
                 </div>
+
+                {/* Step Card matching Luxury Botanical / Dark Glassmorphic Theme */}
                 <div className="j-card">
-                  <span className="j-quip">{step.quip}</span>
-                  <h3>{step.title}</h3>
-                  <p className="desc">{step.desc}</p>
+                  {/* Card Header Info */}
+                  <div className="j-card-header">
+                    <span className="j-phase-pill">{step.phase}</span>
+                    <span className="j-quip">{step.quip}</span>
+                  </div>
+
+                  {/* Card Title & Description */}
+                  <h3 className="j-card-title">{step.title}</h3>
+                  <p className="j-card-desc">{step.desc}</p>
+
+                  {/* Card Meta Badges */}
                   <div className="j-meta">
                     {step.meta.map((m, mi) => (
-                      <span key={mi} className={mi === 0 ? "dur" : ""}>
+                      <span key={mi} className={`j-meta-pill ${mi === 0 ? "dur" : ""}`}>
                         {m}
                       </span>
                     ))}
@@ -250,127 +259,407 @@ export default function CaraKerja() {
       </div>
 
       <style>{`
-        /* ---------- design tokens (samakan / override sesuai token project kamu) ---------- */
-        .ck-section{
-          --navy-deep:#050710;
-          --navy-card:#141f38;
-          --navy-soft:#111a2e;
-          --line: rgba(232,236,243,0.09);
-          --mint:#5eead4;
-          --coral:#ff6b5b;
-          --ink:#e8ecf3;
-          --ink-dim:#8f99b3;
-          --ink-faint:#5c657d;
-          --ease: cubic-bezier(.22,1,.36,1);
-          position:relative;
-          background:var(--navy-deep);
-          color:var(--ink);
-          font-family:'Outfit',sans-serif;
-          padding:140px 0;
-        }
-        @media (max-width:860px){ .ck-section{ padding:96px 0; } }
+        /* ==========================================================================
+           CaraKerja.jsx Styles - Matching Botanical Luxury & Modern Dark Obsidian Theme
+           ========================================================================== */
 
-        .ck-container{ max-width:1180px; margin:0 auto; padding:0 32px; }
-        @media (max-width:860px){ .ck-container{ padding:0 22px; } }
+        .ck-section {
+          --ck-bg: #070908;
+          --ck-card-bg: linear-gradient(165deg, #0e1a16 0%, #080f0c 100%);
+          --ck-border: rgba(255, 255, 255, 0.08);
+          --ck-border-hover: rgba(47, 224, 136, 0.35);
+          --ck-accent-green: #2fe088;
+          --ck-accent-lime: #d4ff00;
+          --ck-text-main: #f4faf6;
+          --ck-text-muted: #8ea49a;
+          --ck-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
-        .ck-eyebrow{
-          display:inline-flex; align-items:center; gap:8px;
-          font-family:'JetBrains Mono',monospace; font-size:12.5px; letter-spacing:0.14em; text-transform:uppercase;
-          color:var(--mint); background:rgba(94,234,212,0.08); border:1px solid rgba(94,234,212,0.25);
-          padding:7px 14px 7px 12px; border-radius:100px; margin-bottom:22px;
-        }
-        .ck-dot{ width:6px; height:6px; border-radius:50%; background:var(--mint); box-shadow:0 0 8px var(--mint); display:inline-block; }
-
-        .ck-title{
-          font-family:'Outfit',sans-serif; font-weight:700; letter-spacing:-0.02em;
-          font-size:clamp(30px,4.4vw,50px); line-height:1.08; max-width:680px; margin:0;
-        }
-        .ck-sub{
-          font-family:'Outfit',sans-serif; font-weight:400; color:var(--ink-dim); font-size:17px;
-          max-width:520px; margin-top:16px; line-height:1.7;
+          position: relative;
+          background: var(--ck-bg);
+          color: var(--ck-text-main);
+          font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+          padding: 7rem 0 8rem;
+          overflow: hidden;
         }
 
-        /* ---------- timeline ---------- */
-        .journey{ position:relative; margin-top:70px; padding:10px 0 20px; }
-        .journey-line{
-          position:absolute; left:50%; top:0; bottom:0; width:4px; transform:translateX(-50%);
-          background:repeating-linear-gradient(to bottom, var(--line) 0 9px, transparent 9px 20px);
-          border-radius:4px;
-        }
-        .journey-line-fill{
-          position:absolute; left:0; top:0; width:100%; height:0%;
-          background:repeating-linear-gradient(to bottom, var(--mint) 0 9px, var(--coral) 9px 20px);
-          border-radius:4px; box-shadow:0 0 14px rgba(94,234,212,0.4);
-          transition:height .12s linear;
-        }
-        .journey-sprout{
-          position:absolute; left:50%; top:0; z-index:6;
-          transform:translate(-50%,-50%) scale(0.85) rotate(0deg);
-          filter:drop-shadow(0 0 12px rgba(94,234,212,0.5));
-          transition:top .12s linear;
-        }
-        @media (max-width:820px){
-          .journey-line{ left:27px; }
-          .journey-sprout{ left:27px; }
+        @media (max-width: 860px) {
+          .ck-section {
+            padding: 5rem 0 6rem;
+          }
         }
 
-        .journey-steps{ position:relative; z-index:2; display:flex; flex-direction:column; gap:64px; }
-        .j-step{
-          display:grid; grid-template-columns:1fr 66px 1fr; align-items:center; column-gap:26px;
-          opacity:0; transition:opacity .8s var(--ease), transform .8s var(--ease);
-        }
-        .j-step.reveal-l{ transform:translateX(-40px); }
-        .j-step.reveal-r{ transform:translateX(40px); }
-        .j-step.in{ opacity:1; transform:translateX(0); }
-        @media (max-width:820px){
-          .j-step{ grid-template-columns:56px 1fr; column-gap:18px; }
+        .ck-container {
+          max-width: 1280px;
+          margin: 0 auto;
+          padding: 0 2rem;
         }
 
-        .j-node{
-          grid-column:2; width:66px; height:66px; border-radius:50%; position:relative; z-index:3;
-          background:var(--navy-card); border:3px solid var(--line);
-          display:flex; align-items:center; justify-content:center; font-size:27px;
-          transition:border-color .4s var(--ease), transform .4s var(--ease), box-shadow .4s var(--ease);
+        @media (max-width: 768px) {
+          .ck-container {
+            padding: 0 1.25rem;
+          }
         }
-        @media (max-width:820px){ .j-node{ grid-column:1; width:52px; height:52px; font-size:21px; } }
-        .j-node::after{
-          content:attr(data-num); position:absolute; top:-8px; right:-8px; width:22px; height:22px; border-radius:50%;
-          background:var(--coral); color:#0a0604; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:10.5px;
-          display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0,0,0,0.35);
-        }
-        .j-node.passed{ border-color:var(--mint); transform:scale(1.1); box-shadow:0 0 22px rgba(94,234,212,0.4); }
 
-        .j-card{
-          position:relative; background:var(--navy-card); border:1.5px dashed var(--line);
-          border-radius:26px 26px 26px 6px; padding:24px 26px; transition:transform .35s var(--ease), border-color .35s;
+        /* Section Header */
+        .ck-header {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          margin-bottom: 4.5rem;
         }
-        .j-step.left .j-card{ grid-column:1; }
-        .j-step.right .j-card{ grid-column:3; border-radius:26px 26px 6px 26px; }
-        @media (max-width:820px){
-          .j-step.left .j-card, .j-step.right .j-card{ grid-column:2; border-radius:22px 22px 22px 5px !important; }
-        }
-        .j-card:hover{ transform:translateY(-6px) rotate(-1deg); border-color:var(--mint); border-style:solid; }
-        .j-step.right .j-card:hover{ transform:translateY(-6px) rotate(1deg); }
-        .j-step.left .j-card::after{
-          content:''; position:absolute; top:50%; right:-22px; width:22px; height:2px;
-          background:repeating-linear-gradient(to right, var(--mint) 0 4px, transparent 4px 8px);
-        }
-        .j-step.right .j-card::before{
-          content:''; position:absolute; top:50%; left:-22px; width:22px; height:2px;
-          background:repeating-linear-gradient(to right, var(--coral) 0 4px, transparent 4px 8px);
-        }
-        @media (max-width:820px){ .j-step.left .j-card::after, .j-step.right .j-card::before{ display:none; } }
-        .j-quip{ display:block; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--mint); margin-bottom:8px; }
-        .j-card h3{ font-family:'Outfit',sans-serif; font-weight:700; font-size:18.5px; margin:0 0 8px; }
-        .j-card .desc{ color:var(--ink-dim); font-size:14px; line-height:1.7; margin:0 0 16px; }
-        .j-meta{ display:flex; gap:8px; flex-wrap:wrap; }
-        .j-meta span{ font-family:'JetBrains Mono',monospace; font-size:10.5px; padding:5px 11px; border-radius:100px; border:1px solid var(--line); color:var(--ink-faint); }
-        .j-meta .dur{ border-color:var(--coral); color:var(--coral); }
 
-        .journey-hint{ margin-top:30px; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--ink-faint); text-align:center; }
+        .ck-eyebrow {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.8rem;
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: var(--ck-accent-lime);
+          background: rgba(212, 255, 0, 0.08);
+          border: 1px solid rgba(212, 255, 0, 0.25);
+          padding: 0.45rem 1.15rem;
+          border-radius: 9999px;
+          margin-bottom: 1.25rem;
+        }
 
-        @media (prefers-reduced-motion: reduce){
-          .journey-sprout, .journey-line-fill, .j-node, .j-card, .j-step{ transition-duration:0.001ms !important; }
+        .ck-dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: var(--ck-accent-lime);
+          box-shadow: 0 0 10px var(--ck-accent-lime);
+          display: inline-block;
+        }
+
+        .ck-title {
+          font-family: 'Outfit', sans-serif;
+          font-weight: 900;
+          letter-spacing: -0.035em;
+          font-size: clamp(2rem, 4.2vw, 3.2rem);
+          line-height: 1.1;
+          max-width: 760px;
+          margin: 0 0 1rem;
+          color: #ffffff;
+        }
+
+        .ck-sub {
+          font-family: 'Outfit', sans-serif;
+          font-weight: 400;
+          color: var(--ck-text-muted);
+          font-size: 1.05rem;
+          max-width: 580px;
+          margin: 0 auto;
+          line-height: 1.65;
+        }
+
+        /* Timeline Container */
+        .journey {
+          position: relative;
+          margin-top: 2rem;
+          padding: 20px 0 40px;
+        }
+
+        /* Center Vertical Track */
+        .journey-line {
+          position: absolute;
+          left: 50%;
+          top: 0;
+          bottom: 0;
+          width: 3px;
+          transform: translateX(-50%);
+          background: repeating-linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.08) 0 8px,
+            transparent 8px 18px
+          );
+          border-radius: 3px;
+        }
+
+        .journey-line-fill {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 0%;
+          background: linear-gradient(to bottom, var(--ck-accent-green), var(--ck-accent-lime));
+          border-radius: 3px;
+          box-shadow: 0 0 14px rgba(47, 224, 136, 0.6);
+          transition: height 0.12s linear;
+        }
+
+        /* Traveling Sprout (Avatar) */
+        .journey-sprout {
+          position: absolute;
+          left: 50%;
+          top: 0;
+          z-index: 8;
+          transform: translate3d(-50%, -50%, 0);
+          transition: top 0.12s linear;
+          pointer-events: none;
+        }
+
+        .sprout-avatar-frame {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          border: 2.5px solid var(--ck-accent-green);
+          box-shadow: 0 0 18px rgba(47, 224, 136, 0.7), 0 6px 14px rgba(0, 0, 0, 0.6);
+          background: #08100c;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+        }
+
+        .sprout-avatar-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        @media (max-width: 820px) {
+          .journey-line {
+            left: 32px;
+          }
+          .journey-sprout {
+            left: 32px;
+          }
+        }
+
+        /* Step Rows */
+        .journey-steps {
+          position: relative;
+          z-index: 2;
+          display: flex;
+          flex-direction: column;
+          gap: 4.5rem;
+        }
+
+        .j-step {
+          display: grid;
+          grid-template-columns: 1fr 86px 1fr;
+          align-items: center;
+          column-gap: 2rem;
+          opacity: 0;
+          transition: opacity 0.8s var(--ck-ease), transform 0.8s var(--ck-ease);
+        }
+
+        .j-step.reveal-l {
+          transform: translateX(-35px);
+        }
+        .j-step.reveal-r {
+          transform: translateX(35px);
+        }
+        .j-step.in {
+          opacity: 1;
+          transform: translateX(0);
+        }
+
+        @media (max-width: 820px) {
+          .j-step {
+            grid-template-columns: 64px 1fr;
+            column-gap: 1.25rem;
+          }
+        }
+
+        /* Center Node Circle with Lottie */
+        .j-node {
+          grid-column: 2;
+          width: 76px;
+          height: 76px;
+          border-radius: 50%;
+          position: relative;
+          z-index: 4;
+          background: radial-gradient(circle at center, #142820 0%, #09130f 100%);
+          border: 2px solid rgba(47, 224, 136, 0.35);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(47, 224, 136, 0.15);
+          transition: all 0.4s var(--ck-ease);
+          margin: 0 auto;
+        }
+
+        @media (max-width: 820px) {
+          .j-node {
+            grid-column: 1;
+            width: 60px;
+            height: 60px;
+          }
+        }
+
+        .j-node::after {
+          content: attr(data-num);
+          position: absolute;
+          top: -4px;
+          right: -4px;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background: var(--ck-accent-lime);
+          color: #060707;
+          font-family: 'Outfit', sans-serif;
+          font-weight: 900;
+          font-size: 11px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45);
+          border: 2px solid #09130f;
+          z-index: 5;
+        }
+
+        .j-node.passed {
+          border-color: var(--ck-accent-green);
+          box-shadow: 0 0 24px rgba(47, 224, 136, 0.45), 0 12px 28px rgba(0, 0, 0, 0.6);
+          transform: scale(1.06);
+        }
+
+        /* Step Card - Redesigned to match Luxury Botanical & Bento Standards */
+        .j-card {
+          position: relative;
+          background: var(--ck-card-bg);
+          border: 1.5px solid var(--ck-border);
+          border-radius: 24px;
+          padding: 1.85rem 2rem;
+          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
+          transition: transform 0.35s var(--ck-ease), border-color 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .j-step.left .j-card {
+          grid-column: 1;
+        }
+        .j-step.right .j-card {
+          grid-column: 3;
+        }
+
+        @media (max-width: 820px) {
+          .j-step.left .j-card,
+          .j-step.right .j-card {
+            grid-column: 2;
+            padding: 1.4rem 1.4rem;
+          }
+        }
+
+        .j-card:hover {
+          transform: translateY(-5px);
+          border-color: var(--ck-border-hover);
+          box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(47, 224, 136, 0.12);
+        }
+
+        /* Subtle Connector Whisker on Desktop */
+        .j-step.left .j-card::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          right: -20px;
+          width: 20px;
+          height: 2px;
+          background: repeating-linear-gradient(to right, rgba(47, 224, 136, 0.5) 0 4px, transparent 4px 8px);
+        }
+
+        .j-step.right .j-card::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: -20px;
+          width: 20px;
+          height: 2px;
+          background: repeating-linear-gradient(to right, rgba(47, 224, 136, 0.5) 0 4px, transparent 4px 8px);
+        }
+
+        @media (max-width: 820px) {
+          .j-step.left .j-card::after,
+          .j-step.right .j-card::before {
+            display: none;
+          }
+        }
+
+        /* Card Content Formatting */
+        .j-card-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 0.75rem;
+          flex-wrap: wrap;
+          margin-bottom: 0.85rem;
+        }
+
+        .j-phase-pill {
+          display: inline-block;
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.72rem;
+          font-weight: 800;
+          letter-spacing: 0.08em;
+          color: var(--ck-accent-lime);
+          background: rgba(212, 255, 0, 0.08);
+          border: 1px solid rgba(212, 255, 0, 0.25);
+          padding: 0.25rem 0.65rem;
+          border-radius: 9999px;
+        }
+
+        .j-quip {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.78rem;
+          color: rgba(142, 164, 154, 0.85);
+        }
+
+        .j-card-title {
+          font-family: 'Outfit', sans-serif;
+          font-weight: 800;
+          font-size: 1.35rem;
+          letter-spacing: -0.02em;
+          color: #ffffff;
+          margin: 0 0 0.55rem;
+          line-height: 1.25;
+        }
+
+        .j-card-desc {
+          color: var(--ck-text-muted);
+          font-size: 0.9rem;
+          line-height: 1.65;
+          margin: 0 0 1.25rem;
+        }
+
+        .j-meta {
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+        }
+
+        .j-meta-pill {
+          font-family: 'Outfit', sans-serif;
+          font-size: 0.78rem;
+          font-weight: 600;
+          padding: 0.35rem 0.75rem;
+          border-radius: 9999px;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          background: rgba(255, 255, 255, 0.04);
+          color: #c4d4cc;
+          transition: all 0.2s ease;
+        }
+
+        .j-meta-pill.dur {
+          border-color: rgba(47, 224, 136, 0.35);
+          background: rgba(47, 224, 136, 0.08);
+          color: var(--ck-accent-green);
+          font-weight: 700;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .journey-sprout,
+          .journey-line-fill,
+          .j-node,
+          .j-card,
+          .j-step {
+            transition-duration: 0.001ms !important;
+          }
         }
       `}</style>
     </section>
