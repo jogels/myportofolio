@@ -1875,7 +1875,37 @@ export default function ThreeUiShelfSection() {
 
             <span className="modal-header-badge">{selectedProject.vol} · {selectedProject.category.toUpperCase()}</span>
             <h2 className="modal-title">{selectedProject.title}</h2>
-            <p className="modal-discipline">{selectedProject.discipline}</p>
+            <p className="modal-discipline" style={{ marginBottom: '1rem' }}>{selectedProject.discipline}</p>
+
+            {/* Visual Example Button (Top Position) */}
+            <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'flex-start' }}>
+              <button
+                type="button"
+                className="btn-visual-mockup hover:scale-105"
+                onClick={() => setShowMockup(true)}
+                style={{
+                  padding: '0.75rem 1.6rem',
+                  fontSize: '0.88rem',
+                  fontWeight: '700',
+                  letterSpacing: '0.05em',
+                  color: '#ffffff',
+                  background: 'linear-gradient(135deg, #ef7046 0%, #d4562c 100%)',
+                  border: 'none',
+                  borderRadius: '14px',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.7rem',
+                  boxShadow: '0 6px 20px rgba(239, 112, 70, 0.35)',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  textTransform: 'uppercase'
+                }}
+              >
+                <Smartphone size={16} />
+                {lang === 'ID' ? 'Contoh Visual' : 'Visual Example'}
+              </button>
+            </div>
+
             <p className="card-deck" style={{ fontSize: '1rem', color: 'rgba(244, 238, 230, 0.85)' }}>{selectedProject.deck}</p>
 
             <h4 className="modal-section-title">{t('works_modal_modules')}</h4>
@@ -1887,41 +1917,12 @@ export default function ThreeUiShelfSection() {
             ))}
 
             <h4 className="modal-section-title">{t('works_modal_tech')}</h4>
-            <div className="card-tech-tags" style={{ gap: '0.6rem', marginBottom: '1.5rem' }}>
+            <div className="card-tech-tags" style={{ gap: '0.6rem', marginBottom: '0.5rem' }}>
               {selectedProject.tech.map((t, idx) => (
                 <span key={idx} className="tech-pill" style={{ fontSize: '0.82rem', padding: '0.35rem 0.75rem', background: 'rgba(200, 112, 70, 0.15)', color: '#ffffff' }}>
                   {t}
                 </span>
               ))}
-            </div>
-
-            {/* Visual Example Button */}
-            <div style={{ marginTop: '2.5rem', display: 'flex', justifyContent: 'center' }}>
-              <button
-                type="button"
-                className="btn-visual-mockup hover:scale-105"
-                onClick={() => setShowMockup(true)}
-                style={{
-                  padding: '0.8rem 2rem',
-                  fontSize: '0.9rem',
-                  fontWeight: '700',
-                  letterSpacing: '0.05em',
-                  color: '#ffffff',
-                  background: 'linear-gradient(135deg, #ef7046 0%, #d4562c 100%)',
-                  border: 'none',
-                  borderRadius: '14px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.8rem',
-                  boxShadow: '0 6px 20px rgba(239, 112, 70, 0.35)',
-                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                  textTransform: 'uppercase'
-                }}
-              >
-                <Smartphone size={16} />
-                {lang === 'ID' ? 'Contoh Visual' : 'Visual Example'}
-              </button>
             </div>
           </div>
         </div>
